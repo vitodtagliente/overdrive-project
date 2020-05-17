@@ -1,2 +1,2 @@
-# overdrive-project
- Nodejs based project
+# maps-rpg
+ Nodejs browser base rpg game/social network

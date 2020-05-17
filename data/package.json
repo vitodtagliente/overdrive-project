@@ -1,0 +1,17 @@
+{
+  "name": "data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["data"],
+  "author": "Vito Domenico Tagliente",
+  "license": "ISC",
+  "dependencies": {
+    "mango": "file:../packages/mango",
+    "overdrive-logger": "file:../packages/overdrive-logger",
+    "overdrive-status": "file:../packages/overdrive-status"
+  }
+}

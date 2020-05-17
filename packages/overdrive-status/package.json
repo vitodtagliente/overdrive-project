@@ -1,0 +1,16 @@
+{
+  "name": "overdrive-status",
+  "version": "1.0.0",
+  "description": "HTTP Status codes made easy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "http",
+    "status",
+    "status code"
+  ],
+  "author": "Vito Domenico Tagliente",
+  "license": "ISC"
+}

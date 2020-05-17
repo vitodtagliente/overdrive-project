@@ -1,0 +1,19 @@
+{
+  "name": "overdrive",
+  "version": "1.0.0",
+  "description": "Nodejs overdrive framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vito Domenico Tagliente",
+  "license": "ICS",
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "mango": "file:../mango",
+    "overdrive-logger": "file:../overdrive-logger",
+    "overdrive-status": "file:../overdrive-status"
+  }
+}
