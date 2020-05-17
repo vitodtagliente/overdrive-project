@@ -11,5 +11,5 @@ exports.Controllers = [
 exports.initialize = function (app) {
     Logger.log("Initializing the server interface...");
     // register the controllers
-    Controller.load(exports.Controllers);
+    Controller.load(exports.Controllers, app.raw);
 }

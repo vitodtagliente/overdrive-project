@@ -19,5 +19,5 @@ exports.initialize = function (app) {
     // set the views folder
     app.set('views', path.join(__dirname, '/views'));
     // register the controllers
-    Controller.load(exports.Controllers);
+    Controller.load(exports.Controllers, app.raw);
 }
