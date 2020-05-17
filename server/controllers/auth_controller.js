@@ -7,17 +7,16 @@ const UserProvider = require('data').Providers.UserProvider;
 const Validation = require('overdrive').Validation;
 
 class AuthController extends Controller {
-    /// Retrieve the session info
-    static async session(req, res) {
-        const session = new Session(req);
-        res.respond(
-            session.user ? Status.Code.OK : Status.Code.Unauthorized,
-            session.user
-        );
-    }
-
     /// Handle the login request
     static async login(req, res) {
+        const session = new Session(req);
+        if (session.user != null)
+        {
+            // already logged in
+            res.respond(Status.Code.BadRequest);
+            return;
+        }
+
         const { email, password } = req.body;
         // validate the data
         if (!Validation.empty([email, password]))
@@ -29,7 +28,6 @@ class AuthController extends Controller {
                 if (await Password.compare(password, user.password))
                 {
                     // store the user id into the session
-                    const session = new Session(req);
                     session.data.user = { id: user.id };
                     res.respond(Status.Code.OK);
                     return;
@@ -43,7 +41,7 @@ class AuthController extends Controller {
     static async register(req, res) {
         const { username, email, password } = req.body;
         // validate the data
-        if (!Validation.empty([username, email, password]) 
+        if (!Validation.empty([username, email, password])
             && Validation.email(email))
         {
             const hashedPassword = await Password.hash(password);
@@ -69,7 +67,6 @@ class AuthController extends Controller {
     /// Register the controller routes
     /// @param router - The router
     register(router) {
-        router.get('/api/auth', AuthController.session);
         router.post('/api/auth/login', AuthController.login);
         router.post('/api/auth/register', AuthController.register);
         router.get('/api/auth/logout', AuthController.logout);
