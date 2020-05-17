@@ -9,3 +9,4 @@ exports.Respond = require('./respond');
 exports.Session = require('./session');
 exports.Status = require('overdrive-status');
 exports.Type = require('./type');
+exports.Validation = require('./validation');

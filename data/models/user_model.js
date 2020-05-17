@@ -30,11 +30,5 @@ module.exports = Model.define(
             required: true,
             default: 'player'
         }
-    },
-    (schema) => {
-        schema.methods.isValidPassword = function (pass) {
-            console.log(this.password + " = " + pass);
-            return this.password == pass;
-        }
     }
 );

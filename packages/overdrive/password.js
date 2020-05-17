@@ -7,7 +7,7 @@ class Password {
     /// @param password - The password to encrypt.
     /// @returns - A promise with two argument: the error string and hashed password.
     static async hash(password) {
-        return await bcrypt.hash(password, this.saltRounds);
+        return await bcrypt.hash(password, Password.saltRounds);
     }
 
     /// Check if the plain text password is equal to the hashed one.

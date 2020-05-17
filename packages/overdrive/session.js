@@ -13,13 +13,13 @@ class Session {
     /// Retrieve the data
     /// @return - The session data
     get data() {
-        return this.#req;
+        return this.#req.session;
     }
 
     /// Set the data
     /// @param value - the new data
     set data(value) {
-        if (this.#req != null)
+        if (this.#req != null && this.#req.session != null)
         {
             this.#req = value;
         }
@@ -33,6 +33,7 @@ class Session {
 
             });
         }
+        return true;
     }
 
     /// Initialize the session module
