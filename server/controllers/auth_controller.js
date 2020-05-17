@@ -43,7 +43,8 @@ class AuthController extends Controller {
     static async register(req, res) {
         const { username, email, password } = req.body;
         // validate the data
-        if (!Validation.empty([username, email, password]))
+        if (!Validation.empty([username, email, password]) 
+            && Validation.email(email))
         {
             const hashedPassword = await Password.hash(password);
             const result = await UserProvider.create({
