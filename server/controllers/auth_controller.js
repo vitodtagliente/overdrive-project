@@ -9,18 +9,25 @@ const Validation = require('overdrive').Validation;
 class AuthController extends Controller {
     /// Handle the login request
     static async login(req, res) {
-        const session = new Session(req);
-        if (session.user != null)
-        {
-            // already logged in
-            res.respond(Status.Code.BadRequest);
-            return;
-        }
-
         const { email, password } = req.body;
         // validate the data
         if (!Validation.empty([email, password]))
         {
+            const session = new Session(req);
+            if (session.user != null)
+            {
+                // already logged in
+                const result = await UserProvider.get(session.user.id);
+                if (result.status == Status.Code.OK)
+                {
+                    if (result.data.email == email)
+                    {
+                        return res.respond(Status.Code.OK);
+                    }
+                }
+                return res.respond(Status.Code.BadRequest);
+            }
+
             const result = await UserProvider.findOne({ email });
             const user = result.data;
             if (result.status == Status.Code.OK && user != null)
@@ -29,8 +36,7 @@ class AuthController extends Controller {
                 {
                     // store the user id into the session
                     session.data.user = { id: user.id };
-                    res.respond(Status.Code.OK);
-                    return;
+                    return res.respond(Status.Code.OK);
                 }
             }
         }
