@@ -10,13 +10,17 @@
     "seed": "node scripts/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["overdrive", "project"],
+  "keywords": [
+    "overdrive",
+    "project"
+  ],
   "author": "Vito Domenico Tagliente",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "data": "file:./data",
+    "ejs": "^3.1.3",
     "express": "^4.17.1",
     "mango": "file:./packages/mango",
     "overdrive": "file:./packages/overdrive",

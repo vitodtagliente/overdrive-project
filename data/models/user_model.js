@@ -29,6 +29,9 @@ module.exports = Model.define(
             enum: ['player', 'content-creator', 'admin'],
             required: true,
             default: 'player'
+        },
+        privileges: {
+            type: Array
         }
     }
 );
