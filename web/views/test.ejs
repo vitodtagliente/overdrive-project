@@ -46,6 +46,10 @@
     <script>
         const table = new Datatable('/api/items');
         table.dark = true;
+        table.field('_id', async (model) =>
+        {
+            return "ciao";
+        });
         table.render('#table-container');
     </script>
 </body>
