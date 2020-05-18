@@ -129,7 +129,7 @@ class Table {
         }
         else 
         {
-            if (this.url != url 
+            if (this.url != url
                 || this.#data == null
                 || Array.isArray(this.#data) && this.#data.length == 0)
             {
@@ -163,6 +163,12 @@ class Table {
         return null;
     }
 
+    /// Retrieve the table id
+    /// @return - The id
+    get id() {
+        return this.#id;
+    }
+
     /// Retrieve the table mode
     /// @return - The mode
     get mode() {
@@ -191,15 +197,17 @@ class Table {
             }
 
             // create the table
+            this.#id = new Date().valueOf();
             this.#dom.table = document.createElement('table');
             for (const css_class of this.classes.table)
             {
                 this.table.classList.add(css_class);
-            }
+            }            
+            this.table.setAttribute('id', this.id);
             this.parent.append(this.table);
 
             // setup the columns
-            if ((this.#columns == null 
+            if ((this.#columns == null
                 || (Array.isArray(this.#columns) && this.#columns.length == 0))
                 && this.data.length > 0)
             {
@@ -305,6 +313,8 @@ class Table {
     };
     pagination = new Pagination();
 
+    /// The table id
+    #id = null;
     /// The columns of the table
     /// can contains the showed name
     #columns = Array();
