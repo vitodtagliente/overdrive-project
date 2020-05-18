@@ -129,7 +129,9 @@ class Table {
         }
         else 
         {
-            if (this.url != url)
+            if (this.url != url 
+                || this.#data == null
+                || Array.isArray(this.#data) && this.#data.length == 0)
             {
                 this.#url = url;
                 this.#data = await $.get(
@@ -175,6 +177,9 @@ class Table {
     /// Render the datatable 
     /// @param id - The id of the DOM element in which render the datatable
     async render(id) {
+        // update date
+        await this.fetch(this.url);
+
         // create the table at the first time
         if (this.parent == null)
         {
@@ -232,7 +237,7 @@ class Table {
         const columns = Object.keys(this.columns);
         for (let i = 0; i < count; ++i)
         {
-            const model = data[i];
+            const model = this.data[i];
             const row = this.#dom.table_body.insertRow();
             row.setAttribute('id', model.id);
             await this.renderRow(row, model, columns);
