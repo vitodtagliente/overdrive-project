@@ -239,7 +239,7 @@ class Table {
         {
             const model = this.data[i];
             const row = this.#dom.table_body.insertRow();
-            row.setAttribute('id', model.id);
+            row.setAttribute('id', model.id || model._id);
             await this.renderRow(row, model, columns);
         }
     }
