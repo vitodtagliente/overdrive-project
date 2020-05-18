@@ -2,7 +2,72 @@ class SearchCache {
 
 }
 
-class Datatable {
+class Pagination {
+    /// constructor
+    constructor() {
+
+    }
+
+    get container() {
+        return this.#container;
+    }
+
+    async render() {
+        if (this.widget == null)
+        {
+            if (!await this.create())
+            {
+                console.log('Error on creating the navigation widget!');
+                return false;
+            }
+        }
+
+
+
+    }
+
+    get page() {
+        return this.#state.offset / this.limit;
+    }
+
+    get pages() {
+        return this.#state.count / this.limit;
+    }
+
+    get widget() {
+        return this.#widget;
+    }
+
+    async create(container) {
+        this.#container = container;
+        if (this.#container)
+        {
+            this.#container.innerHTML = "\
+                <nav aria-label='...''>\
+                <ul class='pagination pagination-sm'>\
+                <li class='page-item active'><a class='page-link' href='#'>1</a></li>\
+                <li class='page-item'><a class='page-link' href='#'>2</a></li>\
+                <li class='page-item'><a class='page-link' href='#'>3</a></li>\
+                </ul>\
+                </nav>\
+            ";
+            return true;
+        }
+        return false;
+    }
+
+    enabled = true;
+    limit = 10;
+
+    #container = null;
+    #state = {
+        offset: 0,
+        count: 0
+    }
+    #widget = null;
+}
+
+class Table {
     /// constructor
     /// @param url - The base url for retrieving data
     constructor(url) {
@@ -13,10 +78,26 @@ class Datatable {
         this.#columns = value;
     }
 
+    get data() {
+        return this.#data;
+    }
+
     async fetch(url) {
+        /*
         return await $.get(
             url
         );
+        */
+        this.#data = Array();
+        for (var i = 0; i < 50; ++i)
+        {
+            this.#data.push({
+                id: i,
+                name: 'name' + i,
+                description: 'description' + i
+            });
+        }
+        return this.#data;
     }
 
     field(name, renderer) {
@@ -36,11 +117,9 @@ class Datatable {
         }
 
         this.#table = document.createElement('table');
-        this.#table.classList.add('table');
-        this.#table.classList.add('table-hover');
-        if (this.dark)
+        for (const css_class of this.classes.table)
         {
-            this.#table.classList.add('table-dark');
+            this.#table.classList.add(css_class);
         }
 
         this.#data = await this.fetch(this.url);
@@ -49,6 +128,10 @@ class Datatable {
         await this.renderBody(columns, this.#data);
 
         container.append(this.#table);
+
+        const paginationDiv = document.createElement('div');
+        console.log(await this.pagination.create(paginationDiv));
+        container.append(paginationDiv);
     }
 
     async renderHeader(columns) {
@@ -64,10 +147,15 @@ class Datatable {
 
     async renderBody(columns, data) {
         this.#table_body = this.#table.createTBody();
-        for (const model of data)
+        const count = this.pagination.enabled
+            ? Math.min(data.length, this.pagination.limit)
+            : data.length;
+        for (let i = 0; i < count; ++i)
         {
+            const model = data[i];
             const row = this.#table_body.insertRow();
-            await this.renderModel(row, model, Object.keys(columns));
+            row.setAttribute('id', model.id);
+            await this.renderRow(row, model, Object.keys(columns));
         }
     }
 
@@ -99,9 +187,13 @@ class Datatable {
         return this.#columns;
     }
 
-    dark = false;
-    limit = 10;
-    renderModel = async (row, model, fields) => {
+    classes = {
+        col: Array(),
+        row: Array(),
+        table: ['table', 'table-hover']
+    };
+    pagination = new Pagination();
+    renderRow = async (row, model, fields) => {
         for (const field of fields)
         {
             const cell = row.insertCell();
@@ -110,7 +202,7 @@ class Datatable {
             {
                 if (name == field)
                 {
-                    cell.textContent = await this.#fieldRenderers[name](model);
+                    await this.#fieldRenderers[name](cell, model);
                     found = true;
                     break;
                 }
@@ -118,7 +210,7 @@ class Datatable {
 
             if (!found)
             {
-                cell.textContent = model[field];
+                cell.innerHTML = model[field];
             }
         }
     };

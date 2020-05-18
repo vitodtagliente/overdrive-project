@@ -44,11 +44,12 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/datatable.js"></script>
     <script>
-        const table = new Datatable('/api/items');
-        table.dark = true;
-        table.field('_id', async (model) =>
+        const table = new Table('/api/items');
+        table.classes.table.push('table-dark');
+        table.classes.table.push('table-sm');
+        table.field('id', async (cell, model) =>
         {
-            return "ciao";
+            cell.innerHTML = "<i style='color: cyan'>" + model.id + "</i>";
         });
         table.render('#table-container');
     </script>
