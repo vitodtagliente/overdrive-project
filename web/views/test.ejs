@@ -44,13 +44,22 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/datatable.js"></script>
     <script>
-        const table = new Table('/api/items');
+        let data = Array();
+        for (var i = 0; i < 50; ++i) {
+            data.push({
+                id: i,
+                name: 'name' + i,
+                description: 'description' + i
+            });
+        };
+
+        const table = new Table(data /*'/api/items'*/);
         table.classes.table.push('table-dark');
         table.classes.table.push('table-sm');
         table.field('id', async (cell, model) =>
         {
             cell.innerHTML = "<i style='color: cyan'>" + model.id + "</i>";
         });
-        table.render('#table-container');
+        table.render('table-container');
     </script>
 </body>
