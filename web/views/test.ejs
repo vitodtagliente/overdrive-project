@@ -44,9 +44,9 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/datatable.js"></script>
     <script>
-        let data = Array();
+        let test_data = Array();
         for (var i = 0; i < 50; ++i) {
-            data.push({
+            test_data.push({
                 id: i,
                 name: 'name' + i,
                 description: 'description' + i
@@ -60,6 +60,6 @@
         {
             cell.innerHTML = "<i style='color: cyan'>" + model.id + "</i>";
         });
-        table.render('/api/items', 'table-container');
+        table.render(test_data, 'table-container');
     </script>
 </body>
