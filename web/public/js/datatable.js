@@ -4,26 +4,9 @@ class SearchCache {
 
 class Pagination {
     /// constructor
-    constructor() {
-
-    }
-
-    get container() {
-        return this.#container;
-    }
-
-    async render() {
-        if (this.widget == null)
-        {
-            if (!await this.create())
-            {
-                console.log('Error on creating the navigation widget!');
-                return false;
-            }
-        }
-
-
-
+    /// @param table - The table on which refers to
+    constructor(table) {
+        this.#table = table;
     }
 
     get page() {
@@ -34,36 +17,93 @@ class Pagination {
         return this.#state.count / this.limit;
     }
 
+    get parent() {
+        return this.#parent;
+    }
+
+    async render(count) {
+        // create the parent container if not exists
+        if (this.parent == null)
+        {
+            if (this.table == null)
+            {
+                console.log('Unable to create the pagination widget!');
+                return;
+            }
+
+            this.#parent = document.createElement('div');
+            this.table.parent.append(this.parent);
+            const nav = document.createElement('nav');
+            nav.setAttribute('id', 'nav-' + this.table.id);
+            for (const css_class of this.classes.nav)
+            {
+                nav.classList.add(css_class);
+            }
+            this.#widget = document.createElement('ul');
+            for (const css_class of this.classes.ul)
+            {
+                this.widget.classList.add(css_class);
+            }
+            nav.append(this.widget);
+            this.parent.append(nav);
+        }
+
+        // clear the content
+        this.widget.innerHTML = '';
+
+        this.#state.count = count;
+        for (let i = 0; i < this.pages; ++i)
+        {
+            const li = document.createElement('li');
+            for (const css_class of this.classes.li)
+            {
+                li.classList.add(css_class);
+            }
+
+            if (this.page == i)
+            {
+                for (const css_class of this.classes.active)
+                {
+                    li.classList.add(css_class);
+                }
+            }
+
+            const a = document.createElement('a');
+            for (const css_class of this.classes.a)
+            {
+                a.classList.add(css_class);
+            }
+            a.innerText = i + 1;
+            li.append(a);
+
+            this.widget.append(li);
+        }
+    }
+
+    get table() {
+        return this.#table;
+    }
+
     get widget() {
         return this.#widget;
     }
 
-    async create(container) {
-        this.#container = container;
-        if (this.#container)
-        {
-            this.#container.innerHTML = "\
-                <nav aria-label='...''>\
-                <ul class='pagination pagination-sm'>\
-                <li class='page-item active'><a class='page-link' href='#'>1</a></li>\
-                <li class='page-item'><a class='page-link' href='#'>2</a></li>\
-                <li class='page-item'><a class='page-link' href='#'>3</a></li>\
-                </ul>\
-                </nav>\
-            ";
-            return true;
-        }
-        return false;
+    classes = {
+        a: ['page-link'],
+        active: ['active'],
+        li: ['page-item'],
+        nav: [],
+        ul: ['pagination', 'pagination-sm']
     }
-
     enabled = true;
     limit = 10;
 
-    #container = null;
+    #parent = null;
     #state = {
         offset: 0,
         count: 0
     }
+    #table = null;
     #widget = null;
 }
 
@@ -79,6 +119,7 @@ class Table {
     /// @param id - The id of the table
     constructor(id) {
         this.#id = id || new Date().valueOf();
+        this.#pagination = new Pagination(this);
     }
 
     /// Retrieve the columns of the table
@@ -164,6 +205,12 @@ class Table {
         return this.#mode;
     }
 
+    /// Retrieve the pagination system
+    /// @return - The pagination
+    get pagination() {
+        return this.#pagination;
+    }
+
     /// Return the parent widget
     get parent() {
         return this.#dom.parent;
@@ -218,9 +265,8 @@ class Table {
         // render the table body
         await this.#renderBody();
 
-        //const paginationDiv = document.createElement('div');
-        //console.log(await this.pagination.create(paginationDiv));
-        //container.append(paginationDiv);
+        // render the pagination widget
+        await this.pagination.render(this.data.length);
     }
 
     /// Render the body of the table
@@ -235,10 +281,9 @@ class Table {
             this.#dom.table_body.innerHTML = '';
         }
 
-        //const count = this.pagination.enabled
-        //    ? Math.min(data.length, this.pagination.limit)
-        //    : data.length;
-        const count = this.data.length;
+        const count = this.pagination.enabled
+            ? Math.min(this.data.length, this.pagination.limit)
+            : this.data.length;
         const columns = Object.keys(this.columns);
         for (let i = 0; i < count; ++i)
         {
@@ -308,7 +353,6 @@ class Table {
         row: Array(),
         table: ['table', 'table-hover']
     };
-    pagination = new Pagination();
 
     /// The table id
     #id = null;
@@ -328,6 +372,8 @@ class Table {
     #fields = Array();
     /// The mode of the table
     #mode = null;
+    /// The pagination system
+    #pagination = null;
     /// The url for Ajax mode
     #url = null;
 }
