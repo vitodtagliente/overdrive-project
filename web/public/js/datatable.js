@@ -9,6 +9,10 @@ class Pagination {
         this.#table = table;
     }
 
+    get offset() {
+        return this.#state.offset;
+    }
+
     get page() {
         return this.#state.offset / this.limit;
     }
@@ -74,6 +78,10 @@ class Pagination {
                 a.classList.add(css_class);
             }
             a.innerText = i + 1;
+            a.onclick = async () => {
+                this.#state.offset = this.limit * i;
+                await this.table.render();
+            };
             li.append(a);
 
             this.widget.append(li);
@@ -220,15 +228,18 @@ class Table {
     /// @param data - Can be an array of records or the url on which fetch data
     /// @param container_id - The id of the DOM container
     async render(data, container_id) {
-        if (Array.isArray(data))
+        if (data != null)
         {
-            this.#mode = Table.Mode.Data;
-            this.#data = data;
-        }
-        else
-        {
-            this.#mode = Table.Mode.Ajax;
-            this.#data = await this.fetch(data);
+            if (Array.isArray(data))
+            {
+                this.#mode = Table.Mode.Data;
+                this.#data = data;
+            }
+            else
+            {
+                this.#mode = Table.Mode.Ajax;
+                this.#data = await this.fetch(data);
+            }
         }
 
         // create the table at the first time
@@ -284,8 +295,11 @@ class Table {
         const count = this.pagination.enabled
             ? Math.min(this.data.length, this.pagination.limit)
             : this.data.length;
+        const offset = this.pagination.enabled
+            ? this.pagination.offset
+            : 0;
         const columns = Object.keys(this.columns);
-        for (let i = 0; i < count; ++i)
+        for (let i = offset; i < (offset + count); ++i)
         {
             const model = this.data[i];
             const row = this.#dom.table_body.insertRow();
