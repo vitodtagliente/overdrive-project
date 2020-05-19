@@ -12,11 +12,16 @@ class HomeController extends Controller {
         res.render('test');
     }
 
+    static async admin(req, res) {
+        res.render('dashboard');
+    }
+
     /// Register the controller routes
     /// @param router - The router
     register(router) {
         router.get('/', HomeController.home);
         router.get('/test', HomeController.test);
+        router.get('/admin', HomeController.admin);
     }
 };
 
