@@ -76,18 +76,9 @@ class Table {
         };
     }
     /// constructor
-    /// @param data - can be a static array of data or the base url for retrieving data
-    constructor(data) {
-        if (Array.isArray(data))
-        {
-            this.#mode = Table.Mode.Data;
-            this.#data = data;
-        }
-        else
-        {
-            this.#mode = Table.Mode.Ajax;
-            this.#url = data;
-        }
+    /// @param id - The id of the table
+    constructor(id) {
+        this.#id = id || new Date().valueOf();
     }
 
     /// Retrieve the columns of the table
@@ -129,16 +120,14 @@ class Table {
         }
         else 
         {
-            if (this.url != url
-                || this.#data == null
-                || Array.isArray(this.#data) && this.#data.length == 0)
+            if (this.url != url)
             {
                 this.#url = url;
-                this.#data = await $.get(
+                return await $.get(
                     url
                 );
             }
-            return this.data;
+            return Array();
         }
     }
 
@@ -181,28 +170,36 @@ class Table {
     }
 
     /// Render the datatable 
-    /// @param id - The id of the DOM element in which render the datatable
-    async render(id) {
-        // update date
-        await this.fetch(this.url);
+    /// @param data - Can be an array of records or the url on which fetch data
+    /// @param container_id - The id of the DOM container
+    async render(data, container_id) {
+        if (Array.isArray(data))
+        {
+            this.#mode = Table.Mode.Data;
+            this.#data = data;
+        }
+        else
+        {
+            this.#mode = Table.Mode.Ajax;
+            this.#data = await this.fetch(data);
+        }
 
         // create the table at the first time
-        if (this.parent == null)
+        if (this.table == null)
         {
-            this.#dom.parent = document.getElementById(id);
+            this.#dom.parent = document.getElementById(container_id);
             if (this.parent == null)
             {
-                console.log('Unable to create the table! Invalid contained id');
+                console.log('Unable to create the table! Invalid container id');
                 return false;
             }
 
             // create the table
-            this.#id = new Date().valueOf();
             this.#dom.table = document.createElement('table');
             for (const css_class of this.classes.table)
             {
                 this.table.classList.add(css_class);
-            }            
+            }
             this.table.setAttribute('id', this.id);
             this.parent.append(this.table);
 

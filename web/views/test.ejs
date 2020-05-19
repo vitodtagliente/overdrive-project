@@ -53,13 +53,13 @@
             });
         };
 
-        const table = new Table('/api/items');
+        const table = new Table();
         table.classes.table.push('table-dark');
         table.classes.table.push('table-sm');
         table.field('id', async (cell, model) =>
         {
             cell.innerHTML = "<i style='color: cyan'>" + model.id + "</i>";
         });
-        table.render('table-container');
+        table.render('/api/items', 'table-container');
     </script>
 </body>
