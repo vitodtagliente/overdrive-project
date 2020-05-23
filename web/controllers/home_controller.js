@@ -1,4 +1,5 @@
 const Controller = require('overdrive').Controller;
+const Dashboard = require('../dashboard/dashboard');
 
 class HomeController extends Controller {
     /// Serve the placeholder home page
@@ -13,7 +14,8 @@ class HomeController extends Controller {
     }
 
     static async admin(req, res) {
-        res.render('dashboard');
+        const dashboard = new Dashboard();
+        res.render('dashboard', { dashboard });
     }
 
     /// Register the controller routes

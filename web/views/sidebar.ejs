@@ -2,7 +2,7 @@
     <div class="sidebar-content">
         <!-- sidebar-brand  -->
         <div class="sidebar-item sidebar-brand">
-            <a>Overdrive</a>
+            <a><%- dashboard.name %></a>
         </div>
         <!-- sidebar-header  -->
         <div class="sidebar-item sidebar-header d-flex flex-nowrap">
@@ -23,6 +23,7 @@
         <!-- sidebar-menu  -->
         <div class=" sidebar-item sidebar-menu">
             <ul>
+                <%- dashboard.sidebar.render(); %>
                 <li class="header-menu">
                     <span>General</span>
                 </li>
