@@ -1,154 +1,154 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description"
+        content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
+    <title>Sidebar template</title>
 
-    <title>AdminLTE 3 | Starter</title>
-
-    <!-- Font Awesome Icons -->
+    <!-- using online links -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="/css/adminlte.min.css">
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.min.css">
+
+    <!-- using local links -->
+    <!-- <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css"> -->
+
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
 </head>
 
-<body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-        
-        <%- include('navbar') %> 
-        
-        <%- include('sidebar') %>
+<body>
+    <div class="page-wrapper default-theme sidebar-bg bg1 toggled">
 
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0 text-dark">Starter Page</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Starter Page</li>
-                            </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- /.content-header -->
+        <!-- Sidebar -->
+        <%- include('sidebar'); %>
 
-            <!-- Main content -->
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
+        <!-- page-content  -->
+        <main class="page-content pt-2">
+            <div id="overlay" class="overlay"></div>
+            <div class="container-fluid p-5">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <h2>Pro Sidebar</h2>
+                        <p>This is a responsive sidebar template with dropdown menu based on bootstrap framework.</p>
 
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's
-                                        content.
-                                    </p>
-
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
-                                </div>
-                            </div>
-
-                            <div class="card card-primary card-outline">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's
-                                        content.
-                                    </p>
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
-                                </div>
-                            </div><!-- /.card -->
-                        </div>
-                        <!-- /.col-md-6 -->
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional
-                                        content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-
-                            <div class="card card-primary card-outline">
-                                <div class="card-header">
-                                    <h5 class="m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional
-                                        content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.col-md-6 -->
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
+                    <div class="form-group col-md-12">
+                        <iframe
+                            src="https://ghbtns.com/github-btn.html?user=azouaoui-med&repo=pro-sidebar-template&type=star&count=true&size=small"
+                            frameborder="0" scrolling="0" width="100px" height="30px"></iframe>
+                        <iframe
+                            src="https://ghbtns.com/github-btn.html?user=azouaoui-med&repo=pro-sidebar-template&type=fork&count=true&size=small"
+                            frameborder="0" scrolling="0" width="100px" height="30px"></iframe>
+                    </div>
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-            <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
-            </div>
-        </aside>
-        <!-- /.control-sidebar -->
+                    <div class="form-group col-md-12">
+                        <a id="toggle-sidebar" class="btn btn-secondary rounded-0" href="#">
+                            <span>Toggle Sidebar</span>
+                        </a>
+                        <a id="pin-sidebar" class="btn btn-outline-secondary rounded-0" href="#">
+                            <span>Pin Sidebar</span>
+                        </a>
 
-        <!-- Main Footer -->
-        <footer class="main-footer">
-            <!-- To the right -->
-            <div class="float-right d-none d-sm-inline">
-                Anything you want
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <h3>Themes</h3>
+                        <p>Here are more themes that you can use</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <a href="#" data-theme="default-theme" class="theme default-theme selected"></a>
+                        <a href="#" data-theme="chiller-theme" class="theme chiller-theme"></a>
+                        <a href="#" data-theme="legacy-theme" class="theme legacy-theme"></a>
+                        <a href="#" data-theme="ice-theme" class="theme ice-theme"></a>
+                        <a href="#" data-theme="cool-theme" class="theme cool-theme"></a>
+                        <a href="#" data-theme="light-theme" class="theme light-theme"></a>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <p>You can also use background image </p>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <a href="#" data-bg="bg1" class="theme theme-bg selected"></a>
+                        <a href="#" data-bg="bg2" class="theme theme-bg"></a>
+                        <a href="#" data-bg="bg3" class="theme theme-bg"></a>
+                        <a href="#" data-bg="bg4" class="theme theme-bg"></a>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="toggle-bg" checked>
+                            <label class="custom-control-label" for="toggle-bg">Background image</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="toggle-border-radius">
+                            <label class="custom-control-label" for="toggle-border-radius">Border radius</label>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <hr>
+                <div class="row ">
+                    <div class="form-group col-md-12">
+                        <small>Made with <i class="fa fa-heart text-danger" aria-hidden="true"></i> by <span
+                                class="text-secondary font-weight-bold">Mohamed
+                                Azouaoui</span></small>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <a href="https://github.com/azouaoui-med" target="_blank"
+                            class="btn btn-sm bg-secondary shadow-sm rounded-0 text-light mr-3 mb-3">
+                            <i class="fab fa-github" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://twitter.com/azouaoui_med" target="_blank"
+                            class="btn btn-sm bg-secondary shadow-sm rounded-0 text-light mr-3 mb-3">
+                            <i class="fab fa-twitter" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://www.instagram.com/azouaoui_med/" target="_blank"
+                            class="btn btn-sm bg-secondary shadow-sm rounded-0 text-light mr-3 mb-3">
+                            <i class="fab fa-instagram" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/mohamed-azouaoui/" target="_blank"
+                            class="btn btn-sm bg-secondary shadow-sm rounded-0 text-light mr-3 mb-3">
+                            <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <!-- Default to the left -->
-            <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
-            reserved.
-        </footer>
+        </main>
+        <!-- page-content" -->
     </div>
-    <!-- ./wrapper -->
+    <!-- page-wrapper -->
 
-    <!-- REQUIRED SCRIPTS -->
-
-    <!-- jQuery -->
-    <script src="/js/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
+    <!-- using online scripts -->
+    <script src="js/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+        </script>
     <script src="/js/bootstrap.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="/js/adminlte.min.js"></script>
+    <script src="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <!-- using local scripts -->
+    <!-- <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script> -->
+
+
+    <script src="/js/dashboard.js"></script>
 </body>
 
 </html>
