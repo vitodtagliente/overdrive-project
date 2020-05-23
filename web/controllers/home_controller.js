@@ -15,6 +15,10 @@ class HomeController extends Controller {
 
     static async admin(req, res) {
         const dashboard = new Dashboard();
+        const sidebar = dashboard.sidebar;
+        const foo = sidebar.add("Foo", 'folder');
+        foo.add('ex1', '', '/ppp');
+        //foo.add('ex2', '', '/ppp');
         res.render('dashboard', { dashboard });
     }
 
