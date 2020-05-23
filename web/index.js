@@ -21,18 +21,7 @@ exports.initialize = function (app) {
     // set the views folder
     app.set('views', path.join(__dirname, '/views'));
     // initialize the dashboard
-    new Dashboard();
-    app.use((req, res, next) => {
-        /// Generate a new dashboard
-        /// @param view - The view to render in the dashboard
-        res.dashboard = (view) => {
-            res.render('dashboard/dashboard', {
-                dashboard: Dashboard.instance,
-                view: `../${view}`
-            });
-        };
-        next();
-    });
+    Dashboard.initialize(app);
     // register the controllers
     Controller.load(exports.Controllers, app.raw);
 }
