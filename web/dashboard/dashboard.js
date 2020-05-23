@@ -12,7 +12,7 @@ class Dashboard {
     }
 
     get name() {
-        return "ciao";
+        return "Overdrive";
     }
 }
 
