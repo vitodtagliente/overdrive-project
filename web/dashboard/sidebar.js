@@ -80,7 +80,7 @@ class Element extends BaseElement {
             for (const child of this.children)
             {
                 result.push('<li>');
-                result.push(`<a href="${child.url}">${child.name}</i>`);
+                result.push(`<a href="${child.url}">${child.name}</a>`);
                 result.push('</li>');
             }
             result.push('</ul>');
@@ -103,8 +103,8 @@ class Element extends BaseElement {
         return this.#section;
     }
 
-    section(section) {
-        this.#section = section;
+    setSection(value) {
+        this.#section = value;
         return this;
     }
 }
@@ -132,13 +132,47 @@ class Sidebar {
         const result = [];
         result.push("<div class=\"sidebar-item sidebar-menu\">");
         result.push("<ul>");
-        for (const child of this.elements)
+
+        const sections = this.#sort();
+        for (const section of Object.keys(sections))
         {
-            result.push(child.render());
+            result.push('<li class="header-menu">');
+            result.push(`<span>${section}</span>`);
+            result.push('</li>');
+
+            for (const child of sections[section])
+            {
+                result.push(child.render());
+            }
         }
+
         result.push("</ul>");
         result.push("</div>");
         return result.join("\n");
+    }
+
+    #sort = () => {
+        let sections = Array();
+
+        for (const element of this.elements)
+        {
+            let section = element.section;
+            if (element.section == null)
+            {
+                section = '';
+
+            }
+
+            if (sections[section] == undefined)
+            {
+                sections[section] = Array();
+            }
+            sections[section].push(element);
+        }
+
+        sections.sort();
+
+        return sections;
     }
 }
 
