@@ -133,8 +133,8 @@ class Sidebar {
         result.push("<div class=\"sidebar-item sidebar-menu\">");
         result.push("<ul>");
 
-        const sections = this.#sort();
-        for (const section of Object.keys(sections))
+        const sections = this.sections;
+        for (const section of Object.keys(sections).sort())
         {
             result.push('<li class="header-menu">');
             result.push(`<span>${section}</span>`);
@@ -151,7 +151,7 @@ class Sidebar {
         return result.join("\n");
     }
 
-    #sort = () => {
+    get sections() {
         let sections = Array();
 
         for (const element of this.elements)
@@ -169,8 +169,6 @@ class Sidebar {
             }
             sections[section].push(element);
         }
-
-        sections.sort();
 
         return sections;
     }
