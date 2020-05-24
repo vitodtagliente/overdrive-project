@@ -24,7 +24,7 @@ class HomeController extends Controller {
         router.get('/', HomeController.home);
 
         // register the navigation
-        dashboard.sidebar.add('Dashboard', 'tachometer-alt', '/');
+        dashboard.sidebar.add('Dashboard', 'tachometer-alt').setUrl('/');
     }
 };
 
