@@ -66,12 +66,12 @@
                 <form>
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input id="email" type="email" class="form-control" id="exampleInputEmail1"
+                        <input name="email" type="email" class="form-control" id="exampleInputEmail1"
                             aria-describedby="emailHelp">
                     </div>
                     <div class="form-group">
                         <label id="password" for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1">
+                        <input name="password" class="form-control" id="exampleInputPassword1">
                     </div>
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -90,6 +90,32 @@
             <a target="_blank" href="https://github.com/vitodtagliente/overdrive-project">overdrive</a>
         </p>
     </footer>
+
+    <!-- vendors -->
+    <script src="/js/vendors/jquery.min.js"></script>
+    <script src="/js/vendors/popper.min.js"></script>
+    <script src="/js/vendors/bootstrap.min.js"></script>
+    <!-- custom -->
+    <script>
+        window.addEventListener('load', function ()
+        {
+            $("form").on("submit", function (e)
+            {
+                e.preventDefault();
+
+                $.post({
+                    url: '/api/auth/login',
+                    data: $('form').serialize(),
+                }).done(function (data)
+                {
+                    window.location.replace("/");
+                }).fail(function (data)
+                {
+
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
