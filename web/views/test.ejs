@@ -1,6 +1,14 @@
 <div class="row">
-    <div id="table-container" class="col-12">
+    <div class="col-12">
+        <h3>Test</h3>
+    </div>
+</div>
+<div class="row">
+    <div id="table-container" class="col-8">
 
+    </div>
+    <div class="col-4">
+        
     </div>
 </div>
 <script>
@@ -16,12 +24,17 @@
         };
 
         const table = new Table();
-        table.classes.table.push('table-dark');
+        // table.classes.table.push('table-dark');
         table.classes.table.push('table-sm');
+        table.classes.table.push('mt-2');
         table.field('id', async (cell, model) =>
         {
-            cell.innerHTML = "<i style='color: cyan'>" + model.id + "</i>";
+            cell.innerHTML = "<i style='color: orange'>" + model.id + "</i>";
         });
+        table.renderColumn = async (cell, name) =>
+        {
+            cell.innerHTML = "<b>" + name + "</b>";
+        };
         table.render(test_data, 'table-container');
     });
 </script>
