@@ -1,1 +1,27 @@
-<h4>Dash test</h4>
+<div class="row">
+    <div id="table-container" class="col-12">
+
+    </div>
+</div>
+<script>
+    window.addEventListener('load', () =>
+    {
+        let test_data = Array();
+        for (var i = 0; i < 50; ++i) {
+            test_data.push({
+                id: i,
+                name: 'name' + i,
+                description: 'description' + i
+            });
+        };
+
+        const table = new Table();
+        table.classes.table.push('table-dark');
+        table.classes.table.push('table-sm');
+        table.field('id', async (cell, model) =>
+        {
+            cell.innerHTML = "<i style='color: cyan'>" + model.id + "</i>";
+        });
+        table.render(test_data, 'table-container');
+    });
+</script>

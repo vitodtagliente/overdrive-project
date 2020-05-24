@@ -10,18 +10,17 @@
     <title><%- dashboard.name %></title>
 
     <!-- using online links -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/all.min.css">
-    <link rel="stylesheet" href="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="/css/vendors/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/vendors/all.min.css">
+    <link rel="stylesheet" href="/css/vendors/jquery.mCustomScrollbar.min.css">
 
-    <!-- using local links -->
-    <!-- <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css"> -->
-
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <link rel="stylesheet" href="/css/sidebar.css">
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+    <!-- overdrive -->
+    <link rel="stylesheet" href="/css/dashboard/dashboard.css">
+    <link rel="stylesheet" href="/css/dashboard/navbar.css">
+    <link rel="stylesheet" href="/css/dashboard/sidebar.css">
+    <link rel="stylesheet" href="/css/dashboard/components.css">
+    
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
 </head>
 
 <body>
@@ -47,42 +46,14 @@
     </div>
     <!-- page-wrapper -->
 
-    <!-- using online scripts -->
-    <script src="js/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
-        </script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="//malihu.github.io/custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
-
-    <!-- using local scripts -->
-    <!-- <script src="../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../node_modules/popper.js/dist/umd/popper.min.js"></script>
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="../node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script> -->
-
-
+    <!-- vendors -->
+    <script src="/js/vendors/jquery.min.js"></script>
+    <script src="/js/vendors/popper.min.js"></script>
+    <script src="/js/vendors/bootstrap.min.js"></script>
+    <script src="/js/vendors/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- overdrive -->
     <script src="/js/dashboard.js"></script>
     <script src="/js/datatable.js"></script>
-    <script>
-        let test_data = Array();
-        for (var i = 0; i < 50; ++i) {
-            test_data.push({
-                id: i,
-                name: 'name' + i,
-                description: 'description' + i
-            });
-        };
-
-        const table = new Table();
-        table.classes.table.push('table-dark');
-        table.classes.table.push('table-sm');
-        table.field('id', async (cell, model) =>
-        {
-            cell.innerHTML = "<i style='color: cyan'>" + model.id + "</i>";
-        });
-        table.render(test_data, 'table-container');
-    </script>
 </body>
 
 </html>
