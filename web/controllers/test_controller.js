@@ -4,7 +4,7 @@ const dashboard = require('../dashboard/dashboard').instance;
 class TestController extends Controller {
     /// Restrieve the test dashboard module
     static async home(req, res){
-        res.dashboard('test');
+        res.dashboard('dashboards/test');
     }
     /// Register the controller routes
     /// @param router - The router

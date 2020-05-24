@@ -6,6 +6,7 @@ const path = require('path');
 
 /// Add here all the controllers to automatically register at the startup of the application
 exports.Controllers = [
+    require('./controllers/auth_controller'),
     require('./controllers/home_controller'),
     require('./controllers/test_controller')
 ];
