@@ -5,7 +5,7 @@ window.addEventListener('load', function () {
         //document.getElementById(signin ? 'row-signin' : 'row-signup').classList.remove('d-none');
         $('#content').fadeToggle(signin ? 2000 : 1000);
         $('#overlay').fadeToggle(signin ? 1000 : 2000);
-        document.title = signin ? 'Sign in' : 'Sign up';
+        document.title = signin ? 'Sign In' : 'Sign Up';
     }
 
     $('#signIn').on('click', function () {

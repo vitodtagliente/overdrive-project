@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
         content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
-    <title>Sign <%- (signin) ? 'in' : 'up' -%></title>
+    <title>Sign <%- (signin) ? 'In' : 'Up' -%></title>
     <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
 
     <!-- vendors -->
@@ -21,7 +21,7 @@
 <body>
     <div id="content" class="container-fluid" <%- !signin ? 'style="display:none"' : '' -%>>
         <div id="row-signin" class="row full-height">
-            <div class="col-6">
+            <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="container side-container sign-in-container">
                     <form id="form-signin">
                         <h1>Sign in</h1>
@@ -38,7 +38,7 @@
                     </form>
                 </div>
             </div>
-            <div class="col-6 bg-info">
+            <div class="col-sm-12 col-md-6 col-lg-6 bg-info">
                 <div class="container ad-container">
                     <h1>Hello, Friend!</h1>
                     <p>Enter your personal details and start journey with us</p>
@@ -49,14 +49,14 @@
     </div>
     <div id="overlay" class="overlay container-fluid" <%- signin ? 'style="display:none"' : '' -%>>
         <div id="row-signup" class="row full-height">
-            <div class="col-6 bg-info">
+            <div class="col-sm-12 col-md-6 col-lg-6 bg-info">
                 <div class="container ad-container">
                     <h1>Welcome Back!</h1>
                     <p>To keep connected with us please login with your personal info</p>
                     <button id="signIn" class="btn btn-light">Sign In</button>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="container side-container">
                     <form id="form-signup">
                         <h1>Create an Account</h1>

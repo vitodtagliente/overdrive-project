@@ -28,12 +28,14 @@ html, body {
 .side-container {
 	max-width: 420px;
 	padding-top: 40px;
+	padding-bottom: 80px;
 	margin: 0 auto;
 }
 
 .ad-container {
 	max-width: 420px;
 	padding-top: 40px;
+	padding-bottom: 80px;
 	height: 100%;
 	margin: auto auto;
 }
