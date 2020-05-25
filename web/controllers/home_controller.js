@@ -10,7 +10,7 @@ class HomeController extends Controller {
         const session = new Session(req);
         if (session.user == null)
         {
-            res.render('home');
+            res.render('overdrive/home');
         }
         else 
         {

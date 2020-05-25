@@ -27,10 +27,10 @@ class Session {
 
     /// Destroy the session
     destroy() {
-        if (this.data && this.data.session)
+        if (this.data)
         {
-            this.data.session.destroy((err) => {
-
+            this.data.destroy((err) => {
+                
             });
         }
         return true;
