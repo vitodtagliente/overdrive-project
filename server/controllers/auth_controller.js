@@ -8,7 +8,7 @@ const Validation = require('overdrive').Validation;
 
 class AuthController extends Controller {
     /// Handle the login request
-    static async login(req, res) {
+    static async signin(req, res) {
         const { email, password } = req.body;
         // validate the data
         if (!Validation.empty([email, password]))
@@ -44,7 +44,7 @@ class AuthController extends Controller {
     }
 
     /// Handle the register request
-    static async register(req, res) {
+    static async signup(req, res) {
         const { username, email, password } = req.body;
         // validate the data
         if (!Validation.empty([username, email, password])
@@ -73,8 +73,8 @@ class AuthController extends Controller {
     /// Register the controller routes
     /// @param router - The router
     register(router) {
-        router.post('/api/auth/login', AuthController.login);
-        router.post('/api/auth/register', AuthController.register);
+        router.post('/api/auth/signin', AuthController.signin);
+        router.post('/api/auth/signup', AuthController.signup);
         router.get('/api/auth/logout', AuthController.logout);
     }
 }
