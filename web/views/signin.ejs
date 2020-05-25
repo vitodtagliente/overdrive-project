@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <div id="content" class="container-fluid">
+    <div id="content" class="container-fluid" <%- !signin ? 'style="display:none"' : '' -%>>
         <div id="row-signin" class="row full-height">
             <div class="col-6">
                 <div class="container side-container sign-in-container">
@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-    <div id="overlay" class="overlay container-fluid" style="display:none">
+    <div id="overlay" class="overlay container-fluid" <%- signin ? 'style="display:none"' : '' -%>>
         <div id="row-signup" class="row full-height">
             <div class="col-6 bg-info">
                 <div class="container ad-container">
