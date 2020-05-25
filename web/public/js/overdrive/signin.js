@@ -32,11 +32,18 @@ window.addEventListener('load', function () {
         e.preventDefault();
 
         const data = $("#form-signup").serialize();
+        const registeredEmail = $('#up-email').val();
 
         $.post({
             url: '/api/auth/signup',
             data: data,
         }).done(function (data) {
+            const email = $('#in-email');
+            email.popover({
+                title: 'Sign up completed!',
+                delay: 5000
+            });
+            email.val(registeredEmail);
             swap();
         }).fail(function (data) {
 
