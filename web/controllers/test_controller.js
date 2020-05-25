@@ -13,7 +13,7 @@ class TestController extends Controller {
         router.get('/test', TestController.home);
 
         // register the navigation
-        dashboard.sidebar.add('Test', 'folder', '/test');
+        dashboard.sidebar.add('Test', 'folder').setUrl('/test');
     }
 }
 
