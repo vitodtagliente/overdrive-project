@@ -1,28 +1,15 @@
 window.addEventListener('load', function () {
-    // animation setup
-    const signUpButton = document.getElementById('signUp');
-    const signInButton = document.getElementById('signIn');
-    const container = document.getElementById('container');
 
     function swap(signin = true) {
-        if (signin)
-        {
-            container.classList.remove('right-panel-active');
-            document.title = "Sign in";
-        }
-        else 
-        {
-            container.classList.add('right-panel-active');
-            document.title = "Sign up";
-        }
+        document.getElementById(signin ? 'row-signup' : 'row-signin').classList.add('d-none');
+        document.getElementById(signin ? 'row-signin' : 'row-signup').classList.remove('d-none');
     }
 
-    signUpButton.addEventListener('click', () => {
-        swap(false);
-    });
-
-    signInButton.addEventListener('click', () => {
+    $('#signIn').on('click', function () {
         swap();
+    });
+    $('#signUp').on('click', function () {
+        swap(false);
     });
 
     $("#form-signin").on("submit", function (e) {

@@ -19,36 +19,59 @@
 </head>
 
 <body>
-    <div class="container <%- (signin) ? '' : 'right-panel-active' -%>" id="container">
-        <div class="form-container sign-up-container">
-            <form id="form-signup">
-                <h1>Create Account</h1>
-                <input type="text" name="username" placeholder="Username" />
-                <input type="email" name="email" placeholder="Email" />
-                <input type="password" name="password" placeholder="Password" />
-                <button type="submit">Sign Up</button>
-            </form>
-        </div>
-        <div class="form-container sign-in-container">
-            <form id="form-signin">
-                <h1>Sign in</h1>
-                <input id="signin-email" type="email" name="email" placeholder="Email" />
-                <input type="password" name="password" placeholder="Password" />
-                <a href="#">Forgot your password?</a>
-                <button type="submit">Sign In</button>
-            </form>
-        </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Welcome Back!</h1>
-                    <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign In</button>
+    <div class="container-fluid" id="container">
+        <div id="row-signin" class="row full-height">
+            <div class="col-6">
+                <div class="container side-container sign-in-container">
+                    <form id="form-signin">
+                        <h1>Sign in</h1>
+                        <div class="form-group">
+                            <label for="in-email">Email address</label>
+                            <input type="email" class="form-control" id="in-email" aria-describedby="emailHelp"
+                                name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="in-password">Password</label>
+                            <input type="password" class="form-control" id="in-password" name="password">
+                        </div>
+                        <button type="submit" class="btn btn-info">Sign In</button>
+                    </form>
                 </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Hello, Friend!</h1>
-                    <p>Enter your personal details and start journey with us</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
+            </div>
+            <div class="col-6 bg-info">
+                <div class="container side-container sign-in-container">
+                    <h3>Sign up</h3>
+                    <button id="signUp" class="btn btn-light">Sign Up</button>
+                </div>
+            </div>
+        </div>
+        <div id="row-signup" class="row full-height d-none">
+            <div class="col-6 bg-info">
+                <div class="container side-container sign-in-container">
+                    <h3>Sign in</h3>
+                    <button id="signIn" class="btn btn-light">Sign In</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="container side-container sign-in-container">
+                    <form id="form-signup">
+                        <h1>Create an Account</h1>
+                        <div class="form-group">
+                            <label for="up-username">Username</label>
+                            <input type="text" class="form-control" id="up-username" aria-describedby="emailHelp"
+                                name="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="up-email">Email address</label>
+                            <input type="email" class="form-control" id="up-email" aria-describedby="emailHelp"
+                                name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="up-password">Password</label>
+                            <input type="password" class="form-control" id="up-password" name="password">
+                        </div>
+                        <button type="submit" class="btn btn-info">Sign Up</button>
+                    </form>
                 </div>
             </div>
         </div>
