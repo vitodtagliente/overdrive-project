@@ -5,14 +5,14 @@ class AuthController extends Controller {
     /// @param req - The http request
     /// @param res - The http response
     static async signin(req, res) {
-        res.render('signin');
+        res.render('signin', { signin: true });
     }
 
     /// Serve the sign-up page
     /// @param req - The http request
     /// @param res - The http response
     static async signup(req, res) {
-        res.render('signup');
+        res.render('signin', { signin: false });
     }
 
     /// Register the controller routes
