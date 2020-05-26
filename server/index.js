@@ -1,16 +1,17 @@
 const Controller = require('overdrive').Controller;
+const Directory = require('overdrive').IO.Directory;
 const Logger = require('overdrive').Logger;
-
-/// Add here all the controllers to automatically register at the startup of the application
-exports.Controllers = [
-    require('./controllers/auth_controller'),
-    require('./controllers/item_controller')
-];
+const path = require('path');
 
 /// Setup the server interface
 /// @param app - The application
 exports.initialize = function (app) {
     Logger.log("Initializing the server interface...");
     // register the controllers
-    Controller.load(exports.Controllers, app.raw);
+    const controllers = Array();
+    for (const file of Directory.getFiles(path.join(__dirname, 'controllers')))
+    {
+        controllers.push(require(file));
+    }
+    Controller.load(controllers, app.raw);
 }

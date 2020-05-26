@@ -1,15 +1,9 @@
 const Controller = require('overdrive').Controller;
 const Dashboard = require('./dashboard/dashboard');
+const Directory = require('overdrive').IO.Directory;
 const express = require('express');
 const Logger = require('overdrive').Logger;
 const path = require('path');
-
-/// Add here all the controllers to automatically register at the startup of the application
-exports.Controllers = [
-    require('./controllers/auth_controller'),
-    require('./controllers/home_controller'),
-    require('./controllers/test_controller')
-];
 
 /// Setup the web interface
 /// @param app - The application
@@ -24,5 +18,10 @@ exports.initialize = function (app) {
     // initialize the dashboard
     Dashboard.initialize(app);
     // register the controllers
-    Controller.load(exports.Controllers, app.raw);
+    const controllers = Array();
+    for (const file of Directory.getFiles(path.join(__dirname, 'controllers')))
+    {
+        controllers.push(require(file));
+    }
+    Controller.load(controllers, app.raw);
 }
