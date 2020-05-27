@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
+    <title>Leave session</title>
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
+
+    <!-- vendors -->
+    <link rel="stylesheet" href="/css/vendors/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/vendors/all.min.css">
+    <!-- overdrive -->
+    <link rel="stylesheet" href="/css/overdrive/footer.css">
+    <!-- custom -->
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .profile-container {
+            width: 100%;
+            max-width: 420px;
+            padding-top: 80px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .img-profile {
+            height: 124px;
+            width: 124px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="profile-container">
+        <div class="text-center mb-4">
+            <img class="img-profile img-fluid img-rounded" src="/img/user.jpg" alt="User picture">
+            <div class="user-info pt-3">
+                <span class="user-name">Vito Domenico
+                    <strong>Tagliente</strong>
+                </span>
+            </div>
+            <span>
+                Hai una session attualmente attiva?
+                <a href="/" class="text-info">Go back home</a>
+            </span>
+            <div class="pt-4">
+                <button data-toggle="modal" data-target="#logout-modal" class="btn btn-sm btn-info">
+                    Leave the session
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="logout-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Logout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure to close the current session?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="btn-logout" type="button" class="btn btn-danger" data-dismiss="modal">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('components/footer') %>
+
+    <!-- vendors -->
+    <script src="/js/vendors/jquery.min.js"></script>
+    <script src="/js/vendors/popper.min.js"></script>
+    <script src="/js/vendors/bootstrap.min.js"></script>
+    <!-- custom -->
+    <script>
+        window.addEventListener('load', function ()
+        {
+            $('#btn-logout').on('click', function ()
+            {
+                $.get({
+                    url: '/api/auth/logout'
+                }).done(function (data)
+                {
+                    window.location.replace('/signin');
+                }).fail(function (data)
+                {
+
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
