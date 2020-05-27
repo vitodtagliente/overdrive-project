@@ -6,11 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["data"],
+  "keywords": [
+    "data"
+  ],
   "author": "Vito Domenico Tagliente",
   "license": "ISC",
   "dependencies": {
     "mango": "file:../packages/mango",
+    "overdrive-db": "file:../packages/overdrive-db",
     "overdrive-logger": "file:../packages/overdrive-logger",
     "overdrive-status": "file:../packages/overdrive-status"
   }

@@ -1,19 +1,19 @@
 {
-  "name": "overdrive",
+  "name": "mango",
   "version": "1.0.0",
-  "description": "Nodejs overdrive framework",
+  "description": "Nodejs Database abrstraction layer",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "mango"
+  ],
   "author": "Vito Domenico Tagliente",
-  "license": "ICS",
+  "license": "ISC",
   "dependencies": {
-    "bcrypt": "^4.0.1",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "mango": "file:../mango",
-    "overdrive-db": "file:../overdrive-db",
+    "mongoose": "^5.9.13",
+    "mongoose-timestamp": "^0.6.0",
     "overdrive-logger": "file:../overdrive-logger",
     "overdrive-status": "file:../overdrive-status"
   }
