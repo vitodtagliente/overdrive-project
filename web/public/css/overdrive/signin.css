@@ -1,10 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
-* {
-	box-sizing: border-box;
-}
-
 body {
 	background: #f6f5f7;
 	font-family: 'Montserrat', sans-serif;
@@ -13,41 +9,102 @@ body {
 html, body {
     height: 100%;
 }
-.container-fluid {
-    height: 100%;
+
+.wrapper {
+	position: relative;
+	min-height: 100vh;
+	display: flex;
+	padding: 20px; 
 }
 
-.full-height {
-	height: 100%;
-}
-
-.btn, input, .form-group input {
-	border-radius: 0px;
-}
-
-.side-container {
-	max-width: 420px;
-	padding-top: 40px;
-	padding-bottom: 80px;
-	margin: 0 auto;
-}
-
-.ad-container {
-	max-width: 420px;
-	padding-top: 40px;
-	padding-bottom: 80px;
-	height: 100%;
-	margin: auto auto;
-}
-
-.overlay {
+.section {
 	position: absolute;
 	top: 0;
 	left: 0;
+	right: 0;
+	bottom: 0;
 	width: 100%;
+	height: 100%;
+	display: flex;
+	transition: 1.2s;
+}
+
+.side {
+	width: 50%;
 	height: 100%;
 }
 
-.advice {
+.ad-container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background-color: #117a8b;
 	margin: auto auto;
+	padding: 10%;
+}
+
+.form-container {
+	padding: 10%;
+	max-width: 720px;
+	margin: 0 auto;
+}
+
+.wrapper .section.signup {
+	left: -100%;
+	top: 0%;
+	opacity: 0;
+}
+
+.wrapper.active .section.signup {
+	left: 0%;
+	top: 0%;
+	opacity: 1;
+}
+
+.wrapper .section.signin {
+	left: 0%;
+	top: 0%;
+	opacity: 1;
+}
+
+.wrapper.active .section.signin {
+	left: -100%;
+	top: 0%;
+	opacity: 0;
+}
+
+@media (max-width: 680px)
+{
+	.section {		
+		display: block;
+	}
+
+	.side {
+		width: 100%;
+		height: auto;
+	}
+
+	.wrapper .section.signup {
+		left: 0%;
+		top: -100%;
+		opacity: 0;
+	}
+	
+	.wrapper.active .section.signup {
+		left: 0%;
+		top: 0%;
+		opacity: 1;
+	}
+	
+	.wrapper .section.signin {
+		left: 0%;
+		top: 0%;
+		opacity: 1;
+	}
+	
+	.wrapper.active .section.signin {
+		left: 0%;
+		top: -100%;
+		opacity: 0;
+	}
 }

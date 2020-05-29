@@ -3,8 +3,14 @@ window.addEventListener('load', function () {
     function swap(signin = true) {
         //document.getElementById(signin ? 'row-signup' : 'row-signin').classList.add('d-none');
         //document.getElementById(signin ? 'row-signin' : 'row-signup').classList.remove('d-none');
-        $('#content').fadeToggle(signin ? 2000 : 1000);
-        $('#overlay').fadeToggle(signin ? 1000 : 2000);
+        if (signin)
+        {
+            $('#content').removeClass('active');
+        }
+        else
+        {
+            $('#content').addClass('active');
+        }
         document.title = signin ? 'Sign In' : 'Sign Up';
     }
 
