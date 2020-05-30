@@ -51,6 +51,13 @@
         {
             cell.innerHTML = "<b>" + name + "</b>";
         };
-        table.render(test_data, 'table-container');
+        /*
+        table.columns = {
+            _id: 'id',
+            name: 'name'
+        };
+        table.render('/api/items', 'table-container');
+        */
+       table.render(test_data, 'table-container');
     });
 </script>
