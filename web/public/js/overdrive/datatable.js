@@ -162,9 +162,10 @@ class Table {
     /// Update the data
     /// #param url - The new url on which request data
     /// @return - The fetched data
-    #fetch = async (url) => {
+    #fetch = async () => {
         if (this.mode == Table.Mode.Ajax)
         {
+            const url = this.#composeRequest();
             console.log(`Datatable ${this.id} request: ${url}`);
             let result = await $.get(
                 url
@@ -249,7 +250,7 @@ class Table {
             {
                 this.#url = data;
                 this.#mode = Table.Mode.Ajax;
-                this.#data = await this.#fetch(this.url);
+                this.#data = await this.#fetch();
             }
         }
 
@@ -373,7 +374,7 @@ class Table {
         {
             if (refresh && this.mode == Table.Mode.Ajax)
             {
-                this.#data = await this.#fetch(this.#composeRequest());
+                this.#data = await this.#fetch();
             }
 
             // render the table body
