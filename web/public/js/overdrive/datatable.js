@@ -360,7 +360,7 @@ class Table {
     async update(refresh = true) {
         if (this.table != null)
         {
-            if (refresh)
+            if (refresh && this.mode == Table.Mode.Ajax)
             {
                 this.#data = await this.fetch(this.#composeRequest());
             }
