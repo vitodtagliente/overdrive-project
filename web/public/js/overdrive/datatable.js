@@ -37,6 +37,22 @@ class Pagination {
 
             this.#parent = document.createElement('div');
             this.table.parent.append(this.parent);
+
+            const select = document.createElement("select");
+            select.classList.add('form-control');
+            for (const limit of this.limits)
+            {
+                const option = document.createElement('option');
+                option.value = limit;
+                option.text = limit;
+                select.appendChild(option);
+            }
+            select.onchange = async () => {
+                this.limit = select.value;
+                await this.table.update();
+            };
+            this.parent.append(select);
+
             const nav = document.createElement('nav');
             nav.setAttribute('id', 'nav-' + this.table.id);
             for (const css_class of this.classes.nav)
@@ -105,6 +121,7 @@ class Pagination {
     }
     enabled = true;
     limit = 10;
+    limits = [10, 25, 50, 100];
 
     #parent = null;
     #state = {
@@ -264,6 +281,22 @@ class Table {
                 return false;
             }
 
+            // create the search box
+            if (this.search.enabled)
+            {
+                this.#dom.search = document.createElement('div');
+                const text = document.createElement('input');
+                text.setAttribute("type", "text");
+                text.classList.add('form-control');
+                this.parent.append(this.#dom.search);
+                this.#dom.search.append(text);
+                text.onchange = (event) => {
+                    console.log(88);
+                    console.log(this);
+                    this.update();
+                };
+            }
+
             // create the table
             this.#dom.table = document.createElement('table');
             for (const css_class of this.classes.table)
@@ -399,6 +432,10 @@ class Table {
         table: ['table', 'table-hover']
     };
 
+    search = {
+        enabled: true
+    };
+
     /// The table id
     #id = null;
     /// The columns of the table
@@ -422,6 +459,7 @@ class Table {
     /// The DOM elements
     #dom = {
         parent: null,
+        search: null,
         table: null,
         table_body: null,
         table_head: null
