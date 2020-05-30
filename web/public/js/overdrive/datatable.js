@@ -162,13 +162,21 @@ class Table {
     /// Update the data
     /// #param url - The new url on which request data
     /// @return - The fetched data
-    async fetch(url) {
+    #fetch = async (url) => {
         if (this.mode == Table.Mode.Ajax)
         {
             console.log(`Datatable ${this.id} request: ${url}`);
-            return await $.get(
+            let result = await $.get(
                 url
             );
+            if (Array.isArray(result))
+            {
+                result = {
+                    data: result
+                };
+            }
+            result.count = result.count || result.data.length;
+            return result;
         }
     }
 
@@ -232,13 +240,16 @@ class Table {
             if (Array.isArray(data))
             {
                 this.#mode = Table.Mode.Data;
-                this.#data = data;
+                this.#data = {
+                    data,
+                    count: data.length
+                };
             }
             else
             {
                 this.#url = data;
                 this.#mode = Table.Mode.Ajax;
-                this.#data = await this.fetch(this.url);
+                this.#data = await this.#fetch(this.url);
             }
         }
 
@@ -264,9 +275,9 @@ class Table {
             // setup the columns
             if ((this.#columns == null
                 || (Array.isArray(this.#columns) && this.#columns.length == 0))
-                && this.data.length > 0)
+                && this.data.count > 0)
             {
-                this.columns = Object.keys(this.data[0]);
+                this.columns = Object.keys(this.data.data[0]);
             }
 
             // render the table head
@@ -290,15 +301,15 @@ class Table {
         }
 
         const count = this.pagination.enabled
-            ? Math.min(this.data.length, this.pagination.limit)
-            : this.data.length;
+            ? Math.min(this.data.count, this.pagination.limit)
+            : this.data.count;
         const offset = this.pagination.enabled
             ? this.pagination.offset
             : 0;
         const columns = Object.keys(this.columns);
         for (let i = offset; i < (offset + count); ++i)
         {
-            const model = this.data[i];
+            const model = this.data.data[i];
             const row = this.#dom.table_body.insertRow();
             row.setAttribute('id', model.id || model._id);
             const self = this;
@@ -362,14 +373,14 @@ class Table {
         {
             if (refresh && this.mode == Table.Mode.Ajax)
             {
-                this.#data = await this.fetch(this.#composeRequest());
+                this.#data = await this.#fetch(this.#composeRequest());
             }
 
             // render the table body
             await this.#renderBody();
 
             // render the pagination widget
-            await this.pagination.render(this.data.length);
+            await this.pagination.render(this.data.count);
         }
     }
 
@@ -402,7 +413,7 @@ class Table {
             url.push(this.pagination.offset);
             url.push('&limit=');
             url.push(this.pagination.limit);
-        }   
+        }
         return url.join('');
     };
     /// The fetched data
