@@ -80,7 +80,7 @@ class Pagination {
             a.innerText = i + 1;
             a.onclick = async () => {
                 this.#state.offset = this.limit * i;
-                await this.table.render();
+                await this.table.update();
             };
             li.append(a);
 
@@ -163,20 +163,12 @@ class Table {
     /// #param url - The new url on which request data
     /// @return - The fetched data
     async fetch(url) {
-        if (this.mode == Table.Mode.Data)
+        if (this.mode == Table.Mode.Ajax)
         {
-            return this.data;
-        }
-        else 
-        {
-            if (this.url != url)
-            {
-                this.#url = url;
-                return await $.get(
-                    url
-                );
-            }
-            return Array();
+            console.log(`Datatable ${this.id} request: ${url}`);
+            return await $.get(
+                url
+            );
         }
     }
 
@@ -244,8 +236,9 @@ class Table {
             }
             else
             {
+                this.#url = data;
                 this.#mode = Table.Mode.Ajax;
-                this.#data = await this.fetch(data);
+                this.#data = await this.fetch(this.url);
             }
         }
 
@@ -280,11 +273,8 @@ class Table {
             await this.#renderHead();
         }
 
-        // render the table body
-        await this.#renderBody();
-
-        // render the pagination widget
-        await this.pagination.render(this.data.length);
+        // update the table content
+        await this.update(false);
     }
 
     /// Render the body of the table
@@ -365,6 +355,24 @@ class Table {
         return this.#dom.table;
     }
 
+    /// update the data table
+    /// @param refresh - Specify if to refresh data
+    async update(refresh = true) {
+        if (this.table != null)
+        {
+            if (refresh)
+            {
+                this.#data = await this.fetch(this.#composeRequest());
+            }
+
+            // render the table body
+            await this.#renderBody();
+
+            // render the pagination widget
+            await this.pagination.render(this.data.length);
+        }
+    }
+
     /// Retrieve the url
     /// #return - The url
     get url() {
@@ -384,6 +392,19 @@ class Table {
     /// The columns of the table
     /// can contains the showed name
     #columns = Array();
+    /// Generate the request url including the pagination
+    #composeRequest = () => {
+        const url = [this.url];
+        if (this.pagination.enabled)
+        {
+            url.push('?');
+            url.push('offset=');
+            url.push(this.pagination.offset);
+            url.push('&limit=');
+            url.push(this.pagination.limit);
+        }   
+        return url.join('');
+    };
     /// The fetched data
     #data = null;
     /// The DOM elements
