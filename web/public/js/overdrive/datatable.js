@@ -213,6 +213,13 @@ class Table {
         return this.#mode;
     }
 
+    /// On row click event
+    /// @param row - The selected row
+    /// @param model - The model of that row
+    onRowClick = (row, model) => {
+
+    };
+
     /// Retrieve the pagination system
     /// @return - The pagination
     get pagination() {
@@ -304,6 +311,10 @@ class Table {
             const model = this.data[i];
             const row = this.#dom.table_body.insertRow();
             row.setAttribute('id', model.id || model._id);
+            const self = this;
+            row.onclick = function () {
+                self.onRowClick(row, model);
+            };
             await this.renderRow(row, model, columns);
         }
     }

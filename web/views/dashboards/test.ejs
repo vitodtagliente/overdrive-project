@@ -58,6 +58,11 @@
         };
         table.render('/api/items', 'table-container');
         */
-       table.render(test_data, 'table-container');
+        table.onRowClick = (row, model) =>
+        {
+            console.log(row);
+            console.log(model);
+        };
+        table.render(test_data, 'table-container');
     });
 </script>
