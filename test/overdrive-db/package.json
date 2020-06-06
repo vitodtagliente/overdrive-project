@@ -1,0 +1,18 @@
+{
+  "name": "overdrive-db",
+  "version": "1.0.0",
+  "description": "Nodejs Database abrstraction layer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "overdrive-db"
+  ],
+  "author": "Vito Domenico Tagliente",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^5.9.13",
+    "mongoose-timestamp": "^0.6.0"
+  }
+}
