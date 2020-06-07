@@ -6,7 +6,7 @@ class MongoQuery extends Query {
     }
 
     async all(search){
-        return [];
+        return await this.model.find({});
     }    
 
     async find(search){

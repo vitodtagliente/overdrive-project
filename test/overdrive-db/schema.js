@@ -8,7 +8,6 @@ class Schema {
     /// @return - The generated model
     static define(name, definition, configure = (model) => { }) {
         const type = Connection.instance.type;
-        console.log(Connection.instance);
         if (type == Connection.Type.MongoDB)
         {
             const MongoSchema = require('./mongo/schema');

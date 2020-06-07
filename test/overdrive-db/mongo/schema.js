@@ -1,4 +1,4 @@
-const Model = require('../model');
+const Model = require('./model');
 const mongoose = require('mongoose');
 const timestamp = require('mongoose-timestamp');
 
@@ -11,7 +11,7 @@ class Schema {
     static define(name, definition, configure = (model) => { }) {
         const schema = new mongoose.Schema(definition);
         schema.plugin(timestamp);
-        const model = new Model(mongoose.model(name, schema));
+        const model = new Model(mongoose.model(name, schema), definition);
         configure(model);
         return model;
     }

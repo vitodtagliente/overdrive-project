@@ -28,11 +28,11 @@ class Model {
     }
 
     async all(search = {}) {
-        this.Query.all(search);
+        return await this.Query.all(search);
     }
 
     async find(search = {}) {
-        this.Query.find(search);
+        return await this.Query.find(search);
     }
 
     /// Check if the given model is valid

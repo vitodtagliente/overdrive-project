@@ -1,4 +1,11 @@
 class Connection {
+    /// The type enum    
+    static Type = {
+        Invalid: 'null',
+        MongoDB: 'mongodb',
+        MySQL: 'mysql'
+    }
+
     #context = null;
     #type = null;
     constructor(type, context) {
@@ -13,27 +20,11 @@ class Connection {
     get type() {
         return this.#type;
     }
-}
-
-class Singleton {
-    /// the instance
-    #instance = null;
-    /// constructor
-    constructor() {
-        this.#instance = new Connection();
-    }
-
-    /// The type enum    
-    Type = {
-        Invalid: 'null',
-        MongoDB: 'mongodb',
-        MySQL: 'mysql'
-    }
 
     /// Retrieve the instance
     /// @return - The instance
-    get instance() {
-        return this.#instance;
+    static get instance() {
+        return global.overdrive_connection;
     }
 
     /// Initialize the connection to the db
@@ -42,17 +33,19 @@ class Singleton {
     /// @param options - The options
     /// @param success - The success callback
     /// @param error - the error callback
-    connect(type, connectionString, options, success = () => { }, error = (err) => { }) {
+    static connect(type, connectionString, options, success = () => { }, error = (err) => { }) {
         if (type == this.Type.MongoDB)
         {
             const MongoConnection = require('./mongo/connection');
             const context = MongoConnection.startup(
                 connectionString,
                 options,
-                success,
+                () => {
+                    global.overdrive_connection = new Connection(type, context);
+                    success();
+                },
                 error
             );
-            this.#instance = new Connection(type, context);
         }
         else 
         {
@@ -61,4 +54,4 @@ class Singleton {
     }
 }
 
-module.exports = new Singleton();
+module.exports = Connection;
