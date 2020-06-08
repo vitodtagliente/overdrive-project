@@ -30,6 +30,14 @@ class CRUD {
                         condition[pieces[0]] = pieces[1];
                     }
                 }
+                else if (token.includes('=contains='))
+                {
+                    const pieces = token.split('=contains=').map(piece => piece.trim());
+                    if (pieces.length == 2)
+                    {
+                        condition[pieces[0]] = { $all: [pieces[1]] };
+                    }
+                }
             }
         }
         console.log(condition);
