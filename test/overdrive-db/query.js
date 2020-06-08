@@ -13,6 +13,26 @@ class Query {
     }
 
     async find(search) {
+        return [];
+    }
+
+    async findOne(search) {
+        return null;
+    }
+
+    async findById(id) {
+        return null;
+    }
+
+    async findByIds(ids = Array(), separator = ',') {
+        return [];
+    }
+
+    async count() {
+        return 0;
+    }
+
+    async find(search) {
         return null;
     }
 

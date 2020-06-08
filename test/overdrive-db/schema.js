@@ -39,6 +39,26 @@ class Schema {
         return await this.query.all();
     }
 
+    async find(search) {
+        return await this.query.find(search);
+    }
+
+    async findOne(search) {
+        return await this.query.findOne(search);
+    }
+
+    async findById(id) {
+        return await this.query.get(id);
+    }
+
+    async findByIds(ids = Array(), separator = ',') {
+        return await this.query.getMany(ids);
+    }
+
+    async count() {
+        return await this.query.count();
+    }
+
     async insert(data) {
         return await this.query.insert(data);
     }
