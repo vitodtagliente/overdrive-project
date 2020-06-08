@@ -39,6 +39,14 @@ class Query {
     async insert(data) {
         return null;
     }
+
+    async deleteById(id) {
+        return false;
+    }
+
+    async deleteByIds(ids = Array(), separator = ',') {
+        return false;
+    }
 }
 
 module.exports = Query;

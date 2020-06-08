@@ -63,6 +63,14 @@ class Schema {
         return await this.query.insert(data);
     }
 
+    async deleteById(id) {
+        return await this.query.deleteById(id);
+    }
+
+    async deleteByIds(ids = Array(), separator = ',') {
+        return await this.query.deleteByIds(ids);
+    }
+
     /// Define a new Model type
     /// @param name - The name of the model
     /// @param definition - the definition of the schema

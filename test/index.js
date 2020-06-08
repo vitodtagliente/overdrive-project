@@ -24,8 +24,9 @@ app.get('/', async function (req, res) {
     });
 
     console.log(await Potion.all());
+    console.log(await Potion.count());
 
-    res.json("Hello World!");
+    res.json(await Potion.all());
 });
 
 app.listen(3000, function () {

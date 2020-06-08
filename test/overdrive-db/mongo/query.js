@@ -77,7 +77,7 @@ class MongoQuery extends Query {
     }
 
     async count() {
-        return 0;
+        return await this.context.count();
     }
 
     async find(search) {
@@ -95,6 +95,59 @@ class MongoQuery extends Query {
             console.log(error);
             return null;
         }
+    }
+
+    async deleteById(id) {
+        if (MongoQuery.isValidId(id))
+        {
+            const result = await this.context.deleteOne({ _id: id });
+            return result.ok == true
+                && result.n == result.deletedCount
+                && result.deletedCount > 0;
+        }
+        return false;
+    }
+
+    async deleteByIds(ids = Array(), separator = ',') {
+        if (typeof ids === "string")
+        {
+            ids = ids.split(separator).map(id => id.trim());
+        }
+
+        let idsToFind = Array();
+        for (const id of ids)
+        {
+            if (Model.Id.isValid(id))
+            {
+                idsToFind.push(id);
+            }
+            else 
+            {
+                console.error(`'${id}' is not a valid Model.Id!`)
+            }
+        }
+
+        if (idsToFind.length == 0)
+        {
+            return false;
+        }
+
+        try 
+        {
+            const result = await this.context.deleteMany({
+                _id: {
+                    $in: idsToFind
+                }
+            });
+            return result.ok == true
+                && result.n == result.deletedCount
+                && result.deletedCount > 0;
+        }
+        catch (err)
+        {
+            console.error(err);
+        }
+        return false;
     }
 }
 
