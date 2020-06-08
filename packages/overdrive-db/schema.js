@@ -70,26 +70,45 @@ class Schema {
         return await this.query.find(condition, search);
     }
 
+    /// Find one record
+    /// @param condition - The condition
+    /// òreturn - The record if exists
     async findOne(condition) {
         return await this.query.findOne(condition);
     }
 
+    /// Find a record by id
+    /// @param id - The id
+    /// @return - The record if exists
     async findById(id) {
         return await this.query.findById(id);
     }
 
+    /// Find records by ids
+    /// @param ids - the set of ids
+    /// @return -  The list of records if exist
     async findByIds(ids = Array(), separator = ',') {
         return await this.query.findByIds(ids);
     }
 
+    /// Insert a new record into the database
+    /// @param data - The data of the new record
+    /// @return - The created record is succeed
     async insert(data) {
         return await this.query.insert(data);
     }
 
+    /// Delete a record by id
+    /// @param id - The id
+    /// @return - True if succeed
     async deleteById(id) {
         return await this.query.deleteById(id);
     }
 
+    /// Delete records by ids
+    /// @param ids - The list of ids
+    /// @param separator - The separator character if ids is a string
+    /// @return - True if succeed
     async deleteByIds(ids = Array(), separator = ',') {
         return await this.query.deleteByIds(ids);
     }

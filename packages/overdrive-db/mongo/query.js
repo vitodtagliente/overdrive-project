@@ -2,10 +2,15 @@ const mongoose = require('mongoose');
 const Query = require('../query');
 
 class MongoQuery extends Query {
+    /// constructor
+    /// @param context - The context
     constructor(context) {
         super(context);
     }
 
+    /// Check if an id is valid
+    /// @param id - The id to verify
+    /// @return - True if valid
     static isValidId(id) {
         return mongoose.Types.ObjectId.isValid(id);
     }
@@ -18,22 +23,37 @@ class MongoQuery extends Query {
         return (derived.prototype instanceof parent || derived === parent);
     }
 
+    /// Retrieve all the records
+    /// @return - The list of records
     async all() {
         return await this.context.find({});
     }
 
+    /// Retrive the number of records
+    /// @param condition - The condition
+    /// @return - The count
     async count(condition) {
         return await this.context.countDocuments(condition || {});
     }
 
+    /// Find records
+    /// @param condition - The condition
+    /// @param search - The search options
+    /// @return - The list of records that match the search
     async find(condition, search) {
         return await this.context.find(condition, null, search);
     }
 
+    /// Find one record
+    /// @param condition - The condition
+    /// òreturn - The record if exists
     async findOne(condition) {
         return await this.context.findOne(condition);
     }
 
+    /// Find a record by id
+    /// @param id - The id
+    /// @return - The record if exists
     async findById(id) {
         if (MongoQuery.isValidId(id))
         {
@@ -49,6 +69,9 @@ class MongoQuery extends Query {
         return null;
     }
 
+    /// Find records by ids
+    /// @param ids - the set of ids
+    /// @return -  The list of records if exist
     async findByIds(ids = Array(), separator = ',') {
         if (typeof ids === "string")
         {
@@ -88,6 +111,9 @@ class MongoQuery extends Query {
         return [];
     }
 
+    /// Insert a new record into the database
+    /// @param data - The data of the new record
+    /// @return - The created record is succeed
     async insert(data) {
         try
         {
@@ -101,6 +127,9 @@ class MongoQuery extends Query {
         }
     }
 
+    /// Delete a record by id
+    /// @param id - The id
+    /// @return - True if succeed
     async deleteById(id) {
         if (MongoQuery.isValidId(id))
         {
@@ -112,6 +141,10 @@ class MongoQuery extends Query {
         return false;
     }
 
+    /// Delete records by ids
+    /// @param ids - The list of ids
+    /// @param separator - The separator character if ids is a string
+    /// @return - True if succeed
     async deleteByIds(ids = Array(), separator = ',') {
         if (typeof ids === "string")
         {
