@@ -43,8 +43,8 @@ class Schema {
         return await this.query.count(condition);
     }
 
-    async find(search) {
-        return await this.query.find(search);
+    async find(condition, search) {
+        return await this.query.find(condition, search);
     }
 
     async findOne(condition) {

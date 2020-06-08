@@ -18,21 +18,6 @@ class MongoQuery extends Query {
         return (derived.prototype instanceof parent || derived === parent);
     }
 
-    static buildSearch(search) {
-        let result = {};
-        if (search != null)
-        {
-            assert(MongoQuery.isSubclassOf(search, this.Search), 'Invalid search object');
-
-            if (search.hasPagination())
-            {
-                result.limit = search.limit;
-                result.skip = search.skip;
-            }
-        }
-        return result;
-    }
-
     async all() {
         return await this.context.find({});
     }
@@ -41,8 +26,8 @@ class MongoQuery extends Query {
         return await this.context.countDocuments(condition || {});
     }
 
-    async find(search) {
-        return await this.context.find(search, MongoQuery.buildSearch(search));
+    async find(condition, search) {
+        return await this.context.find(condition, search);
     }
 
     async findOne(condition) {
