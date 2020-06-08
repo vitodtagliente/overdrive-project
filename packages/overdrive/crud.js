@@ -2,6 +2,19 @@ const Logger = require('overdrive-logger');
 const Status = require('overdrive-status');
 
 class CRUD {
+
+    static buildSearch(req) {
+        let search = {};
+        const limit = req.query.limit;
+        if (limit != null && limit > 0)
+        {
+            search.limit = limit;
+            search.skip = req.query.skip || 0;
+        }
+        console.log(search);
+        return search;
+    }
+
     /// Register basic CRUD operation for a data provider
     /// @param router - The express router
     /// @param provider - The data provider
@@ -16,7 +29,7 @@ class CRUD {
         /// Retrieve all the models
         /// @return - The model list
         router.get(route, async (req, res) => {
-            const data = await provider.all();
+            const data = await provider.find({}, this.buildSearch(req));
             res.respond(Status.Code.OK, data);
         });
 
