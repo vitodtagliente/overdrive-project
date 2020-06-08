@@ -15,7 +15,25 @@ class CRUD {
     }
 
     static buildCondition(req) {
-        return {};
+        let condition = {};
+        const filter = req.query.filter;
+        if (filter != null)
+        {
+            const tokens = filter.split(' ').map(token => token.trim());
+            for (const token of tokens)
+            {
+                if (token.includes('=='))
+                {
+                    const pieces = token.split('==').map(piece => piece.trim());
+                    if (pieces.length == 2)
+                    {
+                        condition[pieces[0]] = pieces[1];
+                    }
+                }
+            }
+        }
+        console.log(condition);
+        return condition;
     }
 
     /// Register basic CRUD operation for a data provider
