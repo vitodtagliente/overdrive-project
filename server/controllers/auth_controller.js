@@ -3,7 +3,7 @@ const Controller = require('overdrive').Controller;
 const Password = require('overdrive').Password;
 const Session = require('overdrive').Session;
 const Status = require('overdrive').Status;
-const UserProvider = require('data').Providers.UserProvider;
+const User = require('data').Models.User;
 const Validation = require('overdrive').Validation;
 
 class AuthController extends Controller {
@@ -17,7 +17,7 @@ class AuthController extends Controller {
             if (session.user != null)
             {
                 // already logged in
-                const result = await UserProvider.get(session.user.id);
+                const result = await User.findById(session.user.id);
                 if (result.status == Status.Code.OK)
                 {
                     if (result.data.email == email)
@@ -28,9 +28,8 @@ class AuthController extends Controller {
                 return res.respond(Status.Code.BadRequest);
             }
 
-            const result = await UserProvider.findOne({ email });
-            const user = result.data;
-            if (result.status == Status.Code.OK && user != null)
+            const user = await User.findOne({ email });
+            if (user != null)
             {
                 if (await Password.compare(password, user.password))
                 {
@@ -51,7 +50,7 @@ class AuthController extends Controller {
             && Validation.email(email))
         {
             const hashedPassword = await Password.hash(password);
-            const result = await UserProvider.create({
+            const result = await User.insert({
                 username,
                 email,
                 password: hashedPassword

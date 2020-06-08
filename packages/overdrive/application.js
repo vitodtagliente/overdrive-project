@@ -1,6 +1,6 @@
 const Auth = require('./auth');
 const bodyParser = require('body-parser');
-const Connection = require('mango').Connection;
+const Connection = require('overdrive-db').Connection;
 const cookieParser = require('cookie-parser');
 const express = require('express');
 const Logger = require('overdrive-logger');
@@ -37,6 +37,10 @@ class ApplicationConfig {
 
     get secret() {
         return this.#config.SECRET || 'OVERDRIVE-SECRET';
+    }
+
+    get type() {
+        return this.#config.CONNECTION_TYPE || Connection.Type.MongoDB;
     }
 
     get url() {
@@ -122,8 +126,10 @@ class Application {
             if (connectionString != null)
             {
                 // initialize the database connection
-                Connection.startup(
+                Connection.connect(
+                    this.#config.type,
                     connectionString,
+                    null,
                     () => {
                         success();
                         Logger.log(`Server listening on port ${this.#config.port}...`);

@@ -1,6 +1,6 @@
-const Model = require('mango').Model;
+const Schema = require('overdrive-db').Schema;
 
-module.exports = Model.define(
+module.exports = Schema.define(
     'User',
     {
         username: {

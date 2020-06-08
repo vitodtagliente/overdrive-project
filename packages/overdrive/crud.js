@@ -1,4 +1,5 @@
 const Logger = require('overdrive-logger');
+const Status = require('overdrive-status');
 
 class CRUD {
     /// Register basic CRUD operation for a data provider
@@ -15,16 +16,16 @@ class CRUD {
         /// Retrieve all the models
         /// @return - The model list
         router.get(route, async (req, res) => {
-            const result = await provider.getAll();
-            res.respond(result.status, result.data);
+            const data = await provider.all();
+            res.respond(Status.Code.OK, data);
         });
 
         /// Retrieve the models by a given id list
         /// @param ids - The list of ids in format "id1,id2,...,idn"
         /// @return - The list of models, if them exist
         router.get(`${route}/:ids`, async (req, res) => {
-            const result = await provider.getMany(req.params.ids);
-            res.respond(result.status, result.data);
+            const data = await provider.findByIds(req.params.ids);
+            res.respond(Status.Code.OK, data);
         });
 
         /// Create a new entry
