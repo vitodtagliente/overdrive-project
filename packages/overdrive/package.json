@@ -12,7 +12,6 @@
     "bcrypt": "^4.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "mango": "file:../mango",
     "overdrive-db": "file:../overdrive-db",
     "overdrive-logger": "file:../overdrive-logger",
     "overdrive-status": "file:../overdrive-status"

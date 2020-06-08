@@ -6,13 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["server"],
+  "keywords": [
+    "server"
+  ],
   "author": "Vito Domenico Tagliente",
   "license": "ISC",
   "dependencies": {
     "data": "file:../data",
-    "mango": "file:../packages/mango",
     "overdrive": "file:../packages/overdrive",
+    "overdrive-db": "file:../packages/overdrive-db",
     "overdrive-logger": "file:../packages/overdrive-logger",
     "overdrive-status": "file:../packages/overdrive-status",
     "shared": "file:../shared"

@@ -13,8 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "data": "file:../data",
-    "mango": "file:../packages/mango",
     "overdrive": "file:../packages/overdrive",
+    "overdrive-db": "file:../packages/overdrive-db",
     "overdrive-logger": "file:../packages/overdrive-logger",
     "overdrive-status": "file:../packages/overdrive-status",
     "shared": "file:../shared"
