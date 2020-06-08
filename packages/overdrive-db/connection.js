@@ -8,15 +8,22 @@ class Connection {
 
     #context = null;
     #type = null;
+    /// constructor
+    /// @param type - The type of connection
+    /// @param context - The raw connection
     constructor(type, context) {
         this.#context = context;
         this.#type = type;
     }
 
+    /// Retrieve the context, the raw connection
+    /// @return - The context
     get context() {
         return this.#context;
     }
 
+    /// Retrieve the type
+    /// @return - The type
     get type() {
         return this.#type;
     }

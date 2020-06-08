@@ -6,6 +6,11 @@ class Schema {
     #definition = null;
     #queryType = null;
     #query = null;
+    /// constructor
+    /// @param name - The name of the schema
+    /// @param definition - The definition
+    /// @param context - The raw schema
+    /// @param queryType - The type of query handler
     constructor(name, definition, context, queryType) {
         this.#definition = definition;
         this.#name = name;
@@ -14,35 +19,53 @@ class Schema {
         this.#query = new queryType(context);
     }
 
+    /// Retrieve the name of the schema
+    /// @return - The name
     get name() {
         return this.#name;
     }
 
+    /// Retrieve the context of the schema
+    /// @return - The context
     get context() {
         return this.#context;
     }
 
+    /// Retrieve the definition of the schema
+    /// @return - The definition
     get definition() {
         return this.#definition;
     }
 
+    /// Retrieve the query type
+    /// @return - The query type
     get Query() {
         return this.#queryType;
     }
 
+    /// Retrieve the query handler
+    /// @return - The query
     get query() {
         return this.#query;
     }
 
-    /// queries
+    /// Retrieve all the records
+    /// @return - The list of records
     async all() {
         return await this.query.all();
     }
 
+    /// Retrive the number of records
+    /// @param condition - The condition
+    /// @return - The count
     async count(condition) {
         return await this.query.count(condition);
     }
 
+    /// Find records
+    /// @param condition - The condition
+    /// @param search - The search options
+    /// @return - The list of records that match the search
     async find(condition, search) {
         return await this.query.find(condition, search);
     }
