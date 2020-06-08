@@ -37,18 +37,16 @@ class MongoQuery extends Query {
         return await this.context.find({});
     }
 
-    async count(search) {
-        return await this.context.countDocuments(
-            search ? search.condition : {}
-        );
+    async count(condition) {
+        return await this.context.countDocuments(condition || {});
     }
 
     async find(search) {
-        return await this.context.find(search);
+        return await this.context.find(search, MongoQuery.buildSearch(search));
     }
 
-    async findOne(search) {
-        return await this.context.findOne(search);
+    async findOne(condition) {
+        return await this.context.findOne(condition);
     }
 
     async findById(id) {

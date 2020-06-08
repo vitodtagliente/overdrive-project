@@ -62,7 +62,7 @@ class Query {
         return [];
     }
 
-    async count(search) {
+    async count(condition) {
         return 0;
     }
 
@@ -70,7 +70,7 @@ class Query {
         return [];
     }
 
-    async findOne(search) {
+    async findOne(condition) {
         return null;
     }
 

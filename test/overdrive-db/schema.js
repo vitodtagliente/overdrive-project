@@ -39,16 +39,16 @@ class Schema {
         return await this.query.all();
     }
 
-    async count(search) {
-        return await this.query.count(search);
+    async count(condition) {
+        return await this.query.count(condition);
     }
 
     async find(search) {
         return await this.query.find(search);
     }
 
-    async findOne(search) {
-        return await this.query.findOne(search);
+    async findOne(condition) {
+        return await this.query.findOne(condition);
     }
 
     async findById(id) {
