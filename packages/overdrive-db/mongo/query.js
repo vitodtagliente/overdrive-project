@@ -27,7 +27,7 @@ class MongoQuery extends Query {
     }
 
     async find(condition, search) {
-        return await this.context.find(condition, search);
+        return await this.context.find(condition, null, search);
     }
 
     async findOne(condition) {
