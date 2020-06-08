@@ -52,11 +52,11 @@ class Schema {
     }
 
     async findById(id) {
-        return await this.query.get(id);
+        return await this.query.findById(id);
     }
 
     async findByIds(ids = Array(), separator = ',') {
-        return await this.query.getMany(ids);
+        return await this.query.findByIds(ids);
     }
 
     async insert(data) {

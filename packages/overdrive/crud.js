@@ -46,7 +46,7 @@ class CRUD {
         /// Create a new entry
         /// @return - The new model, if succeed
         router.post(route, async (req, res) => {
-            const result = await schema.create(req.body);
+            const result = await schema.insert(req.body);
             res.respond(result.status, result.data);
         });
 
@@ -54,7 +54,7 @@ class CRUD {
         /// @param ids - The list of ids in format "id1,id2,...,idn"
         /// @return - True if succeed
         router.delete(`${route}/:ids`, async (req, res) => {
-            const result = await schema.removeMany(req.params.ids);
+            const result = await schema.deleteByIds(req.params.ids);
             res.respond(result.status, result.data);
         });
     }
