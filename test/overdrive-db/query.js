@@ -1,18 +1,22 @@
 class Query {
-    #model = null;
-    constructor(model) {
-        this.#model = model;
+    #context = null;
+    constructor(context) {
+        this.#context = context;
     }
 
-    get model() {
-        return this.#model;
+    get context() {
+        return this.#context;
     }
 
-    async all(search){
+    async all(search) {
         return [];
-    }    
+    }
 
-    async find(search){
+    async find(search) {
+        return null;
+    }
+
+    async insert(data) {
         return null;
     }
 }

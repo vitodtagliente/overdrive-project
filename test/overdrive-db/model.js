@@ -9,6 +9,20 @@ class Model {
         this.#query = query;
         this.#schema = schema;
         this.#type = type;
+
+        for (const key of Object.keys(schema))
+        {
+            console.log(key);
+            Object.defineProperties(
+                this,
+                {
+                    key: {
+                        get: () => { return this.raw[key]; },
+                        set: (value) => { this.raw[key] = value; }
+                    }
+                }
+            );
+        }
     }
 
     get raw() {
