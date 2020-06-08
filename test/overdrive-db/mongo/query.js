@@ -10,8 +10,37 @@ class MongoQuery extends Query {
         return mongoose.Types.ObjectId.isValid(id);
     }
 
-    async all(search) {
+    /// Check if a type is a derived one
+    /// @param derived - The derived type
+    /// @param parent - The parent type
+    /// @return - True if the inherarchy is verified
+    static isSubclassOf(derived, parent) {
+        return (derived.prototype instanceof parent || derived === parent);
+    }
+
+    static buildSearch(search) {
+        let result = {};
+        if (search != null)
+        {
+            assert(MongoQuery.isSubclassOf(search, this.Search), 'Invalid search object');
+
+            if (search.hasPagination())
+            {
+                result.limit = search.limit;
+                result.skip = search.skip;
+            }
+        }
+        return result;
+    }
+
+    async all() {
         return await this.context.find({});
+    }
+
+    async count(search) {
+        return await this.context.countDocuments(
+            search ? search.condition : {}
+        );
     }
 
     async find(search) {
@@ -74,14 +103,6 @@ class MongoQuery extends Query {
             console.error(err);
         }
         return [];
-    }
-
-    async count() {
-        return await this.context.count();
-    }
-
-    async find(search) {
-        return null;
     }
 
     async insert(data) {

@@ -1,3 +1,45 @@
+class Search {
+    #condition = {};
+    #limit = null;
+    #offset = 0;
+    #sort = {};
+    constructor(condition = {}) {
+        this.#condition = condition;
+    }
+
+    get condition() {
+        return this.#condition;
+    }
+
+    get limit() {
+        return this.#limit;
+    }
+
+    get offset() {
+        return this.#offset;
+    }
+
+    get sort() {
+        return this.#sort;
+    }
+
+    hasPagination() {
+        return this.limit != null && this.limit > 0;
+    }
+
+    paginate(limit, offset = 0) {
+        this.#limit = limit;
+        this.#offset = offset;
+        return this;
+    }
+
+    sort() {
+
+
+        return this;
+    }
+}
+
 class Query {
     #context = null;
     constructor(context) {
@@ -8,8 +50,20 @@ class Query {
         return this.#context;
     }
 
-    async all(search) {
+    get Search() {
+        return Search;
+    }
+
+    get search() {
+        return new Search();
+    }
+
+    async all() {
         return [];
+    }
+
+    async count(search) {
+        return 0;
     }
 
     async find(search) {
@@ -26,14 +80,6 @@ class Query {
 
     async findByIds(ids = Array(), separator = ',') {
         return [];
-    }
-
-    async count() {
-        return 0;
-    }
-
-    async find(search) {
-        return null;
     }
 
     async insert(data) {

@@ -39,6 +39,10 @@ class Schema {
         return await this.query.all();
     }
 
+    async count(search) {
+        return await this.query.count(search);
+    }
+
     async find(search) {
         return await this.query.find(search);
     }
@@ -53,10 +57,6 @@ class Schema {
 
     async findByIds(ids = Array(), separator = ',') {
         return await this.query.getMany(ids);
-    }
-
-    async count() {
-        return await this.query.count();
     }
 
     async insert(data) {
