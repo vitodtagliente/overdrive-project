@@ -4,8 +4,12 @@ const Schema = require('../schema');
 const timestamp = require('mongoose-timestamp');
 
 class MongoSchema extends Schema {
+    /// constructor
+    /// @param name - The name of the schema
+    /// @param definition - The definition
+    /// @param context - The raw schema
     constructor(name, definition, context) {
-        super(name, definition, context);
+        super(name, definition, context, MongoQuery);
     }
     /// Define a new Model type
     /// @param name - The name of the model
@@ -17,7 +21,7 @@ class MongoSchema extends Schema {
         schema.plugin(timestamp);
         // genereate it only one time
         const model = mongoose.models[name] || mongoose.model(name, schema);
-        return new Schema(name, definition, model, MongoQuery);
+        return new MongoSchema(name, definition, model);
     }
 };
 
