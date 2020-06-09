@@ -35,7 +35,7 @@ class CRUD {
                     const pieces = token.split('=contains=').map(piece => piece.trim());
                     if (pieces.length == 2)
                     {
-                        condition[pieces[0]] = { $all: [pieces[1]] };
+                        condition[pieces[0]] = { $regex: `^.*${pieces[1]}.*$` };
                     }
                 }
             }
