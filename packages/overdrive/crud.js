@@ -80,10 +80,18 @@ class CRUD {
 
     /// Create a new entry
     /// @return - The new model, if succeed
-    static insert(router, schema, route) {
+    static insert(router, schema, route, validate = (data) => { return data; }) {
         router.post(route, async (req, res) => {
-            const result = await schema.insert(req.body);
-            res.respond(result.status, result.data);
+            const data = validate(req.body);
+            if (data)
+            {
+                const model = await schema.insert(data);
+                res.respond(model ? Status.Code.Created : Status.Code.BadRequest, model);
+            }
+            else 
+            {
+                res.respond(Status.Code.BadRequest);
+            }
         });
     }
 
