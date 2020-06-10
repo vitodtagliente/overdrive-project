@@ -40,7 +40,6 @@ class CRUD {
                 }
             }
         }
-        console.log(condition);
         return condition;
     }
 
@@ -49,8 +48,15 @@ class CRUD {
     /// @param schema - The data schema
     /// @param route - The base route
     static register(router, schema, route) {
-        /// Retrieve all the models
-        /// @return - The model list
+        this.find(router, schema, route);
+        this.findByIds(router, schema, route);
+        this.insert(router, schema, route);
+        this.deleteByIds(router, schema, route);
+    }
+
+    /// Retrieve all the models
+    /// @return - The model list
+    static find(router, schema, route) {
         router.get(route, async (req, res) => {
             const condition = this.buildCondition(req);
             const data = await schema.find(condition, this.buildSearch(req));
@@ -60,30 +66,37 @@ class CRUD {
                 count
             });
         });
+    }
 
-        /// Retrieve the models by a given id list
-        /// @param ids - The list of ids in format "id1,id2,...,idn"
-        /// @return - The list of models, if them exist
+    /// Retrieve the models by a given id list
+    /// @param ids - The list of ids in format "id1,id2,...,idn"
+    /// @return - The list of models, if them exist
+    static findByIds(router, schema, route) {
         router.get(`${route}/:ids`, async (req, res) => {
             const data = await schema.findByIds(req.params.ids);
             res.respond(Status.Code.OK, data);
         });
+    }
 
-        /// Create a new entry
-        /// @return - The new model, if succeed
+    /// Create a new entry
+    /// @return - The new model, if succeed
+    static insert(router, schema, route) {
         router.post(route, async (req, res) => {
             const result = await schema.insert(req.body);
             res.respond(result.status, result.data);
         });
+    }
 
-        /// Remove a model
-        /// @param ids - The list of ids in format "id1,id2,...,idn"
-        /// @return - True if succeed
+    /// Remove a model
+    /// @param ids - The list of ids in format "id1,id2,...,idn"
+    /// @return - True if succeed
+    static deleteByIds(router, schema, route) {
         router.delete(`${route}/:ids`, async (req, res) => {
             const result = await schema.deleteByIds(req.params.ids);
             res.respond(result.status, result.data);
         });
     }
+
 };
 
 module.exports = CRUD;
