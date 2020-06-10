@@ -100,8 +100,8 @@ class CRUD {
     /// @return - True if succeed
     static deleteByIds(router, schema, route) {
         router.delete(`${route}/:ids`, async (req, res) => {
-            const result = await schema.deleteByIds(req.params.ids);
-            res.respond(result.status, result.data);
+            const success = await schema.deleteByIds(req.params.ids);
+            res.respond(success ? Status.Code.OK : Status.Code.BadRequest);
         });
     }
 

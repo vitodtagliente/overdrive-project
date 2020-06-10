@@ -154,13 +154,13 @@ class MongoQuery extends Query {
         let idsToFind = Array();
         for (const id of ids)
         {
-            if (Model.Id.isValid(id))
+            if (MongoQuery.isValidId(id))
             {
                 idsToFind.push(id);
             }
             else 
             {
-                console.error(`'${id}' is not a valid Model.Id!`)
+                console.error(`'${id}' is not a valid Id!`)
             }
         }
 
