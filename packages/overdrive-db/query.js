@@ -65,6 +65,14 @@ class Query {
         return false;
     }
 
+    /// Update by id
+    /// @param id - The id of the record to update
+    /// @param data - The fields to update
+    /// @return - True if succeed
+    async update(id, data) {
+        return  null;
+    }
+
     /// Delete records by ids
     /// @param ids - The list of ids
     /// @param separator - The separator character if ids is a string

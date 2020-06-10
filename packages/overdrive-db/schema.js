@@ -113,6 +113,14 @@ class Schema {
         return await this.query.deleteByIds(ids);
     }
 
+    /// Update by id
+    /// @param id - The id of the record to update
+    /// @param data - The fields to update
+    /// @return - The true if succeed
+    async update(id, data) {
+        return await this.query.update(id, data);
+    }
+
     /// Define a new Model type
     /// @param name - The name of the model
     /// @param definition - the definition of the schema

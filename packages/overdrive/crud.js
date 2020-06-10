@@ -48,39 +48,19 @@ class CRUD {
     /// @param schema - The data schema
     /// @param route - The base route
     static register(router, schema, route) {
-        this.find(router, schema, route);
-        this.findByIds(router, schema, route);
-        this.insert(router, schema, route);
-        this.deleteByIds(router, schema, route);
+        this.create(router, schema, route);
+        this.read(router, schema, route);
+        this.update(router, schema, route);
+        this.delete(router, schema, route);
     }
-
-    /// Retrieve all the models
-    /// @return - The model list
-    static find(router, schema, route) {
-        router.get(route, async (req, res) => {
-            const condition = this.buildCondition(req);
-            const data = await schema.find(condition, this.buildSearch(req));
-            const count = await schema.count(condition);
-            res.respond(Status.Code.OK, {
-                data,
-                count
-            });
-        });
-    }
-
-    /// Retrieve the models by a given id list
-    /// @param ids - The list of ids in format "id1,id2,...,idn"
-    /// @return - The list of models, if them exist
-    static findByIds(router, schema, route) {
-        router.get(`${route}/:ids`, async (req, res) => {
-            const data = await schema.findByIds(req.params.ids);
-            res.respond(Status.Code.OK, data);
-        });
-    }
-
-    /// Create a new entry
-    /// @return - The new model, if succeed
-    static insert(router, schema, route, validate = (data) => { return data; }) {
+    
+    /// Register Create operation
+    /// @param router - The express router
+    /// @param schema - The data schema
+    /// @param route - The base route
+    static create(router, schema, route, validate = (data) => { return data; }) {
+        /// Create a new entry
+        /// @return - The new model, if succeed
         router.post(route, async (req, res) => {
             const data = validate(req.body);
             if (data)
@@ -95,16 +75,67 @@ class CRUD {
         });
     }
 
-    /// Remove a model
-    /// @param ids - The list of ids in format "id1,id2,...,idn"
-    /// @return - True if succeed
-    static deleteByIds(router, schema, route) {
+    /// Register Read operation
+    /// @param router - The express router
+    /// @param schema - The data schema
+    /// @param route - The base route
+    static read(router, schema, route) {
+        /// Retrieve all the models
+        /// @return - The model list
+        router.get(route, async (req, res) => {
+            const condition = this.buildCondition(req);
+            const data = await schema.find(condition, this.buildSearch(req));
+            const count = await schema.count(condition);
+            res.respond(Status.Code.OK, {
+                data,
+                count
+            });
+        });
+
+        /// Retrieve the models by a given id list
+        /// @param ids - The list of ids in format "id1,id2,...,idn"
+        /// @return - The list of models, if them exist
+        router.get(`${route}/:ids`, async (req, res) => {
+            const data = await schema.findByIds(req.params.ids);
+            res.respond(Status.Code.OK, data);
+        });
+    }
+
+    /// Register Update operation
+    /// @param router - The express router
+    /// @param schema - The data schema
+    /// @param route - The base route
+    static update(router, schema, route, validate = (data) => { return data; }) {
+        /// Update a model
+        /// @param id - The model to update
+        /// @return - True if succeed
+        router.patch(`${route}/:id`, async (req, res) => {
+            const data = validate(req.body);
+            if (data)
+            {
+                const success = await schema.update(req.params.id, data);
+                res.respond(success ? Status.Code.OK : Status.Code.BadRequest);
+            }
+            else 
+            {
+                res.respond(Status.Code.BadRequest);
+            }
+        });
+    }
+
+    /// Register Delete operation
+    /// @param router - The express router
+    /// @param schema - The data schema
+    /// @param route - The base route
+    static delete(router, schema, route) {
+        /// Remove a model
+        /// @param ids - The list of ids in format "id1,id2,...,idn"
+        /// @return - True if succeed
         router.delete(`${route}/:ids`, async (req, res) => {
             const success = await schema.deleteByIds(req.params.ids);
             res.respond(success ? Status.Code.OK : Status.Code.BadRequest);
         });
     }
-
 };
 
 module.exports = CRUD;

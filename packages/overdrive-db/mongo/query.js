@@ -87,7 +87,7 @@ class MongoQuery extends Query {
             }
             else 
             {
-                console.error(`'${id}' is not a valid Model.Id!`)
+                console.error(`'${id}' is not a valid mongo Id!`);
             }
         }
 
@@ -160,7 +160,7 @@ class MongoQuery extends Query {
             }
             else 
             {
-                console.error(`'${id}' is not a valid Id!`)
+                console.error(`'${id}' is not a valid mongo Id!`);
             }
         }
 
@@ -185,6 +185,23 @@ class MongoQuery extends Query {
             console.error(err);
         }
         return false;
+    }
+
+    /// Update by id
+    /// @param id - The id of the record to update
+    /// @param data - The fields to update
+    /// @return - True if succeed
+    async update(id, data) {
+        if (MongoQuery.isValidId(id))
+        {
+            const result = await this.context.updateOne(
+                { _id: id },
+                data
+            );
+            return result.ok == true;
+        }
+        console.error(`'${id}' is not a valid mongo Id!`);
+        return null;
     }
 }
 
