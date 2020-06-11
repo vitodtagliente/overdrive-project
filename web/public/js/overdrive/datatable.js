@@ -133,6 +133,26 @@ class Pagination {
 }
 
 class Table {
+
+    static #instances = Array();
+
+    static instance(id) {
+        if (id == null && this.#instances.length == 1)
+        {
+            return this.#instances[0];
+        }
+
+        for (let i = 0; i < this.#instances.length; ++i)
+        {
+            const table = this.#instances[i];
+            if (table.id == id)
+            {
+                return table;
+            }
+        }
+        return null;
+    }
+
     /// The usage method
     static get Mode() {
         return {
@@ -145,6 +165,9 @@ class Table {
     constructor(id) {
         this.#id = id || new Date().valueOf();
         this.#pagination = new Pagination(this);
+
+        /// register this instance
+        Table.#instances.push(this);
     }
 
     /// Retrieve the columns of the table
@@ -169,6 +192,21 @@ class Table {
             this.#columns = value;
         }
     }
+
+    /// Generate the request url including the pagination
+    /// @return - The url for the request
+    #composeRequest = () => {
+        const url = [this.url];
+        if (this.pagination.enabled)
+        {
+            url.push('?');
+            url.push('skip=');
+            url.push(this.pagination.offset);
+            url.push('&limit=');
+            url.push(this.pagination.limit);
+        }
+        return url.join('');
+    };
 
     /// Retrieve the data of the table
     /// @return - The table
@@ -441,19 +479,6 @@ class Table {
     /// The columns of the table
     /// can contains the showed name
     #columns = Array();
-    /// Generate the request url including the pagination
-    #composeRequest = () => {
-        const url = [this.url];
-        if (this.pagination.enabled)
-        {
-            url.push('?');
-            url.push('skip=');
-            url.push(this.pagination.offset);
-            url.push('&limit=');
-            url.push(this.pagination.limit);
-        }
-        return url.join('');
-    };
     /// The fetched data
     #data = null;
     /// The DOM elements
