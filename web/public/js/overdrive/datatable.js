@@ -228,10 +228,10 @@ class Table {
             if (Array.isArray(result))
             {
                 result = {
-                    data: result
+                    data: result,
+                    count: result.length
                 };
             }
-            result.count = result.count || result.data.length;
             return result;
         }
     }
