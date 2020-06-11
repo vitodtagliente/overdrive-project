@@ -338,7 +338,7 @@ class Table {
             ? Math.min(this.data.count, this.pagination.limit)
             : this.data.count;
         const offset = this.pagination.enabled
-            ? this.pagination.offset
+            ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
             : 0;
         const columns = Object.keys(this.columns);
         for (let i = offset; i < (offset + count); ++i)
@@ -447,7 +447,7 @@ class Table {
         if (this.pagination.enabled)
         {
             url.push('?');
-            url.push('offset=');
+            url.push('skip=');
             url.push(this.pagination.offset);
             url.push('&limit=');
             url.push(this.pagination.limit);
