@@ -13,7 +13,7 @@ class CRUD {
         return search;
     }
 
-    static buildCondition(req) {
+    static buildCondition(req, schema) {
         let condition = {};
         const filter = req.query.filter;
         if (filter != null)
@@ -31,10 +31,22 @@ class CRUD {
                 }
                 else if (token.includes('any=like='))
                 {
-                    const pieces = token.split('=contains=').map(piece => piece.trim());
+                    const pieces = token.split('any=like=').map(piece => piece.trim());
                     if (pieces.length == 2)
                     {
-                        
+                        const pattern = pieces[1];
+                        let or = [];
+                        for (const field of Object.keys(schema.definition))
+                        {
+                            const type = schema.definition[field].type;
+                            if (type == String)
+                            {
+                                let expression = {};
+                                expression[field] = { $regex: `^.*${pattern}.*$` };
+                                or.push(expression);
+                            }
+                        }
+                        condition['$or'] = or;
                     }
                 }
                 else if (token.includes('=like='))
@@ -90,7 +102,7 @@ class CRUD {
         /// Retrieve all the models
         /// @return - The model list
         router.get(route, async (req, res) => {
-            const condition = this.buildCondition(req);
+            const condition = this.buildCondition(req, schema);
             const data = await schema.find(condition, this.buildSearch(req));
             const count = await schema.count(condition);
             res.respond(Status.Code.OK, {

@@ -207,6 +207,7 @@ class Table {
     /// @return - The url for the request
     #composeRequest = () => {
         const url = [this.url];
+        let first = true;
         if (this.pagination.enabled)
         {
             url.push('?');
@@ -214,6 +215,14 @@ class Table {
             url.push(this.pagination.offset);
             url.push('&limit=');
             url.push(this.pagination.limit);
+            first = false;
+        }
+        if (!(this.searchText && (this.searchText.length === 0 || !this.searchText.trim())))
+        {
+            url.push(first ? '?' : '&');
+            url.push('filter=any=like=');
+            url.push(this.searchText);
+            first = false;
         }
         return url.join('');
     };
@@ -338,10 +347,9 @@ class Table {
                 text.classList.add('form-control');
                 this.parent.append(this.#dom.search);
                 this.#dom.search.append(text);
-                text.onchange = (event) => {
-                    console.log(88);
-                    console.log(this);
+                text.onchange = () => {
                     this.update();
+                    this.searchText = text.value;
                 };
             }
 
@@ -496,6 +504,8 @@ class Table {
     search = {
         enabled: true
     };
+
+    searchText = null;
 
     /// The table id
     #id = null;
