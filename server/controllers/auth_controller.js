@@ -50,12 +50,12 @@ class AuthController extends Controller {
             && Validation.email(email))
         {
             const hashedPassword = await Password.hash(password);
-            const result = await User.insert({
+            const user = await User.insert({
                 username,
                 email,
                 password: hashedPassword
             });
-            res.respond(result.status);
+            res.respond(user ? Status.Code.Created : Status.Code.BadRequest, user);
         }
         else 
         {

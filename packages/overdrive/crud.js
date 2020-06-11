@@ -1,4 +1,3 @@
-const Logger = require('overdrive-logger');
 const Status = require('overdrive-status');
 
 class CRUD {
