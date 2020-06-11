@@ -36,10 +36,20 @@ class Pagination {
             }
 
             this.#parent = document.createElement('div');
+            this.parent.classList.add('row');
             this.table.parent.append(this.parent);
+
+            const select_div = document.createElement('div');
+            select_div.classList.add('col-2');
+            this.parent.appendChild(select_div);
+
+            const nav_div = document.createElement('div');
+            nav_div.classList.add('col-10');
+            this.parent.appendChild(nav_div);
 
             const select = document.createElement("select");
             select.classList.add('form-control');
+            select.classList.add('form-control-sm');
             for (const limit of this.limits)
             {
                 const option = document.createElement('option');
@@ -51,7 +61,7 @@ class Pagination {
                 this.limit = select.value;
                 await this.table.update();
             };
-            this.parent.append(select);
+            select_div.append(select);
 
             const nav = document.createElement('nav');
             nav.setAttribute('id', 'nav-' + this.table.id);
@@ -65,7 +75,7 @@ class Pagination {
                 this.widget.classList.add(css_class);
             }
             nav.append(this.widget);
-            this.parent.append(nav);
+            nav_div.append(nav);
         }
 
         // clear the content
@@ -117,7 +127,7 @@ class Pagination {
         active: ['active'],
         li: ['page-item'],
         nav: [],
-        ul: ['pagination', 'pagination-sm']
+        ul: ['pagination', 'pagination-sm', 'justify-content-end']
     }
     enabled = true;
     limit = 10;

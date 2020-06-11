@@ -29,7 +29,15 @@ class CRUD {
                         condition[pieces[0]] = pieces[1];
                     }
                 }
-                else if (token.includes('=contains='))
+                else if (token.includes('any=like='))
+                {
+                    const pieces = token.split('=contains=').map(piece => piece.trim());
+                    if (pieces.length == 2)
+                    {
+                        
+                    }
+                }
+                else if (token.includes('=like='))
                 {
                     const pieces = token.split('=contains=').map(piece => piece.trim());
                     if (pieces.length == 2)
@@ -52,7 +60,7 @@ class CRUD {
         this.update(router, schema, route);
         this.delete(router, schema, route);
     }
-    
+
     /// Register Create operation
     /// @param router - The express router
     /// @param schema - The data schema
