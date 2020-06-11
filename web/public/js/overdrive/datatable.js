@@ -373,7 +373,7 @@ class Table {
         }
 
         const count = this.pagination.enabled
-            ? Math.min(this.data.count, this.pagination.limit)
+            ? Math.min(this.data.data.length, this.pagination.limit)
             : this.data.count;
         const offset = this.pagination.enabled
             ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
@@ -383,11 +383,14 @@ class Table {
         {
             const model = this.data.data[i];
             const row = this.#dom.table_body.insertRow();
-            row.setAttribute('id', model.id || model._id);
-            const self = this;
-            row.onclick = function () {
-                self.onRowClick(row, model);
-            };
+            if (model != null)
+            {
+                row.setAttribute('id', model.id || model._id);
+                const self = this;
+                row.onclick = function () {
+                    self.onRowClick(row, model);
+                };
+            }
             await this.renderRow(row, model, columns);
         }
     }
