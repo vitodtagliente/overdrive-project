@@ -376,6 +376,10 @@ class Table {
         if (this.#dom.table_body == null)
         {
             this.#dom.table_body = this.table.createTBody();
+            for (const css_class of this.classes.tbody)
+            {
+                this.#dom.table_body.classList.add(css_class);
+            }
         }
         else
         {
@@ -415,6 +419,10 @@ class Table {
     /// Render the head of the table
     #renderHead = async () => {
         this.#dom.table_head = this.table.createTHead();
+        for (const css_class of this.classes.thead)
+        {
+            this.#dom.table_head.classList.add(css_class);
+        }
         const row = this.#dom.table_head.insertRow();
         const columns = this.columns;
         for (const column of Object.keys(columns))
@@ -480,7 +488,9 @@ class Table {
     classes = {
         col: Array(),
         row: Array(),
-        table: ['table', 'table-hover']
+        table: ['table', 'table-hover', 'table-striped'],
+        tbody: Array(),
+        thead: ['thead-dark']
     };
 
     search = {
