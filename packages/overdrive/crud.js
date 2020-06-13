@@ -28,6 +28,19 @@ class Search {
         const filter = req.query.filter;
         if (filter != null)
         {
+            const toRegexPattern = (str) => {
+                let regex = Array();
+                regex.push('^.*');
+                for (var i = 0; i < str.length; i++)
+                {
+                    const char = str.charAt(i);
+                    regex.push(`[${char.toLowerCase()}|${char.toUpperCase()}]`);
+                    
+                }
+                regex.push('.*$');
+                return regex.join('');
+            };
+
             const tokens = filter.split(' ').map(token => token.trim());
             for (const token of tokens)
             {
@@ -44,7 +57,7 @@ class Search {
                     const pieces = token.split('any=like=').map(piece => piece.trim());
                     if (pieces.length == 2)
                     {
-                        const pattern = pieces[1];
+                        const pattern = toRegexPattern(pieces[1]);
                         let or = [];
                         for (const field of Object.keys(schema.definition))
                         {
@@ -64,7 +77,8 @@ class Search {
                     const pieces = token.split('=contains=').map(piece => piece.trim());
                     if (pieces.length == 2)
                     {
-                        condition[pieces[0]] = { $regex: `^.*${pieces[1]}.*$` };
+                        const pattern = toRegexPattern(pieces[1]);
+                        condition[pieces[0]] = { $regex: pattern };
                     }
                 }
             }
