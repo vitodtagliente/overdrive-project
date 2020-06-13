@@ -401,6 +401,11 @@ class Table {
             ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
             : 0;
         const columns = Object.keys(this.columns);
+        if (true)
+        {
+            const row = this.#dom.table_body.insertRow();
+            await this.renderSearchRow(row, columns);
+        }
         for (let i = offset; i < (offset + count); ++i)
         {
             const model = this.data.data[i];
@@ -460,6 +465,18 @@ class Table {
             }
         }
     };
+
+    renderSearchRow = async (row, fields) => {
+        for (const field of fields)
+        {
+            const cell = row.insertCell();
+            const textbox = document.createElement('input');
+            textbox.setAttribute("type", "text");
+            textbox.classList.add('form-control');
+            textbox.classList.add('form-control-sm');
+            cell.appendChild(textbox);
+        }
+    }
 
     /// Retrieve the DOM table
     /// @return - The DOM table
