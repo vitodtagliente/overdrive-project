@@ -1,19 +1,29 @@
 const Status = require('overdrive-status');
 
-class CRUD {
-
-    static buildSearch(req) {
-        let search = {};
-        const limit = parseInt(req.query.limit, 10);
-        if (limit != null && limit > 0)
-        {
-            search.limit = limit;
-            search.skip = parseInt(req.query.skip, 10) || 0;
-        }
-        return search;
+class Search {
+    #condition = {};
+    #params = {};
+    constructor(condition, params) {
+        this.#condition = condition || {};
+        this.#params = params || {};
     }
 
-    static buildCondition(req, schema) {
+    get condition() {
+        return this.#condition;
+    }
+
+    get params() {
+        return this.#params;
+    }
+
+    static parse(req, schema) {
+        return new Search(
+            this.parseCondition(req, schema),
+            this.parseParams(req)
+        );
+    }
+
+    static parseCondition(req, schema) {
         let condition = {};
         const filter = req.query.filter;
         if (filter != null)
@@ -62,6 +72,19 @@ class CRUD {
         return condition;
     }
 
+    static parseParams(req) {
+        let params = {};
+        const limit = parseInt(req.query.limit, 10);
+        if (limit != null && limit > 0)
+        {
+            params.limit = limit;
+            params.skip = parseInt(req.query.skip, 10) || 0;
+        }
+        return params;
+    }
+}
+
+class CRUD {
     /// Register basic CRUD operation for a data provider
     /// @param router - The express router
     /// @param schema - The data schema
@@ -102,9 +125,9 @@ class CRUD {
         /// Retrieve all the models
         /// @return - The model list
         router.get(route, async (req, res) => {
-            const condition = this.buildCondition(req, schema);
-            const data = await schema.find(condition, this.buildSearch(req));
-            const count = await schema.count(condition);
+            const search = Search.parse(req, schema);
+            const data = await schema.find(search.condition, search.params);
+            const count = await schema.count(search.condition);
             res.respond(Status.Code.OK, {
                 data,
                 count

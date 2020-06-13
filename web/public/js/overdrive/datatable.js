@@ -347,7 +347,7 @@ class Table {
                 text.classList.add('form-control');
                 this.parent.append(this.#dom.search);
                 this.#dom.search.append(text);
-                text.onchange = () => {
+                text.oninput = () => {
                     this.update();
                     this.searchText = text.value;
                 };
