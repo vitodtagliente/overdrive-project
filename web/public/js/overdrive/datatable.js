@@ -1,5 +1,42 @@
-class SearchCache {
+class Search {
+    /// constructor
+    /// @param table - The table on which refers to
+    constructor(table) {
+        this.#table = table;
+    }
 
+    get table() {
+        return this.#table;
+    }
+
+    get(field) {
+        if (Object.keys(this.#fields).includes(field))
+        {
+            return this.#fields[field];
+        }
+        return null;
+    }
+
+    update(field, value) {
+        console.log(field);
+        console.log(value);
+        this.#fields[field] = value;
+        this.table.update();
+    }
+
+    toString() {
+        let result = Array();
+        for (const field of Object.keys(this.#fields))
+        {
+            result.push(result.length == 0 ? '' : ' and ');
+            result.push(`${field}=like=${this.#fields[field]}`);
+        }
+        return result.join("");
+    }
+
+    enabled = true;
+    #fields = {};
+    #table = null;
 }
 
 class Pagination {
@@ -175,6 +212,7 @@ class Table {
     constructor(id) {
         this.#id = id || new Date().valueOf();
         this.#pagination = new Pagination(this);
+        this.#search = new Search(this);
 
         /// register this instance
         Table.#instances.push(this);
@@ -208,21 +246,31 @@ class Table {
     #composeRequest = () => {
         const url = [this.url];
         let first = true;
+        if (this.search.enabled)
+        {
+            const filter = this.search.toString();
+            if (filter.length != 0)
+            {
+                if (first)
+                {
+                    url.push('?');
+                    first = false;
+                }
+                url.push('filter=');
+                url.push(filter);
+            }
+        }
         if (this.pagination.enabled)
         {
-            url.push('?');
+            if (first)
+            {
+                url.push('?');
+                first = false;
+            }
             url.push('skip=');
             url.push(this.pagination.offset);
             url.push('&limit=');
             url.push(this.pagination.limit);
-            first = false;
-        }
-        if (!(this.searchText && (this.searchText.length === 0 || !this.searchText.trim())))
-        {
-            url.push(first ? '?' : '&');
-            url.push('filter=any=like=');
-            url.push(this.searchText);
-            first = false;
         }
         return url.join('');
     };
@@ -339,6 +387,7 @@ class Table {
             }
 
             // create the search box
+            /*
             if (this.search.enabled)
             {
                 this.#dom.search = document.createElement('div');
@@ -352,6 +401,7 @@ class Table {
                     this.searchText = text.value;
                 };
             }
+            */
 
             // create the table
             this.#dom.table = document.createElement('table');
@@ -401,7 +451,7 @@ class Table {
             ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
             : 0;
         const columns = Object.keys(this.columns);
-        if (true)
+        if (this.search.enabled)
         {
             const row = this.#dom.table_body.insertRow();
             await this.renderSearchRow(row, columns);
@@ -472,10 +522,23 @@ class Table {
             const cell = row.insertCell();
             const textbox = document.createElement('input');
             textbox.setAttribute("type", "text");
+            textbox.setAttribute("name", field);
+            textbox.setAttribute("id", `search-${field}`);
             textbox.classList.add('form-control');
             textbox.classList.add('form-control-sm');
+            textbox.value = this.search.get(field);
             cell.appendChild(textbox);
+            textbox.onkeyup = (event) => {
+                this.search.update(field, textbox.value);
+                event.preventDefault();
+            };
         }
+    }
+
+    /// Retrieve the search system
+    /// @return - The search
+    get search() {
+        return this.#search;
     }
 
     /// Retrieve the DOM table
@@ -518,10 +581,6 @@ class Table {
         thead: ['thead-dark']
     };
 
-    search = {
-        enabled: true
-    };
-
     searchText = null;
 
     /// The table id
@@ -545,6 +604,9 @@ class Table {
     #mode = null;
     /// The pagination system
     #pagination = null;
+    /// The search system
+    #search = null;
+
     /// The url for Ajax mode
     #url = null;
 }
