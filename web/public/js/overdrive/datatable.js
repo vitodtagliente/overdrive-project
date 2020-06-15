@@ -218,6 +218,10 @@ class Table {
         Table.#instances.push(this);
     }
 
+    get body() {
+        return this.#dom.table_body;
+    }
+
     /// Retrieve the columns of the table
     /// @return - The columns
     get columns() {
@@ -251,26 +255,20 @@ class Table {
             const filter = this.search.toString();
             if (filter.length != 0)
             {
-                if (first)
-                {
-                    url.push('?');
-                    first = false;
-                }
+                url.push(first ? '?' : '&');
                 url.push('filter=');
                 url.push(filter);
+                first = false;
             }
         }
         if (this.pagination.enabled)
         {
-            if (first)
-            {
-                url.push('?');
-                first = false;
-            }
+            url.push(first ? '?' : '&');
             url.push('skip=');
             url.push(this.pagination.offset);
             url.push('&limit=');
             url.push(this.pagination.limit);
+            first = false;
         }
         return url.join('');
     };
@@ -279,6 +277,10 @@ class Table {
     /// @return - The table
     get data() {
         return this.#data;
+    }
+
+    get DOM() {
+        return this.#dom;
     }
 
     /// Update the data
@@ -431,6 +433,7 @@ class Table {
     /// Render the body of the table
     #renderBody = async () => {
         // create the body if not exist or clear it
+        let created = false;
         if (this.#dom.table_body == null)
         {
             this.#dom.table_body = this.table.createTBody();
@@ -438,10 +441,26 @@ class Table {
             {
                 this.#dom.table_body.classList.add(css_class);
             }
+            created = true;
         }
         else
         {
-            this.#dom.table_body.innerHTML = '';
+            if (this.search.enabled)
+            {
+                let first = true;
+                for (const child of this.body.children)
+                {
+                    if (!first)
+                    {
+                        this.body.removeChild(child);
+                    }
+                    first = false;
+                }
+            }
+            else 
+            {
+                this.body.innerHTML = '';
+            }
         }
 
         const count = this.pagination.enabled
@@ -451,7 +470,7 @@ class Table {
             ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
             : 0;
         const columns = Object.keys(this.columns);
-        if (this.search.enabled)
+        if (created && this.search.enabled)
         {
             const row = this.#dom.table_body.insertRow();
             await this.renderSearchRow(row, columns);
@@ -526,7 +545,6 @@ class Table {
             textbox.setAttribute("id", `search-${field}`);
             textbox.classList.add('form-control');
             textbox.classList.add('form-control-sm');
-            textbox.value = this.search.get(field);
             cell.appendChild(textbox);
             textbox.onkeyup = (event) => {
                 this.search.update(field, textbox.value);
