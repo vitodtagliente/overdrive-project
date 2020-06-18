@@ -423,7 +423,7 @@ class Table {
             }
 
             // render the table head
-            await this.#renderHead();
+            this.#renderHead();
         }
 
         // update the table content
@@ -431,9 +431,8 @@ class Table {
     }
 
     /// Render the body of the table
-    #renderBody = async () => {
+    #renderBody = () => {
         // create the body if not exist or clear it
-        let created = false;
         if (this.#dom.table_body == null)
         {
             this.#dom.table_body = this.table.createTBody();
@@ -441,26 +440,10 @@ class Table {
             {
                 this.#dom.table_body.classList.add(css_class);
             }
-            created = true;
         }
         else
         {
-            if (this.search.enabled)
-            {
-                let first = true;
-                for (const child of this.body.children)
-                {
-                    if (!first)
-                    {
-                        this.body.removeChild(child);
-                    }
-                    first = false;
-                }
-            }
-            else 
-            {
-                this.body.innerHTML = '';
-            }
+            this.body.innerHTML = '';
         }
 
         const count = this.pagination.enabled
@@ -470,11 +453,6 @@ class Table {
             ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
             : 0;
         const columns = Object.keys(this.columns);
-        if (created && this.search.enabled)
-        {
-            const row = this.#dom.table_body.insertRow();
-            await this.renderSearchRow(row, columns);
-        }
         for (let i = offset; i < (offset + count); ++i)
         {
             const model = this.data.data[i];
@@ -487,7 +465,7 @@ class Table {
                     self.onRowClick(row, model);
                 };
             }
-            await this.renderRow(row, model, columns);
+            this.renderRow(row, model, columns);
         }
     }
 
@@ -499,7 +477,7 @@ class Table {
     }
 
     /// Render the head of the table
-    #renderHead = async () => {
+    #renderHead = () => {
         this.#dom.table_head = this.table.createTHead();
         for (const css_class of this.classes.thead)
         {
@@ -510,7 +488,7 @@ class Table {
         for (const column of Object.keys(columns))
         {
             const cell = row.insertCell();
-            await this.renderColumn(cell, columns[column]);
+            this.renderColumn(cell, columns[column]);
             cell.setAttribute('scope', 'col');
         }
     }
@@ -519,14 +497,14 @@ class Table {
     /// @param row - The table row
     /// @param model - the model
     /// @param fields - The columns of the table
-    renderRow = async (row, model, fields) => {
+    renderRow = (row, model, fields) => {
         for (const field of fields)
         {
             const cell = row.insertCell();
             const renderer = this.#findFieldRenderer(field);
             if (renderer != null)
             {
-                await renderer(cell, model);
+                renderer(cell, model);
             }
             else 
             {
@@ -576,10 +554,10 @@ class Table {
             }
 
             // render the table body
-            await this.#renderBody();
+            this.#renderBody();
 
             // render the pagination widget
-            await this.pagination.render(this.data.count);
+            this.pagination.render(this.data.count);
         }
     }
 
