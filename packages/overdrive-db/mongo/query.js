@@ -127,6 +127,18 @@ class MongoQuery extends Query {
         }
     }
 
+    /// Insert a many records into the database
+    /// @param recrods - The array of the new records
+    /// @return - True is succeed
+    async insertMany(records) {
+        return await this.context.collection.insertMany(records);
+    }
+
+    /// Delete all the records
+    async deleteAll() {
+        return await this.context.collection.deleteMany({});
+    }
+
     /// Delete a record by id
     /// @param id - The id
     /// @return - True if succeed

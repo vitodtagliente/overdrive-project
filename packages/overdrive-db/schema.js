@@ -98,6 +98,18 @@ class Schema {
         return await this.query.insert(data);
     }
 
+    /// Insert a many records into the database
+    /// @param recrods - The array of the new records
+    /// @return - True is succeed
+    async insertMany(records) {
+        return await this.query.insertMany(records);
+    }
+
+    /// Delete all the records
+    async deleteAll() {
+        return await this.query.deleteAll();
+    }
+
     /// Delete a record by id
     /// @param id - The id
     /// @return - True if succeed

@@ -7,7 +7,8 @@ function generate() {
     {
         v.push({
             name: 'Potion' + i,
-            type: "potion"
+            type: "potion",
+            power: i
         });
     }
 

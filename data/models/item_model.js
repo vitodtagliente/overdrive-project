@@ -32,5 +32,10 @@ module.exports = Schema.define('Item', {
         type: String,
         required: false,
         trim: true
+    },
+    power: {
+        type: Number,
+        required: false,
+        default: 0
     }
 });

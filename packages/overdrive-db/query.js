@@ -58,19 +58,23 @@ class Query {
         return null;
     }
 
+    /// Insert a many records into the database
+    /// @param recrods - The array of the new records
+    /// @return - True is succeed
+    async insertMany(records) {
+        return false;
+    }
+
+    /// Delete all the records
+    async deleteAll() {
+        return false;
+    }
+
     /// Delete a record by id
     /// @param id - The id
     /// @return - True if succeed
     async deleteById(id) {
         return false;
-    }
-
-    /// Update by id
-    /// @param id - The id of the record to update
-    /// @param data - The fields to update
-    /// @return - True if succeed
-    async update(id, data) {
-        return  null;
     }
 
     /// Delete records by ids
@@ -79,6 +83,14 @@ class Query {
     /// @return - True if succeed
     async deleteByIds(ids = Array(), separator = ',') {
         return false;
+    }
+
+    /// Update by id
+    /// @param id - The id of the record to update
+    /// @param data - The fields to update
+    /// @return - True if succeed
+    async update(id, data) {
+        return null;
     }
 }
 

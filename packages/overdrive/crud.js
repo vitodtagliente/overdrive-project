@@ -35,7 +35,7 @@ class Search {
                 {
                     const char = str.charAt(i);
                     regex.push(`[${char.toLowerCase()}|${char.toUpperCase()}]`);
-                    
+
                 }
                 regex.push('.*$');
                 return regex.join('');
@@ -57,16 +57,41 @@ class Search {
                     const pieces = token.split('any=like=').map(piece => piece.trim());
                     if (pieces.length == 2)
                     {
-                        const pattern = toRegexPattern(pieces[1]);
+                        const searches = pieces[1].split('any=like=').map(p => p.trim());
                         let or = [];
-                        for (const field of Object.keys(schema.definition))
+                        for (const search of searches)
                         {
-                            const type = schema.definition[field].type;
-                            if (type == String)
+                            const pattern = toRegexPattern(search);
+                            const isTrue = search.toLowerCase() == "true";
+                            const isFalse = search.toLowerCase() == "false";
+                            const isNumber = !isNaN(search);
+                            for (const field of Object.keys(schema.definition))
                             {
-                                let expression = {};
-                                expression[field] = { $regex: `^.*${pattern}.*$` };
-                                or.push(expression);
+                                const type = schema.definition[field].type;
+                                if (type == String)
+                                {
+                                    let expression = {};
+                                    expression[field] = { $regex: pattern };
+                                    or.push(expression);
+                                }
+                                else if (type == Number)
+                                {
+                                    if (isNumber)
+                                    {
+                                        let expression = {};
+                                        expression[field] = { $eq: Number(search) };
+                                        or.push(expression);
+                                    }
+                                }
+                                else if (type == Boolean)
+                                {
+                                    if (isTrue || isFalse)
+                                    {
+                                        let expression = {};
+                                        expression[field] = { $eq: (isTrue) ? true : false };
+                                        or.push(expression);
+                                    }
+                                }
                             }
                         }
                         condition['$or'] = or;
