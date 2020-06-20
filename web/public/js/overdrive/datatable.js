@@ -5,6 +5,8 @@ class Search {
         this.#table = table;
     }
 
+    /// The owning table
+    /// @return - The table
     get table() {
         return this.#table;
     }
@@ -39,6 +41,7 @@ class Search {
     #table = null;
 }
 
+/// The pagination component
 class Pagination {
     /// constructor
     /// @param table - The table on which refers to
@@ -46,22 +49,32 @@ class Pagination {
         this.#table = table;
     }
 
+    /// Retrieve the offset of the pagination
+    /// @return - The offset
     get offset() {
         return this.#state.offset;
     }
 
+    /// Retrieve the current page
+    /// @return - The page
     get page() {
         return this.#state.offset / this.limit;
     }
 
+    /// Retrieve the num of pages
+    /// @return - The pages num
     get pages() {
         return this.#state.count / this.limit;
     }
 
+    /// Retrieve the parent DOM
+    /// @return - The DOM of the parent element
     get parent() {
         return this.#parent;
     }
 
+    /// Render the widget
+    /// @param count - The num of records
     async render(count) {
         // create the parent container if not exists
         if (this.parent == null)
@@ -151,14 +164,19 @@ class Pagination {
         }
     }
 
+    /// Retrieve the table
+    /// @return - The table
     get table() {
         return this.#table;
     }
 
+    /// Retrieve the navigation widget
+    /// @return - The widget
     get widget() {
         return this.#widget;
     }
 
+    /// Styles
     classes = {
         a: ['page-link'],
         active: ['active'],
@@ -166,16 +184,20 @@ class Pagination {
         nav: [],
         ul: ['pagination', 'pagination-sm', 'justify-content-end']
     }
+    /// used to enable/disable the pagination
     enabled = true;
     limit = 10;
     limits = [10, 25, 50, 100];
-
+    /// the parent DOM
     #parent = null;
+    /// The internal state
     #state = {
         offset: 0,
         count: 0
     }
+    /// The table
     #table = null;
+    /// 
     #widget = null;
 }
 
