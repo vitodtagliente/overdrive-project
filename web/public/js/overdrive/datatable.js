@@ -298,7 +298,8 @@ class Table {
             {
                 result = {
                     data: result,
-                    count: result.length
+                    recordsTotal: result.length,
+                    recordsFiltered: result.length
                 };
             }
             return result;
@@ -367,7 +368,8 @@ class Table {
                 this.#mode = Table.Mode.Data;
                 this.#data = {
                     data,
-                    count: data.length
+                    recordsTotal: data.length,
+                    recordsFiltered: data.length
                 };
             }
             else
@@ -417,7 +419,7 @@ class Table {
             // setup the columns
             if ((this.#columns == null
                 || (Array.isArray(this.#columns) && this.#columns.length == 0))
-                && this.data.count > 0)
+                && this.data.recordsFiltered > 0)
             {
                 this.columns = Object.keys(this.data.data[0]);
             }
@@ -447,8 +449,8 @@ class Table {
         }
 
         const count = this.pagination.enabled
-            ? Math.min(this.data.data.length, this.pagination.limit)
-            : this.data.count;
+            ? Math.min(this.data.recordsFiltered, this.pagination.limit)
+            : this.data.recordsFiltered;
         const offset = this.pagination.enabled
             ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
             : 0;
@@ -557,7 +559,7 @@ class Table {
             this.#renderBody();
 
             // render the pagination widget
-            this.pagination.render(this.data.count);
+            this.pagination.render(this.data.recordsTotal);
         }
     }
 
