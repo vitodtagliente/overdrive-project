@@ -13,6 +13,8 @@ class Inspector {
 
     #createField = (name, type, value) => {
 
+        const isCheckbox = type == 'checkbox';
+
         const applyClasses = (element, classes) => {
             for (const style of classes)
             {
@@ -21,13 +23,12 @@ class Inspector {
         }
 
         const div = document.createElement('div');
-        applyClasses(div, ['form-group', 'row']);
+        applyClasses(div, isCheckbox ? ['form-check'] : ['form-group', 'row']);
 
         const label = document.createElement('label');
-        applyClasses(label, ['col-sm-2', 'col-form-label']);
+        applyClasses(label, !isCheckbox ? ['col-sm-2', 'col-form-label'] : ['form-check-label']);
         label.setAttribute('for', name);
-        label.innerHTML = "<b>" + name + "</b>";
-        div.appendChild(label);
+        label.innerHTML = isCheckbox ? name : "<b>" + name + "</b>";
 
         const inputDiv = document.createElement('div');
         applyClasses(inputDiv, ['col-sm-10']);
@@ -37,11 +38,20 @@ class Inspector {
         input.setAttribute('name', name);
         input.setAttribute('id', name);
         input.value = value;
-        applyClasses(input, ['form-control', 'form-control-sm']);
+        applyClasses(input, !isCheckbox ? ['form-control', 'form-control-sm'] : ['from-check-input']);
 
         inputDiv.appendChild(input);
 
-        div.appendChild(inputDiv);
+        if (isCheckbox)
+        {
+            div.appendChild(inputDiv);
+            div.appendChild(label);
+        }
+        else 
+        {
+            div.appendChild(label);
+            div.appendChild(inputDiv);
+        }
         return div;
     }
 
@@ -79,7 +89,18 @@ class Inspector {
 
         for (const field of Object.keys(this.data))
         {
-            div.appendChild(this.#createField(field, 'text', this.data[field]));
+            const value = this.data[field];
+            let type = 'text';
+            console.log(value);
+            if (typeof value === typeof true)
+            {
+                type = 'checkbox';
+            }
+            else if (!isNaN(value))
+            {
+                type = 'number';
+            }
+            div.appendChild(this.#createField(field, type, value));
         }
 
         row.parentNode.insertBefore(this.#widget, row.nextSibling);
