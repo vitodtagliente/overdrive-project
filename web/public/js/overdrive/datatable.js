@@ -181,8 +181,12 @@ class Pagination {
 
 class Table {
 
+    /// The datatable instances
     static #instances = Array();
 
+    /// Retrieve a table instance
+    /// @param id - The id of the table, if many are instanciatedù
+    /// @return - The table instance, if exists
     static instance(id) {
         if (id == null && this.#instances.length == 1)
         {
@@ -200,7 +204,7 @@ class Table {
         return null;
     }
 
-    /// The usage method
+    /// The usage method type
     static get Mode() {
         return {
             Ajax: 'ajax',
@@ -208,9 +212,10 @@ class Table {
         };
     }
     /// constructor
-    /// @param id - The id of the table
+    /// @param id - The id of the table, can be null
     constructor(id) {
         this.#id = id || new Date().valueOf();
+        // initialize the components
         this.#pagination = new Pagination(this);
         this.#search = new Search(this);
 
@@ -218,6 +223,8 @@ class Table {
         Table.#instances.push(this);
     }
 
+    /// Retrieve the body DOM
+    /// @return - The DOM
     get body() {
         return this.#dom.table_body;
     }
@@ -279,6 +286,8 @@ class Table {
         return this.#data;
     }
 
+    /// Retrieve the DOM object
+    /// @return - The DOM
     get DOM() {
         return this.#dom;
     }
@@ -325,6 +334,12 @@ class Table {
             }
         }
         return null;
+    }
+
+    /// Retrieve the head DOM
+    /// @return - The DOM
+    get head() {
+        return this.#dom.table_head;
     }
 
     /// Retrieve the table id
@@ -379,6 +394,11 @@ class Table {
                 this.#data = await this.#fetch();
             }
         }
+        else 
+        {
+            console.error("Cannot initialize the table rendering, the data is null");
+            return false;
+        }
 
         // create the table at the first time
         if (this.table == null)
@@ -386,7 +406,7 @@ class Table {
             this.#dom.parent = document.getElementById(container_id);
             if (this.parent == null)
             {
-                console.log('Unable to create the table! Invalid container id');
+                console.error(`Unable to create the table! Invalid container ${container_id}`);
                 return false;
             }
 
@@ -416,7 +436,7 @@ class Table {
             this.table.setAttribute('id', this.id);
             this.parent.append(this.table);
 
-            // setup the columns
+            // setup the columns if not set at the table initialization
             if ((this.#columns == null
                 || (Array.isArray(this.#columns) && this.#columns.length == 0))
                 && this.data.recordsFiltered > 0)
@@ -430,6 +450,8 @@ class Table {
 
         // update the table content
         await this.update(false);
+
+        return true;
     }
 
     /// Render the body of the table
@@ -440,7 +462,7 @@ class Table {
             this.#dom.table_body = this.table.createTBody();
             for (const css_class of this.classes.tbody)
             {
-                this.#dom.table_body.classList.add(css_class);
+                this.body.classList.add(css_class);
             }
         }
         else
@@ -458,7 +480,7 @@ class Table {
         for (let i = offset; i < (offset + count); ++i)
         {
             const model = this.data.data[i];
-            const row = this.#dom.table_body.insertRow();
+            const row = this.body.insertRow();
             if (model != null)
             {
                 row.setAttribute('id', model.id || model._id);
@@ -483,9 +505,9 @@ class Table {
         this.#dom.table_head = this.table.createTHead();
         for (const css_class of this.classes.thead)
         {
-            this.#dom.table_head.classList.add(css_class);
+            this.head.classList.add(css_class);
         }
-        const row = this.#dom.table_head.insertRow();
+        const row = this.head.insertRow();
         const columns = this.columns;
         for (const column of Object.keys(columns))
         {
@@ -515,6 +537,7 @@ class Table {
         }
     };
 
+    /*
     renderSearchRow = async (row, fields) => {
         for (const field of fields)
         {
@@ -532,6 +555,7 @@ class Table {
             };
         }
     }
+    */
 
     /// Retrieve the search system
     /// @return - The search
@@ -579,8 +603,6 @@ class Table {
         thead: ['thead-dark']
     };
 
-    searchText = null;
-
     /// The table id
     #id = null;
     /// The columns of the table
@@ -604,7 +626,6 @@ class Table {
     #pagination = null;
     /// The search system
     #search = null;
-
     /// The url for Ajax mode
     #url = null;
 }
