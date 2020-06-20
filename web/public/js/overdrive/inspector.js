@@ -1,5 +1,6 @@
 class Inspector {
     #data = null;
+    #selectedRow = null;
     #table = null;
     #widget = null;
 
@@ -51,6 +52,14 @@ class Inspector {
         {
             this.#widget.remove();
         }
+
+        if (this.#selectedRow == row)
+        {
+            this.#selectedRow = null;
+            return;
+        }
+
+        this.#selectedRow = row;
 
         this.#widget = document.createElement('tr');
         const td = document.createElement('td');
