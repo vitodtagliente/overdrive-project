@@ -209,11 +209,11 @@ class Pagination {
             this.#state.offset = 0;
         }
 
-        const startPage = this.pages > this.maxPages
+        let startPage = this.pages > this.maxPages
             ? Math.max(0, this.page - Math.round(this.maxPages / 2))
             : 0;
 
-        const endPage = this.pages > this.maxPages
+        let endPage = this.pages > this.maxPages
             ? Math.min(this.pages, this.page + Math.round(this.maxPages / 2) + 1)
             : this.pages;
 
