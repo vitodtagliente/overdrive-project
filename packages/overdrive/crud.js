@@ -144,7 +144,8 @@ class CRUD {
             const count = await schema.count(search.condition);
             res.respond(Status.Code.OK, {
                 data,
-                count
+                recordsTotal: count,
+                recordsFiltered: data.length
             });
         });
 
