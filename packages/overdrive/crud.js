@@ -78,8 +78,8 @@ class Search {
                         for (const search of searches)
                         {
                             const pattern = toRegexPattern(search);
-                            const isTrue = search.toLowerCase() == "true";
-                            const isFalse = search.toLowerCase() == "false";
+                            const isTrue = "true".includes(search.toLowerCase());
+                            const isFalse = "false".includes(search.toLowerCase());
                             const isNumber = !isNaN(search);
                             let or = [];
                             for (const field of Object.keys(schema.definition))
