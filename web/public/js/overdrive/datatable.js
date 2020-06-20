@@ -259,7 +259,10 @@ class Pagination {
             );
         }
         createChild(false, '<span aria-hidden="true">&raquo;</span>', async () => {
-            this.#state.offset = Math.min((this.pages - 1) * this.limit, this.limit * (this.page + 1));
+            this.#state.offset = Math.min(
+                Math.max((this.pages - 1) * this.limit, 0),
+                this.limit * (this.page + 1)
+            );
             await this.table.update();
         });
     }
