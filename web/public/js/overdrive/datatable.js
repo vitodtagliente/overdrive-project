@@ -19,9 +19,23 @@ class Search {
         return null;
     }
 
+    render() {
+        if (this.table != null && this.table.parent != null)
+        {
+            this.#dom.search = document.createElement('div');
+            const text = document.createElement('input');
+            text.setAttribute("type", "text");
+            text.classList.add('form-control');
+            this.table.parent.append(this.#dom.search);
+            this.#dom.search.append(text);
+            text.oninput = () => {
+                this.update();
+                this.#search = text.value;
+            };
+        }
+    }
+
     update(field, value) {
-        console.log(field);
-        console.log(value);
         this.#fields[field] = value;
         this.table.update();
     }
@@ -33,11 +47,25 @@ class Search {
             result.push(result.length == 0 ? '' : ' and ');
             result.push(`${field}=like=${this.#fields[field]}`);
         }
+        if (this.#search && this.#search.lenght > 0)
+        {
+            result.push(result.length == 0 ? '' : ' or ');
+            result.push(`any=like=${this.#search}`);
+        }
         return result.join("");
     }
 
+    /// Specify if the search is enabled
     enabled = true;
+    /// DOM elements
+    #dom = {
+        search: null
+    }
+    /// The mathc for each field
     #fields = {};
+    /// any search
+    #search = null;
+    /// The table
     #table = null;
 }
 
@@ -452,11 +480,6 @@ class Table {
                 this.#data = await this.#fetch();
             }
         }
-        else 
-        {
-            console.error("Cannot initialize the table rendering, the data is null");
-            return false;
-        }
 
         // create the table at the first time
         if (this.table == null)
@@ -469,21 +492,10 @@ class Table {
             }
 
             // create the search box
-            /*
             if (this.search.enabled)
             {
-                this.#dom.search = document.createElement('div');
-                const text = document.createElement('input');
-                text.setAttribute("type", "text");
-                text.classList.add('form-control');
-                this.parent.append(this.#dom.search);
-                this.#dom.search.append(text);
-                text.oninput = () => {
-                    this.update();
-                    this.searchText = text.value;
-                };
+                this.search.render();
             }
-            */
 
             // create the table
             this.#dom.table = document.createElement('table');
@@ -671,7 +683,6 @@ class Table {
     /// The DOM elements
     #dom = {
         parent: null,
-        search: null,
         table: null,
         table_body: null,
         table_head: null
