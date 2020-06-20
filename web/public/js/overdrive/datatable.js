@@ -204,6 +204,10 @@ class Pagination {
         this.paginationBody.innerHTML = '';
 
         this.#state.count = count;
+        if (this.#state.offset > count)
+        {
+            this.#state.offset = 0;
+        }
         for (let i = 0; i < this.pages; ++i)
         {
             const li = document.createElement('li');
