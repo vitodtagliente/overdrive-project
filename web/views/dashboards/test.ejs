@@ -10,11 +10,14 @@
     <div class="col">
         <div id="table-container">
         </div>
+        <div id="inspector">
+
+        </div>
     </div>
 </div>
 <script>
     window.addEventListener('load', () =>
-    {        
+    {
         let test_data = Array();
         for (var i = 0; i < 50; ++i) {
             test_data.push({
@@ -36,7 +39,7 @@
         {
             cell.innerHTML = "<b>" + name + "</b>";
         };
-        
+
         /*
         table.columns = {
             _id: 'id',
@@ -44,15 +47,10 @@
         };
         table.render('/api/items', 'table-container');
         */
-        
-         table.onRowClick = (row, model) =>
-         {
-             console.log(row);
-             console.log(model);
-             model.name = '<b>Selected</b>';
-             table.render();
-         };
-         table.render('/api/items', 'table-container');
-         
+
+        const inspector = new Inspector();
+        inspector.attach(table);
+        table.render('/api/items', 'table-container');
+
     });
 </script>
