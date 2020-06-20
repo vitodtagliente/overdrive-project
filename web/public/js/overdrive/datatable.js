@@ -710,7 +710,7 @@ class Table {
     classes = {
         col: Array(),
         row: Array(),
-        table: ['table'],
+        table: ['table', 'table-striped'],
         tbody: Array(),
         thead: ['thead-dark']
     };

@@ -26,7 +26,7 @@ class Inspector {
         const label = document.createElement('label');
         applyClasses(label, ['col-sm-2', 'col-form-label']);
         label.setAttribute('for', name);
-        label.innerHTML = name;
+        label.innerHTML = "<b>" + name + "</b>";
         div.appendChild(label);
 
         const inputDiv = document.createElement('div');
@@ -55,17 +55,17 @@ class Inspector {
 
         if (this.#selectedRow == row)
         {
-            this.#selectedRow.classList.remove('table-active');
+            this.#selectedRow.classList.remove('table-primary');
             this.#selectedRow = null;
             return;
         }
 
         if (this.#selectedRow)
         {
-            this.#selectedRow.classList.remove('table-active');
+            this.#selectedRow.classList.remove('table-primary');
         }
         this.#selectedRow = row;
-        row.classList.add('table-active');
+        row.classList.add('table-primary');
 
         this.#widget = document.createElement('tr');
         this.#widget.classList.remove('hover');
