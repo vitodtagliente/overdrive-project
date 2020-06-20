@@ -23,35 +23,35 @@ class Inspector {
         }
 
         const div = document.createElement('div');
-        applyClasses(div, isCheckbox ? ['form-check'] : ['form-group', 'row']);
+        applyClasses(div, ['form-group', 'row']);
 
         const label = document.createElement('label');
-        applyClasses(label, !isCheckbox ? ['col-sm-2', 'col-form-label'] : ['form-check-label']);
+        applyClasses(label, ['col-sm-2', 'col-form-label', 'pt-0', 'pb-0']);
         label.setAttribute('for', name);
-        label.innerHTML = isCheckbox ? name : "<b>" + name + "</b>";
+        label.innerHTML = "<b>" + name + "</b>";
 
         const inputDiv = document.createElement('div');
-        applyClasses(inputDiv, ['col-sm-10']);
+        applyClasses(inputDiv, isCheckbox ? ['col-sm-10'] : ['col-sm-10']);
 
         const input = document.createElement('input');
         input.setAttribute('type', type);
         input.setAttribute('name', name);
         input.setAttribute('id', name);
-        input.value = value;
+        if (isCheckbox)
+        {
+            input.checked = value;
+        }
+        else 
+        {
+            input.value = value;
+        }
         applyClasses(input, !isCheckbox ? ['form-control', 'form-control-sm'] : ['from-check-input']);
 
         inputDiv.appendChild(input);
 
-        if (isCheckbox)
-        {
-            div.appendChild(inputDiv);
-            div.appendChild(label);
-        }
-        else 
-        {
-            div.appendChild(label);
-            div.appendChild(inputDiv);
-        }
+        div.appendChild(label);
+        div.appendChild(inputDiv);
+
         return div;
     }
 
@@ -91,7 +91,6 @@ class Inspector {
         {
             const value = this.data[field];
             let type = 'text';
-            console.log(value);
             if (typeof value === typeof true)
             {
                 type = 'checkbox';
