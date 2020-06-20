@@ -49,6 +49,18 @@ class Pagination {
         this.#table = table;
     }
 
+    /// Retrieve the DOM elements
+    /// @return - The DOM elements
+    get DOM() {
+        return this.#DOM;
+    }
+
+    /// Retrieve the limit select box
+    /// @return - The limit select
+    get limitSelect() {
+        return this.DOM.limitSelect;
+    }
+
     /// Retrieve the offset of the pagination
     /// @return - The offset
     get offset() {
@@ -66,70 +78,93 @@ class Pagination {
     get pages() {
         return this.#state.count / this.limit;
     }
+    /// Retrieve the pagination widget
+    /// @return - The DOM element
+    get pagination() {
+        return this.DOM.paginationWidget;
+    }
+
+    /// Retrieve the pagination body DOM
+    /// @return - The DOM element
+    get paginationBody() {
+        return this.DOM.paginationBody;
+    }
 
     /// Retrieve the parent DOM
     /// @return - The DOM of the parent element
     get parent() {
-        return this.#parent;
+        return this.DOM.parent;
     }
 
     /// Render the widget
     /// @param count - The num of records
-    async render(count) {
+    render(count) {
         // create the parent container if not exists
         if (this.parent == null)
         {
             if (this.table == null)
             {
-                console.log('Unable to create the pagination widget!');
+                console.error('Unable to create the pagination widget!');
                 return;
             }
 
-            this.#parent = document.createElement('div');
+            this.#DOM.parent = document.createElement('div');
             this.parent.classList.add('row');
             this.table.parent.append(this.parent);
 
-            const select_div = document.createElement('div');
-            select_div.classList.add('col-2');
-            this.parent.appendChild(select_div);
+            this.#DOM.limitDiv = document.createElement('div');
+            this.#DOM.limitDiv.classList.add('col-2');
+            this.parent.appendChild(this.#DOM.limitDiv);
 
-            const nav_div = document.createElement('div');
-            nav_div.classList.add('col-10');
-            this.parent.appendChild(nav_div);
-
-            const select = document.createElement("select");
-            select.classList.add('form-control');
-            select.classList.add('form-control-sm');
-            for (const limit of this.limits)
+            if (this.limits.length > 0)
             {
-                const option = document.createElement('option');
-                option.value = limit;
-                option.text = limit;
-                select.appendChild(option);
-            }
-            select.onchange = async () => {
-                this.limit = select.value;
-                await this.table.update();
-            };
-            select_div.append(select);
+                this.#DOM.limitSelect = document.createElement("select");
+                this.limitSelect.classList.add('form-control');
+                this.limitSelect.classList.add('form-control-sm');
 
-            const nav = document.createElement('nav');
-            nav.setAttribute('id', 'nav-' + this.table.id);
+                if (!this.limits.includes(this.limit))
+                {
+                    this.limit = this.limits[0];
+                }
+
+                for (const limit of this.limits)
+                {
+                    const option = document.createElement('option');
+                    option.value = limit;
+                    option.text = limit;
+                    this.limitSelect.appendChild(option);
+                }
+
+                this.limitSelect.value = this.limit;
+
+                this.limitSelect.onchange = async () => {
+                    this.limit = this.limitSelect.value;
+                    await this.table.update();
+                };
+                this.#DOM.limitDiv.append(this.limitSelect);
+            }
+
+            this.#DOM.paginationDiv = document.createElement('div');
+            this.#DOM.paginationDiv.classList.add('col-10');
+            this.parent.appendChild(this.#DOM.paginationDiv);
+
+            this.#DOM.paginationWidget = document.createElement('nav');
+            this.pagination.setAttribute('id', 'nav-' + this.table.id);
             for (const css_class of this.classes.nav)
             {
-                nav.classList.add(css_class);
+                this.pagination.classList.add(css_class);
             }
-            this.#widget = document.createElement('ul');
+            this.#DOM.paginationBody = document.createElement('ul');
             for (const css_class of this.classes.ul)
             {
-                this.widget.classList.add(css_class);
+                this.paginationBody.classList.add(css_class);
             }
-            nav.append(this.widget);
-            nav_div.append(nav);
+            this.pagination.append(this.paginationBody);
+            this.#DOM.paginationDiv.append(this.pagination);
         }
 
         // clear the content
-        this.widget.innerHTML = '';
+        this.paginationBody.innerHTML = '';
 
         this.#state.count = count;
         for (let i = 0; i < this.pages; ++i)
@@ -160,7 +195,7 @@ class Pagination {
             };
             li.append(a);
 
-            this.widget.append(li);
+            this.paginationBody.append(li);
         }
     }
 
@@ -168,12 +203,6 @@ class Pagination {
     /// @return - The table
     get table() {
         return this.#table;
-    }
-
-    /// Retrieve the navigation widget
-    /// @return - The widget
-    get widget() {
-        return this.#widget;
     }
 
     /// Styles
@@ -184,12 +213,21 @@ class Pagination {
         nav: [],
         ul: ['pagination', 'pagination-sm', 'justify-content-end']
     }
+    /// DOM elements
+    #DOM = {
+        limitDiv: null,
+        paginationDiv: null,
+        limitSelect: null,
+        paginationWidget: null,
+        paginationBody: null,
+        parent: null
+    }
     /// used to enable/disable the pagination
     enabled = true;
+    /// the limit of elements per page
     limit = 10;
+    /// The available limit options
     limits = [10, 25, 50, 100];
-    /// the parent DOM
-    #parent = null;
     /// The internal state
     #state = {
         offset: 0,
@@ -197,8 +235,6 @@ class Pagination {
     }
     /// The table
     #table = null;
-    /// 
-    #widget = null;
 }
 
 class Table {
