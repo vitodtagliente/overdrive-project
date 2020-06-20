@@ -214,7 +214,7 @@ class Pagination {
             : 0;
 
         const endPage = this.pages > this.maxPages
-            ? Math.min(this.pages, this.page + Math.round(this.maxPages / 2))
+            ? Math.min(this.pages, this.page + Math.round(this.maxPages / 2) + 1)
             : this.pages;
 
         const createChild = (isActive, text, callback) => {
@@ -294,7 +294,7 @@ class Pagination {
     /// The available limit options
     limits = [10, 25, 50, 100];
     /// The max pages
-    maxPages = 5;
+    maxPages = 6;
     /// The internal state
     #state = {
         offset: 0,
