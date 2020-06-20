@@ -208,15 +208,23 @@ class Pagination {
         {
             this.#state.offset = 0;
         }
-        for (let i = 0; i < this.pages; ++i)
-        {
+
+        const startPage = this.pages > this.maxPages
+            ? Math.max(0, this.page - Math.round(this.maxPages / 2))
+            : 0;
+
+        const endPage = this.pages > this.maxPages
+            ? Math.min(this.pages, this.page + Math.round(this.maxPages / 2))
+            : this.pages;
+
+        const createChild = (isActive, text, callback) => {
             const li = document.createElement('li');
             for (const css_class of this.classes.li)
             {
                 li.classList.add(css_class);
             }
 
-            if (this.page == i)
+            if (isActive)
             {
                 for (const css_class of this.classes.active)
                 {
@@ -229,15 +237,31 @@ class Pagination {
             {
                 a.classList.add(css_class);
             }
-            a.innerText = i + 1;
-            a.onclick = async () => {
-                this.#state.offset = this.limit * i;
-                await this.table.update();
-            };
+
+            a.innerHTML = text;
+            a.onclick = callback;
             li.append(a);
 
             this.paginationBody.append(li);
         }
+
+        createChild(false, '<span aria-hidden="true">&laquo;</span>', async () => {
+            this.#state.offset = Math.max(0, this.limit * (this.page - 1));
+            await this.table.update();
+        });
+        for (let i = startPage; i < endPage; ++i)
+        {
+            createChild(this.page == i, i + 1,
+                async () => {
+                    this.#state.offset = this.limit * i;
+                    await this.table.update();
+                }
+            );
+        }
+        createChild(false, '<span aria-hidden="true">&raquo;</span>', async () => {
+            this.#state.offset = Math.min((this.pages - 1) * this.limit, this.limit * (this.page + 1));
+            await this.table.update();
+        });
     }
 
     /// Retrieve the table
@@ -269,6 +293,8 @@ class Pagination {
     limit = 10;
     /// The available limit options
     limits = [10, 25, 50, 100];
+    /// The max pages
+    maxPages = 5;
     /// The internal state
     #state = {
         offset: 0,
