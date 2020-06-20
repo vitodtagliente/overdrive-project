@@ -5,6 +5,14 @@ class Search {
         this.#table = table;
     }
 
+    get DOM() {
+        return this.#dom;
+    }
+
+    get parent() {
+        return this.DOM.parent;
+    }
+
     /// The owning table
     /// @return - The table
     get table() {
@@ -22,15 +30,15 @@ class Search {
     render() {
         if (this.table != null && this.table.parent != null)
         {
-            this.#dom.search = document.createElement('div');
-            const text = document.createElement('input');
-            text.setAttribute("type", "text");
-            text.classList.add('form-control');
-            this.table.parent.append(this.#dom.search);
-            this.#dom.search.append(text);
-            text.oninput = () => {
-                this.update();
-                this.#search = text.value;
+            this.#dom.parent = document.createElement('div');
+            this.#dom.search = document.createElement('input');
+            this.#dom.search.setAttribute("type", "text");
+            this.#dom.search.classList.add('form-control');
+            this.table.parent.append(this.parent);
+            this.parent.append(this.#dom.search);
+            this.#dom.search.onkeyup = () => {
+                this.#search = this.#dom.search.value;
+                this.table.update();
             };
         }
     }
@@ -47,7 +55,7 @@ class Search {
             result.push(result.length == 0 ? '' : ' and ');
             result.push(`${field}=like=${this.#fields[field]}`);
         }
-        if (this.#search && this.#search.lenght > 0)
+        if (this.#search && this.#search.length > 0)
         {
             result.push(result.length == 0 ? '' : ' or ');
             result.push(`any=like=${this.#search}`);
@@ -59,6 +67,7 @@ class Search {
     enabled = true;
     /// DOM elements
     #dom = {
+        parent: null,
         search: null
     }
     /// The mathc for each field
