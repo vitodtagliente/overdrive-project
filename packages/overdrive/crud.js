@@ -30,18 +30,34 @@ class Search {
         {
             const toRegexPattern = (str) => {
                 let regex = Array();
+                const specials = ['[', ']', '\\', '^', '$', '.', '?', '*', '+', '(', ')', '|'];
                 regex.push('^.*');
                 for (var i = 0; i < str.length; i++)
                 {
                     const char = str.charAt(i);
-                    regex.push(`[${char.toLowerCase()}|${char.toUpperCase()}]`);
+                    if (specials.includes(char))
+                    {
+                        regex.push(`\\${char}`);
+                    }
+                    else 
+                    {
+                        if (isNaN(char))
+                        {
+                            regex.push(`[${char.toLowerCase()}|${char.toUpperCase()}]`);
+                        }
+                        else 
+                        {
+                            regex.push(char);
 
+                        }
+                    }
                 }
                 regex.push('.*$');
                 return regex.join('');
+
             };
 
-            const tokens = filter.split(' ').map(token => token.trim());
+            const tokens = [filter];
             for (const token of tokens)
             {
                 if (token.includes('=='))
@@ -57,14 +73,15 @@ class Search {
                     const pieces = token.split('any=like=').map(piece => piece.trim());
                     if (pieces.length == 2)
                     {
-                        const searches = pieces[1].split('any=like=').map(p => p.trim());
-                        let or = [];
+                        const searches = pieces[1].split(' ').map(p => p.trim());
+                        let and = Array();
                         for (const search of searches)
                         {
                             const pattern = toRegexPattern(search);
                             const isTrue = search.toLowerCase() == "true";
                             const isFalse = search.toLowerCase() == "false";
                             const isNumber = !isNaN(search);
+                            let or = [];
                             for (const field of Object.keys(schema.definition))
                             {
                                 const type = schema.definition[field].type;
@@ -88,13 +105,22 @@ class Search {
                                     if (isTrue || isFalse)
                                     {
                                         let expression = {};
-                                        expression[field] = { $eq: (isTrue) ? true : false };
+                                        if (isTrue)
+                                        {
+                                            expression[field] = { $eq: true };
+                                        }
+                                        else 
+                                        {
+                                            expression[field] = { $ne: true };
+                                        }
                                         or.push(expression);
                                     }
                                 }
                             }
+                            console.log(or);
+                            and.push({ $or: or });
                         }
-                        condition['$or'] = or;
+                        condition['$and'] = and;
                     }
                 }
                 else if (token.includes('=like='))
@@ -108,6 +134,7 @@ class Search {
                 }
             }
         }
+        console.log(condition);
         return condition;
     }
 

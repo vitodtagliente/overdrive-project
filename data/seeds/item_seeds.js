@@ -8,7 +8,8 @@ function generate() {
         v.push({
             name: 'Potion' + i,
             type: "potion",
-            power: i
+            power: i / 2//,
+           // isEquippable: Boolean(i % 2)
         });
     }
 
