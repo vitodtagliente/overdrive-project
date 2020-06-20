@@ -105,6 +105,7 @@ class Inspector {
         row.parentNode.insertBefore(this.#widget, row.nextSibling);
 
         td.appendChild(div);
+        row.scrollIntoView();
     }
 
     attach(table) {
