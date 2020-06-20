@@ -55,13 +55,20 @@ class Inspector {
 
         if (this.#selectedRow == row)
         {
+            this.#selectedRow.classList.remove('table-active');
             this.#selectedRow = null;
             return;
         }
 
+        if (this.#selectedRow)
+        {
+            this.#selectedRow.classList.remove('table-active');
+        }
         this.#selectedRow = row;
+        row.classList.add('table-active');
 
         this.#widget = document.createElement('tr');
+        this.#widget.classList.remove('hover');
         const td = document.createElement('td');
         td.setAttribute('colspan', '100%');
         this.#widget.appendChild(td);
