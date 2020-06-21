@@ -3,6 +3,7 @@ class Inspector {
     #selectedRow = null;
     #table = null;
     #widget = null;
+    #url = null;
 
     constructor() {
     }
@@ -40,6 +41,7 @@ class Inspector {
         if (isCheckbox)
         {
             input.checked = value;
+            input.value = true;
         }
         else 
         {
@@ -53,6 +55,17 @@ class Inspector {
         div.appendChild(inputDiv);
 
         return div;
+    }
+
+    #createButton = (text, color, callback) => {
+        const button = document.createElement('button');
+        button.setAttribute('type', 'button');
+        button.classList.add('btn');
+        button.classList.add(color);
+        button.classList.add('btn-sm');
+        button.innerHTML = text;
+        button.onclick = callback;
+        return button;
     }
 
     render(row, model) {
@@ -78,14 +91,15 @@ class Inspector {
         row.classList.add('table-primary');
 
         this.#widget = document.createElement('tr');
-        this.#widget.classList.remove('hover');
+        this.#widget.classList.add('table-light');
         const td = document.createElement('td');
         td.setAttribute('colspan', '100%');
         this.#widget.appendChild(td);
 
-        const div = document.createElement('div');
-        div.classList.add('container');
-        div.classList.add('p-2');
+        const form = document.createElement('form');
+        form.id = "inspector-form";
+        form.classList.add('container');
+        form.classList.add('p-2');
 
         for (const field of Object.keys(this.data))
         {
@@ -99,12 +113,49 @@ class Inspector {
             {
                 type = 'number';
             }
-            div.appendChild(this.#createField(field, type, value));
+            form.appendChild(this.#createField(field, type, value));
         }
+
+        form.appendChild(this.#createButton('Save', 'btn-warning', function (e) {
+            e.preventDefault();
+
+            let data = $("#inspector-form").serialize();
+
+            // include unchecked checkboxes. use filter to only include unchecked boxes.
+            $.each($('form input[type=checkbox]')
+                .filter(function (idx) {
+                    return $(this).prop('checked') === false
+                }),
+                function (idx, el) {
+                    // attach matched element names to the formData with a chosen value.
+                    data += '&' + $(el).attr('name') + '=false';
+                }
+            );
+
+            const url = '/api/items/' + model._id;
+            console.log("sending data to " + url);
+            console.log(data);
+
+            $.ajax({
+                type: 'PATCH',
+                url: url,
+                data: data,
+            }).done(function (data) {
+                console.log("success");
+                console.log(data);
+            }).fail(function (data) {
+                console.log(error);
+            });
+
+            Table.instance().update();
+        }));
+        form.appendChild(this.#createButton('Close', 'btn-light', function () {
+            // close function
+        }));
 
         row.parentNode.insertBefore(this.#widget, row.nextSibling);
 
-        td.appendChild(div);
+        td.appendChild(form);
         row.scrollIntoView();
     }
 
@@ -113,9 +164,14 @@ class Inspector {
         table.onRowClick = (row, model) => {
             this.render(row, model);
         };
+        this.#url = '/api/items';
     }
 
     get table() {
         return this.#table;
+    }
+
+    get url() {
+        return this.#url;
     }
 }

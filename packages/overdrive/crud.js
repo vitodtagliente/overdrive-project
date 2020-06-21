@@ -222,6 +222,7 @@ class CRUD {
             const data = validate(req.body);
             if (data)
             {
+                console.log(data);
                 const success = await schema.update(req.params.id, data);
                 res.respond(success ? Status.Code.OK : Status.Code.BadRequest);
             }
