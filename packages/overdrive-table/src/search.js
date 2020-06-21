@@ -24,23 +24,26 @@ export default class Search extends Component {
     render() {
         if (this.table != null && this.table.parent != null)
         {
-            this.#DOM.parent = Utils.createChild(this.table.parent, 'div', (div) => {
-                this.#DOM.searchBox = Utils.createChild(div, 'input', (searchbox) => {
-                    Utils.setAttributes(searchbox, {
-                        id: `search-component-${this.table.id}`,
-                        placeholder: 'Search',
-                        type: 'text'
+            if (this.searchBox == null)
+            {
+                this.#DOM.parent = Utils.createChild(this.table.parent, 'div', (div) => {
+                    this.#DOM.searchBox = Utils.createChild(div, 'input', (searchbox) => {
+                        Utils.setAttributes(searchbox, {
+                            id: `search-component-${this.table.id}`,
+                            placeholder: 'Search',
+                            type: 'text'
+                        });
+                        Utils.addClasses(searchbox, ["form-control"]);
+                        searchbox.onkeyup = () => {
+                            this.table.update();
+                        };
                     });
-                    Utils.addClasses(searchbox, ["form-control"]);
-                    searchbox.onkeyup = () => {
-                        this.table.update();
-                    };
                 });
-            });
+            }
         }
         else 
         {
-            console.error("Cannot initialize the Search component, invlaid table object");
+            console.error("Cannot initialize the Search component, invalid table object");
         }
     }
 
@@ -59,6 +62,8 @@ export default class Search extends Component {
         }
         return "";
     }
+
+    /// private:
 
     /// DOM elements
     #DOM = {

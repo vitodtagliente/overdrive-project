@@ -1,10 +1,11 @@
-import Table from './table';
+import Component from './component';
+import Utils from './utils';
 
-export default class Pagination {
+export default class Pagination extends Component {
     /// constructor
     /// @param table - The table on which refers to
     constructor(table) {
-        this.#table = table;
+        super(table);
     }
 
     /// Retrieve the DOM elements
@@ -188,12 +189,6 @@ export default class Pagination {
         });
     }
 
-    /// Retrieve the table
-    /// @return - The table
-    get table() {
-        return this.#table;
-    }
-
     /// Styles
     classes = {
         a: ['page-link'],
@@ -202,6 +197,15 @@ export default class Pagination {
         nav: [],
         ul: ['pagination', 'pagination-sm', 'justify-content-end']
     }
+    /// the limit of elements per page
+    limit = 10;
+    /// The available limit options
+    limits = [10, 25, 50, 100];
+    /// The max pages
+    maxPages = 6;
+
+    /// private:
+
     /// DOM elements
     #DOM = {
         limitDiv: null,
@@ -211,19 +215,9 @@ export default class Pagination {
         paginationBody: null,
         parent: null
     }
-    /// used to enable/disable the pagination
-    enabled = true;
-    /// the limit of elements per page
-    limit = 10;
-    /// The available limit options
-    limits = [10, 25, 50, 100];
-    /// The max pages
-    maxPages = 6;
     /// The internal state
     #state = {
         offset: 0,
         count: 0
     }
-    /// The table
-    #table = null;
 }

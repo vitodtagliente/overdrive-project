@@ -1,8 +1,67 @@
-class Pagination {
+class Component {
+    enabled = true;
+    #table = null;
+    /// Constructor
+    /// @param table - The table
+    constructor(table) {
+        this.#table = table;
+    }
+
+    /// Render/create the component
+    render() {
+
+    }
+
+    /// Retrieve the table
+    get table() {
+        return this.#table;
+    }
+}
+
+class Utils {
+    /// Add classes to a DOM element
+    /// @param element - The element
+    /// @param classList - The list of classes to apply
+    static addClasses(element, classList) {
+        for (const cl of classList)
+        {
+            element.classList.add(cl);
+        }
+    }
+
+    /// Set DOM element attributes
+    /// @param element - The element
+    /// @param attributes - The attributes to set
+    static setAttributes(element, attributes) {
+        for (const name of Object.keys(attributes))
+        {
+            element.setAttribute(name, attributes[name]);
+        }
+    }
+
+    /// Create a new element and add to the selected element
+    /// @param parent - The parent element
+    /// @param type - The type of element
+    /// @param callback - The function used to customize the new element
+    /// @return - The new element
+    static createChild(parent, type, callback = (element) => { }) {
+        console.assert(parent != null, "Invalid parent object!");
+        const element = document.createElement(type);
+        console.assert(element != null, `Invalid element type: ${type}`);
+        parent.appendChild(element);
+        if (callback != null)
+        {
+            callback(element);
+        }
+        return element;
+    }
+}
+
+class Pagination extends Component {
     /// constructor
     /// @param table - The table on which refers to
     constructor(table) {
-        this.#table = table;
+        super(table);
     }
 
     /// Retrieve the DOM elements
@@ -186,12 +245,6 @@ class Pagination {
         });
     }
 
-    /// Retrieve the table
-    /// @return - The table
-    get table() {
-        return this.#table;
-    }
-
     /// Styles
     classes = {
         a: ['page-link'],
@@ -200,6 +253,15 @@ class Pagination {
         nav: [],
         ul: ['pagination', 'pagination-sm', 'justify-content-end']
     }
+    /// the limit of elements per page
+    limit = 10;
+    /// The available limit options
+    limits = [10, 25, 50, 100];
+    /// The max pages
+    maxPages = 6;
+
+    /// private:
+
     /// DOM elements
     #DOM = {
         limitDiv: null,
@@ -209,79 +271,10 @@ class Pagination {
         paginationBody: null,
         parent: null
     }
-    /// used to enable/disable the pagination
-    enabled = true;
-    /// the limit of elements per page
-    limit = 10;
-    /// The available limit options
-    limits = [10, 25, 50, 100];
-    /// The max pages
-    maxPages = 6;
     /// The internal state
     #state = {
         offset: 0,
         count: 0
-    }
-    /// The table
-    #table = null;
-}
-
-class Component {
-    enabled = true;
-    #table = null;
-    /// Constructor
-    /// @param table - The table
-    constructor(table) {
-        this.#table = table;
-    }
-
-    /// Render/create the component
-    render() {
-
-    }
-
-    /// Retrieve the table
-    get table() {
-        return this.#table;
-    }
-}
-
-class Utils {
-    /// Add classes to a DOM element
-    /// @param element - The element
-    /// @param classList - The list of classes to apply
-    static addClasses(element, classList) {
-        for (const cl of classList)
-        {
-            element.classList.add(cl);
-        }
-    }
-
-    /// Set DOM element attributes
-    /// @param element - The element
-    /// @param attributes - The attributes to set
-    static setAttributes(element, attributes) {
-        for (const name of Object.keys(attributes))
-        {
-            element.setAttribute(name, attributes[name]);
-        }
-    }
-
-    /// Create a new element and add to the selected element
-    /// @param parent - The parent element
-    /// @param type - The type of element
-    /// @param callback - The function used to customize the new element
-    /// @return - The new element
-    static createChild(parent, type, callback = (element) => { }) {
-        console.assert(parent != null, "Invalid parent object!");
-        const element = document.createElement(type);
-        console.assert(element != null, `Invalid element type: ${type}`);
-        parent.appendChild(element);
-        if (callback != null)
-        {
-            callback(element);
-        }
-        return element;
     }
 }
 
@@ -308,23 +301,26 @@ class Search extends Component {
     render() {
         if (this.table != null && this.table.parent != null)
         {
-            this.#DOM.parent = Utils.createChild(this.table.parent, 'div', (div) => {
-                this.#DOM.searchBox = Utils.createChild(div, 'input', (searchbox) => {
-                    Utils.setAttributes(searchbox, {
-                        id: `search-component-${this.table.id}`,
-                        placeholder: 'Search',
-                        type: 'text'
+            if (this.searchBox == null)
+            {
+                this.#DOM.parent = Utils.createChild(this.table.parent, 'div', (div) => {
+                    this.#DOM.searchBox = Utils.createChild(div, 'input', (searchbox) => {
+                        Utils.setAttributes(searchbox, {
+                            id: `search-component-${this.table.id}`,
+                            placeholder: 'Search',
+                            type: 'text'
+                        });
+                        Utils.addClasses(searchbox, ["form-control"]);
+                        searchbox.onkeyup = () => {
+                            this.table.update();
+                        };
                     });
-                    Utils.addClasses(searchbox, ["form-control"]);
-                    searchbox.onkeyup = () => {
-                        this.table.update();
-                    };
                 });
-            });
+            }
         }
         else 
         {
-            console.error("Cannot initialize the Search component, invlaid table object");
+            console.error("Cannot initialize the Search component, invalid table object");
         }
     }
 
@@ -343,6 +339,8 @@ class Search extends Component {
         }
         return "";
     }
+
+    /// private:
 
     /// DOM elements
     #DOM = {
