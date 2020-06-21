@@ -84,7 +84,7 @@ export default class Table {
         let first = true;
         if (this.search.enabled)
         {
-            const filter = this.search.toString();
+            const filter = 'any=like=' + this.search.value;
             if (filter.length != 0)
             {
                 url.push(first ? '?' : '&');

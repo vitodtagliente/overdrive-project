@@ -1,81 +1,68 @@
-import Table from './table';
+import Component from './component';
+import Utils from './dom-utils';
 
-export default class Search {
+export default class Search extends Component {
     /// constructor
     /// @param table - The table on which refers to
     constructor(table) {
-        this.#table = table;
+        super(table);
     }
 
+    /// Retrieve the DOM elements
+    /// @return - The DOM elements
     get DOM() {
-        return this.#dom;
+        return this.#DOM;
     }
 
+    /// Retrieve the parent DOM element
+    /// @return - The parent DOM 
     get parent() {
         return this.DOM.parent;
     }
 
-    /// The owning table
-    /// @return - The table
-    get table() {
-        return this.#table;
-    }
-
-    get(field) {
-        if (Object.keys(this.#fields).includes(field))
-        {
-            return this.#fields[field];
-        }
-        return null;
-    }
-
+    /// Render/create the component
     render() {
         if (this.table != null && this.table.parent != null)
         {
-            this.#dom.parent = document.createElement('div');
-            this.#dom.search = document.createElement('input');
-            this.#dom.search.setAttribute("type", "text");
-            this.#dom.search.classList.add('form-control');
-            this.table.parent.append(this.parent);
-            this.parent.append(this.#dom.search);
-            this.#dom.search.onkeyup = () => {
-                this.#search = this.#dom.search.value;
-                this.table.update();
-            };
+            this.#DOM.parent = Utils.createChild(this.table.parent, 'div', (div) => {
+                this.#DOM.searchBox = Utils.createChild(div, 'input', (searchbox) => {
+                    Utils.setAttributes(searchbox, {
+                        id: `search-component-${this.table.id}`,
+                        placeholder: 'Search',
+                        type: 'text'
+                    });
+                    Utils.addClasses(searchbox, ["form-control"]);
+                    searchbox.onkeyup = () => {
+                        this.table.update();
+                    };
+                });
+            });
         }
-    }
-
-    update(field, value) {
-        this.#fields[field] = value;
-        this.table.update();
-    }
-
-    toString() {
-        let result = Array();
-        for (const field of Object.keys(this.#fields))
+        else 
         {
-            result.push(result.length == 0 ? '' : ' and ');
-            result.push(`${field}=like=${this.#fields[field]}`);
+            console.error("Cannot initialize the Search component, invlaid table object");
         }
-        if (this.#search && this.#search.length > 0)
-        {
-            result.push(result.length == 0 ? '' : ' or ');
-            result.push(`any=like=${this.#search}`);
-        }
-        return result.join("");
     }
 
-    /// Specify if the search is enabled
-    enabled = true;
+    /// Retrieve the search box
+    /// @return - The search input
+    get searchBox() {
+        return this.DOM.searchBox;
+    }
+
+    /// Retrieve the current value
+    /// @return - The value
+    get value() {
+        if (this.DOM.searchBox)
+        {
+            return this.DOM.searchBox.value;
+        }
+        return "";
+    }
+
     /// DOM elements
-    #dom = {
+    #DOM = {
         parent: null,
-        search: null
+        searchBox: null
     }
-    /// The mathc for each field
-    #fields = {};
-    /// any search
-    #search = null;
-    /// The table
-    #table = null;
 }

@@ -226,84 +226,128 @@ class Pagination {
     #table = null;
 }
 
-class Search {
-    /// constructor
-    /// @param table - The table on which refers to
+class Component {
+    enabled = true;
+    #table = null;
+    /// Constructor
+    /// @param table - The table
     constructor(table) {
         this.#table = table;
     }
 
-    get DOM() {
-        return this.#dom;
+    render() {
+
     }
 
+    /// Retrieve the table
+    get table() {
+        return this.#table;
+    }
+}
+
+class DOMUtils {
+    /// Add classes to a DOM element
+    /// @param element - The element
+    /// @param classList - The list of classes to apply
+    static addClasses(element, classList) {
+        for (const cl of classList)
+        {
+            element.classList.add(cl);
+        }
+    }
+
+    /// Set DOM element attributes
+    /// @param element - The element
+    /// @param attributes - The attributes to set
+    static setAttributes(element, attributes) {
+        for (const name of Object.keys(attributes))
+        {
+            element.setAttribute(name, attributes[name]);
+        }
+    }
+
+    /// Create a new element and add to the selected element
+    /// @param parent - The parent element
+    /// @param type - The type of element
+    /// @param callback - The function used to customize the new element
+    /// @return - The new element
+    static createChild(parent, type, callback = (element) => { }) {
+        console.assert(parent != null, "Invalid parent object!");
+        const element = document.createElement(type);
+        console.assert(element != null, `Invalid element type: ${type}`);
+        parent.appendChild(element);
+        if (callback != null)
+        {
+            callback(element);
+        }
+        return element;
+    }
+}
+
+class Search extends Component {
+    /// constructor
+    /// @param table - The table on which refers to
+    constructor(table) {
+        super(table);
+    }
+
+    /// Retrieve the DOM elements
+    /// @return - The DOM elements
+    get DOM() {
+        return this.#DOM;
+    }
+
+    /// Retrieve the parent DOM element
+    /// @return - The parent DOM 
     get parent() {
         return this.DOM.parent;
     }
 
-    /// The owning table
-    /// @return - The table
-    get table() {
-        return this.#table;
-    }
-
-    get(field) {
-        if (Object.keys(this.#fields).includes(field))
-        {
-            return this.#fields[field];
-        }
-        return null;
-    }
-
+    /// Render the component
     render() {
         if (this.table != null && this.table.parent != null)
         {
-            this.#dom.parent = document.createElement('div');
-            this.#dom.search = document.createElement('input');
-            this.#dom.search.setAttribute("type", "text");
-            this.#dom.search.classList.add('form-control');
-            this.table.parent.append(this.parent);
-            this.parent.append(this.#dom.search);
-            this.#dom.search.onkeyup = () => {
-                this.#search = this.#dom.search.value;
-                this.table.update();
-            };
+            this.#DOM.parent = DOMUtils.createChild(this.table.parent, 'div', (div) => {
+                this.#DOM.searchBox = DOMUtils.createChild(div, 'input', (searchbox) => {
+                    DOMUtils.setAttributes(searchbox, {
+                        id: `search-component-${this.table.id}`,
+                        placeholder: 'Search',
+                        type: 'text'
+                    });
+                    DOMUtils.addClasses(searchbox, ["form-control"]);
+                    searchbox.onkeyup = () => {
+                        this.table.update();
+                    };
+                });
+            });
         }
-    }
-
-    update(field, value) {
-        this.#fields[field] = value;
-        this.table.update();
-    }
-
-    toString() {
-        let result = Array();
-        for (const field of Object.keys(this.#fields))
+        else 
         {
-            result.push(result.length == 0 ? '' : ' and ');
-            result.push(`${field}=like=${this.#fields[field]}`);
+            console.error("Cannot initialize the Search component, invlaid table object");
         }
-        if (this.#search && this.#search.length > 0)
-        {
-            result.push(result.length == 0 ? '' : ' or ');
-            result.push(`any=like=${this.#search}`);
-        }
-        return result.join("");
     }
 
-    /// Specify if the search is enabled
-    enabled = true;
+    /// Retrieve the search box
+    /// @return - The search input
+    get searchBox() {
+        return this.DOM.searchBox;
+    }
+
+    /// Retrieve the current value
+    /// @return - The value
+    get value() {
+        if (this.DOM.searchBox)
+        {
+            return this.DOM.searchBox.value;
+        }
+        return "";
+    }
+
     /// DOM elements
-    #dom = {
+    #DOM = {
         parent: null,
-        search: null
+        searchBox: null
     }
-    /// The mathc for each field
-    #fields = {};
-    /// any search
-    #search = null;
-    /// The table
-    #table = null;
 }
 
 class Inspector {
@@ -566,7 +610,7 @@ class Table {
         let first = true;
         if (this.search.enabled)
         {
-            const filter = this.search.toString();
+            const filter = 'any=like=' + this.search.value;
             if (filter.length != 0)
             {
                 url.push(first ? '?' : '&');
