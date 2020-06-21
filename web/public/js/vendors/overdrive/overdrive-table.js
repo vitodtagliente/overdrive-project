@@ -142,6 +142,7 @@ class Pagination extends Component {
                     Utils.addClasses(element, ['form-control', 'form-control-sm']);
                     element.value = this.limit;
                     element.onchange = async () => {
+                        this.limit = this.limitSelect.value;
                         await this.table.update();
                     };
                 });
