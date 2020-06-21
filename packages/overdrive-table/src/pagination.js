@@ -58,68 +58,60 @@ export default class Pagination extends Component {
     /// Render the widget
     /// @param count - The num of records
     render(count) {
-        // create the parent container if not exists
-        if (this.parent == null)
+        if (this.table == null || this.table.parent == null)
         {
-            if (this.table == null)
-            {
-                console.error('Unable to create the pagination widget!');
-                return;
-            }
+            console.error("Cannot initialize the Search component, invalid table object");
+            return;
+        }
 
-            this.#DOM.parent = document.createElement('div');
-            this.parent.classList.add('row');
-            this.table.parent.append(this.parent);
+        if (this.paginationBody == null)
+        {
+            this.#DOM.parent = Utils.createChild(this.table.parent, 'div', (element) => {
+                Utils.addClasses(element, ['row']);
+            });
 
-            this.#DOM.limitDiv = document.createElement('div');
-            this.#DOM.limitDiv.classList.add('col-2');
-            this.parent.appendChild(this.#DOM.limitDiv);
+            this.#DOM.limitDiv = Utils.createChild(this.parent, 'div', (element) => {
+                Utils.addClasses(element, ['col-2']);
+            });
 
+            /// Create the limit selection widget
             if (this.limits.length > 0)
             {
-                this.#DOM.limitSelect = document.createElement("select");
-                this.limitSelect.classList.add('form-control');
-                this.limitSelect.classList.add('form-control-sm');
-
                 if (!this.limits.includes(this.limit))
                 {
                     this.limit = this.limits[0];
                 }
 
+                this.#DOM.limitSelect = Utils.createChild(this.DOM.limitDiv, 'select', (element) => {
+                    Utils.addClasses(element, ['form-control', 'form-control-sm']);
+                    element.value = this.limit;
+                    element.onchange = async () => {
+                        await this.table.update();
+                    };
+                });
+
                 for (const limit of this.limits)
                 {
-                    const option = document.createElement('option');
-                    option.value = limit;
-                    option.text = limit;
-                    this.limitSelect.appendChild(option);
+                    Utils.createChild(this.limitSelect, 'option', (element) => {
+                        element.value = limit;
+                        element.text = limit;
+                    });
                 }
-
-                this.limitSelect.value = this.limit;
-
-                this.limitSelect.onchange = async () => {
-                    this.limit = this.limitSelect.value;
-                    await this.table.update();
-                };
-                this.#DOM.limitDiv.append(this.limitSelect);
             }
 
-            this.#DOM.paginationDiv = document.createElement('div');
-            this.#DOM.paginationDiv.classList.add('col-10');
-            this.parent.appendChild(this.#DOM.paginationDiv);
-
-            this.#DOM.paginationWidget = document.createElement('nav');
-            this.pagination.setAttribute('id', 'nav-' + this.table.id);
-            for (const css_class of this.classes.nav)
-            {
-                this.pagination.classList.add(css_class);
-            }
-            this.#DOM.paginationBody = document.createElement('ul');
-            for (const css_class of this.classes.ul)
-            {
-                this.paginationBody.classList.add(css_class);
-            }
-            this.pagination.append(this.paginationBody);
-            this.#DOM.paginationDiv.append(this.pagination);
+            // create the navigation widget structure
+            this.#DOM.paginationDiv = Utils.createChild(this.parent, 'div', (div) => {
+                Utils.addClasses(div, ['col-10']);
+                this.#DOM.paginationWidget = Utils.createChild(div, 'nav', (nav) => {
+                    Utils.setAttributes(nav, {
+                        id: `nav-component-${this.table.id}`
+                    });
+                    Utils.addClasses(nav, this.classes.nav);
+                    this.#DOM.paginationBody = Utils.createChild(nav, 'ul', (ul) => {
+                        Utils.addClasses(ul, this.classes.ul);
+                    });
+                });
+            });
         }
 
         // clear the content
@@ -140,31 +132,18 @@ export default class Pagination extends Component {
             : this.pages;
 
         const createChild = (isActive, text, callback) => {
-            const li = document.createElement('li');
-            for (const css_class of this.classes.li)
-            {
-                li.classList.add(css_class);
-            }
-
-            if (isActive)
-            {
-                for (const css_class of this.classes.active)
+            Utils.createChild(this.paginationBody, 'li', (li) => {
+                Utils.addClasses(li, this.classes.li);
+                if (isActive)
                 {
-                    li.classList.add(css_class);
+                    Utils.addClasses(li, this.classes.active);
                 }
-            }
-
-            const a = document.createElement('a');
-            for (const css_class of this.classes.a)
-            {
-                a.classList.add(css_class);
-            }
-
-            a.innerHTML = text;
-            a.onclick = callback;
-            li.append(a);
-
-            this.paginationBody.append(li);
+                Utils.createChild(li, 'a', (a) => {
+                    Utils.addClasses(a, this.classes.a);
+                    a.innerHTML = text;
+                    a.onclick = callback;
+                });
+            });
         }
 
         createChild(false, '<span aria-hidden="true">&laquo;</span>', async () => {
