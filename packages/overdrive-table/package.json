@@ -1,11 +1,11 @@
 {
   "name": "overdrive-table",
   "version": "1.0.0",
-  "release": "dist/overdrive-table.js",
+  "release": "../../web/public/js/vendors/overdrive/overdrive-table.js",
   "final": "dist/overdrive-table.min.js",
   "dependencies": {
     "ms": "^2.0.0",
-    "rollup-plugin-uglify": "^6.0.4"
+    "rollup-plugin-closure-compiler": "^0.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.1",

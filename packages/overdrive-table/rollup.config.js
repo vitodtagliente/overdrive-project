@@ -1,7 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import pkg from './package.json';
-const { uglify } = require('rollup-plugin-uglify');
+import compiler from 'rollup-plugin-closure-compiler';
 
 export default [
 	// browser-friendly UMD build
@@ -10,7 +10,7 @@ export default [
 		output: {
 			name: 'overdrive-table',
 			file: pkg.release,
-			format: 'umd'
+			format: 'es'
 		},
 		plugins: [
 			resolve(), // so Rollup can find `ms`
@@ -23,12 +23,12 @@ export default [
 		output: {
 			name: 'overdrive-table',
 			file: pkg.final,
-			format: 'umd'
+			format: 'es'
 		},
 		plugins: [
 			resolve(), // so Rollup can find `ms`
 			commonjs(), // so Rollup can convert `ms` to an ES module
-			uglify() // uglify the built js
+			compiler()
 		]
 	}
 ];

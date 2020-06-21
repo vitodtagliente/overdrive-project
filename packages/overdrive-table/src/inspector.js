@@ -1,4 +1,6 @@
-class Inspector {
+import Table from './table';
+
+export default class Inspector {
     #data = null;
     #selectedRow = null;
     #table = null;
@@ -175,5 +177,3 @@ class Inspector {
         return this.#url;
     }
 }
-
-module.exports = Inspector;

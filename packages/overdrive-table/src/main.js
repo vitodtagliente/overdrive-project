@@ -1,2 +1,1 @@
-const Table = require('./table');
-const Inspector = require('./inspector');
+import Table from './table';
