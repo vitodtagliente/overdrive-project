@@ -235,6 +235,7 @@ class Component {
         this.#table = table;
     }
 
+    /// Render/create the component
     render() {
 
     }
@@ -245,7 +246,7 @@ class Component {
     }
 }
 
-class DOMUtils {
+class Utils {
     /// Add classes to a DOM element
     /// @param element - The element
     /// @param classList - The list of classes to apply
@@ -303,18 +304,18 @@ class Search extends Component {
         return this.DOM.parent;
     }
 
-    /// Render the component
+    /// Render/create the component
     render() {
         if (this.table != null && this.table.parent != null)
         {
-            this.#DOM.parent = DOMUtils.createChild(this.table.parent, 'div', (div) => {
-                this.#DOM.searchBox = DOMUtils.createChild(div, 'input', (searchbox) => {
-                    DOMUtils.setAttributes(searchbox, {
+            this.#DOM.parent = Utils.createChild(this.table.parent, 'div', (div) => {
+                this.#DOM.searchBox = Utils.createChild(div, 'input', (searchbox) => {
+                    Utils.setAttributes(searchbox, {
                         id: `search-component-${this.table.id}`,
                         placeholder: 'Search',
                         type: 'text'
                     });
-                    DOMUtils.addClasses(searchbox, ["form-control"]);
+                    Utils.addClasses(searchbox, ["form-control"]);
                     searchbox.onkeyup = () => {
                         this.table.update();
                     };

@@ -1,4 +1,4 @@
-export default class DOMUtils {
+export default class Utils {
     /// Add classes to a DOM element
     /// @param element - The element
     /// @param classList - The list of classes to apply

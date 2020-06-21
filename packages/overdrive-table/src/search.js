@@ -1,5 +1,5 @@
 import Component from './component';
-import Utils from './dom-utils';
+import Utils from './utils';
 
 export default class Search extends Component {
     /// constructor
