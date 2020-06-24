@@ -173,7 +173,12 @@ class InspectorWidget {
             this.widget.remove();
             this.#widget = null;
             this.#parent = null;
+            this.onclose();
         }
+    }
+
+    onclose = () => {
+
     }
 
     get id() {
@@ -251,18 +256,22 @@ export default class Inspector extends Component {
         table.onRowClick = (row, model) => {
             if (this.enabled == false) return;
 
-            if (this.editInspector.parent != null)
+            const inspector = this.editInspector;
+            if (inspector.parent != null)
             {
-                Utils.removeClasses(this.editInspector.parent, this.classes.activeRow);
+                Utils.removeClasses(inspector.parent, this.classes.activeRow);
             }
-            if (row == this.editInspector.parent)
+            if (row == inspector.parent)
             {
-                this.editInspector.close();
+                inspector.close();
             }
             else 
             {
                 Utils.addClasses(row, this.classes.activeRow);
-                this.editInspector.open(row, this.schema, `${this.table.url}/${model._id}`, model);
+                inspector.open(row, this.schema, `${this.table.url}/${model._id}`, model);
+                inspector.onclose = () => {
+                    Utils.removeClasses(row, this.classes.activeRow);
+                };
                 row.scrollIntoView();
             }
         };
