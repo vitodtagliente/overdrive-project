@@ -2,11 +2,13 @@ import Component from './component';
 import Utils from './utils';
 
 class InspectorWidget {
+    #id = null;
     #parent = null;
     #table = null;
     #type = null;
     #widget = null;
     constructor(type, table) {
+        this.#id = `inspector-${type}-${table.id}`;
         this.#type = type;
         this.#table = table;
     }
@@ -59,7 +61,7 @@ class InspectorWidget {
 
                     if (definition.type == Boolean)
                     {
-                        Utils.addClasses(input, ['form-check-input']);
+                        Utils.addClasses(input, ['form-check-input', 'ml-0']);
                         Utils.setAttributes(input, { type: 'checkbox' });
                         input.checked = value;
                         input.value = true;
@@ -82,9 +84,10 @@ class InspectorWidget {
     }
 
     #createForm = (parent, schema, url, model) => {
+        const self = this;
         return Utils.createChild(parent, 'form', (form) => {
             Utils.setAttributes(form, {
-                id: 'edit-inspector'
+                id: self.id
             });
             Utils.addClasses(form, ['container', 'p-2']);
 
@@ -100,7 +103,7 @@ class InspectorWidget {
                     name: field,
                     display: field,
                     required: false,
-                    readonly: field == "_id" ?  true : false,
+                    readonly: field == "_id" ? true : false,
                     default: null,
                     type: String,
                     placeholder: ''
@@ -131,10 +134,10 @@ class InspectorWidget {
             this.#appendButton(form, 'Save', ['btn-warning'], function (e) {
                 e.preventDefault();
 
-                let data = form.serialize();
+                let data = $(`#${self.id}`).serialize();
 
                 // include unchecked checkboxes. use filter to only include unchecked boxes.
-                $.each($('form input[type=checkbox]')
+                $.each($(`#${self.id} form input[type=checkbox]`)
                     .filter(function (idx) {
                         return $(this).prop('checked') === false
                     }),
@@ -152,17 +155,14 @@ class InspectorWidget {
                     url: url,
                     data: data,
                 }).done(function (data) {
-                    console.log("success");
-                    console.log(data);
-                }).fail(function (data) {
+                    self.table.update();
+                }).fail(function (error) {
                     console.log(error);
                 });
-
-                this.table.update();
             });
             this.#appendButton(form, 'Close', ['btn-light'], function (e) {
                 // close function
-                this.close();
+                self.close();
             });
         });
     }
@@ -172,7 +172,12 @@ class InspectorWidget {
         {
             this.widget.remove();
             this.#widget = null;
+            this.#parent = null;
         }
+    }
+
+    get id() {
+        return this.#id;
     }
 
     get isOpen() {
@@ -257,7 +262,7 @@ export default class Inspector extends Component {
             else 
             {
                 Utils.addClasses(row, this.classes.activeRow);
-                this.editInspector.open(row, this.schema, `${this.table.url}/${model.id}`, model);
+                this.editInspector.open(row, this.schema, `${this.table.url}/${model._id}`, model);
                 row.scrollIntoView();
             }
         };
