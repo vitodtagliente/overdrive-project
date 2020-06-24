@@ -355,7 +355,7 @@ class InspectorWidget {
             Utils.setAttributes(button, {
                 type: 'button'
             });
-            Utils.addClasses(button, ['btn', 'btn-sm']);
+            Utils.addClasses(button, ['btn', 'btn-sm', 'rounded-0']);
             Utils.addClasses(button, classes);
             button.innerHTML = text;
             button.onclick = callback;
@@ -484,6 +484,11 @@ class InspectorWidget {
 
             for (const field of Object.keys(schema))
             {
+                if (field == "_id")
+                {
+                    continue;
+                }
+
                 let value = null;
                 if (model != null)
                 {
@@ -492,7 +497,8 @@ class InspectorWidget {
                 this.#appendField(form, schema[field], value);
             }
 
-            this.#appendButton(form, 'Save', ['btn-warning'], function (e) {
+            const isEdit = this.type == Inspector.Type.Edit;
+            this.#appendButton(form, 'Save', [isEdit ? 'btn-warning' : 'btn-success'], function (e) {
                 e.preventDefault();
 
                 let data = $(`#${self.id}`).serialize();
@@ -509,19 +515,20 @@ class InspectorWidget {
                 );
 
                 console.log("sending data to " + url);
-                console.log(data);
 
                 $.ajax({
-                    type: 'PATCH',
+                    type: isEdit ? 'PATCH' : 'POST',
                     url: url,
                     data: data,
-                }).done(function (data) {
+                }).done(function () {
+                    self.close();
                     self.table.update();
                 }).fail(function (error) {
                     console.log(error);
                 });
             });
-            this.#appendButton(form, 'Close', ['btn-light'], function (e) {
+
+            this.#appendButton(form, 'Close', ['btn-dark'], function (e) {
                 // close function
                 self.close();
             });
@@ -576,7 +583,7 @@ class InspectorWidget {
         {
             Utils.addClasses(parent, ['p-2']);
             this.#widget = Utils.createChild(parent, 'div', (div) => {
-                Utils.addClasses(div, ['container', 'bg-light']);
+                Utils.addClasses(div, ['bg-light']);
             });
             this.#createForm(this.widget, schema, url);
         }
