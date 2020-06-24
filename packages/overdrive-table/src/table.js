@@ -38,11 +38,11 @@ export default class Table {
     /// @param id - The id of the table, can be null
     constructor(id) {
         this.#id = id || new Date().valueOf();
+        
         // initialize the components
         this.#pagination = new Pagination(this);
         this.#search = new Search(this);
-        this.#inspector = new Inspector();
-        this.inspector.attach(this);
+        this.#inspector = new Inspector(this);
 
         /// register this instance
         Table.#instances.push(this);
@@ -351,26 +351,6 @@ export default class Table {
             }
         }
     };
-
-    /*
-    renderSearchRow = async (row, fields) => {
-        for (const field of fields)
-        {
-            const cell = row.insertCell();
-            const textbox = document.createElement('input');
-            textbox.setAttribute("type", "text");
-            textbox.setAttribute("name", field);
-            textbox.setAttribute("id", `search-${field}`);
-            textbox.classList.add('form-control');
-            textbox.classList.add('form-control-sm');
-            cell.appendChild(textbox);
-            textbox.onkeyup = (event) => {
-                this.search.update(field, textbox.value);
-                event.preventDefault();
-            };
-        }
-    }
-    */
 
     /// Retrieve the search system
     /// @return - The search

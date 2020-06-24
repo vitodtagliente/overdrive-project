@@ -9,6 +9,16 @@ export default class Utils {
         }
     }
 
+    /// Remove classes to a DOM element
+    /// @param element - The element
+    /// @param classList - The list of classes to remove
+    static removeClasses(element, classList) {
+        for (const cl of classList)
+        {
+            element.classList.remove(cl);
+        }
+    }
+
     /// Set DOM element attributes
     /// @param element - The element
     /// @param attributes - The attributes to set
