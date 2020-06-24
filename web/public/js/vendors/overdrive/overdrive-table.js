@@ -375,12 +375,18 @@ class InspectorWidget {
                 Utils.createChild(inputDiv, 'input', (input) => {
                     Utils.setAttributes(input, {
                         id: definition.name,
-                        name: definition.name
+                        name: definition.name,
+                        placeholder: definition.placeholder
                     });
 
-                    if (definition.default)
+                    if (definition.required)
                     {
                         Utils.setAttributes(input, { required: 'required' });
+                    }
+
+                    if (definition.readonly)
+                    {
+                        Utils.setAttributes(input, { readonly: true });
                     }
 
                     if (definition.default)
@@ -419,15 +425,27 @@ class InspectorWidget {
             });
             Utils.addClasses(form, ['container', 'p-2']);
 
-            const fields = Object.keys(model);
-            for (const field of fields)
+            schema = schema || {};
+            for (const field of Object.keys(model))
             {
-                let definition = {};
-                const value = model[field] || null;
-
-                if (definition.type == null)
+                if (schema[field] != null)
                 {
-                    definition.type = String;
+                    continue;
+                }
+
+                let definition = {
+                    name: field,
+                    display: field,
+                    required: false,
+                    readonly: field == "_id" ?  true : false,
+                    default: null,
+                    type: String,
+                    placeholder: ''
+                };
+
+                const value = model[field];
+                if (value != null)
+                {
                     if (typeof value === typeof true)
                     {
                         definition.type = Boolean;
@@ -438,12 +456,13 @@ class InspectorWidget {
                     }
                 }
 
-                definition.display = definition.display || field;
-                definition.name = definition.name || field;
-                definition.required = definition.required || false;
-                definition.default = definition.default || null;
+                schema[field] = definition;
+            }
 
-                this.#appendField(form, definition, value);
+            for (const field of Object.keys(schema))
+            {
+                const value = model[field] || null;
+                this.#appendField(form, schema[field], value);
             }
 
             this.#appendButton(form, 'Save', ['btn-warning'], function (e) {
@@ -545,7 +564,7 @@ class Inspector extends Component {
         Edit: 'edit'
     };
 
-    schema = null;
+    schema = {};
     #widgets = Array();
     constructor(table) {
         super(table);
