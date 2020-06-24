@@ -429,42 +429,66 @@ class InspectorWidget {
             Utils.addClasses(form, ['container', 'p-2']);
 
             schema = schema || {};
-            for (const field of Object.keys(model))
+            if (model != null)
             {
-                if (schema[field] != null)
+                for (const field of Object.keys(model))
                 {
-                    continue;
+                    if (schema[field] != null)
+                    {
+                        continue;
+                    }
+
+                    let definition = {
+                        name: field,
+                        display: field,
+                        required: false,
+                        readonly: field == "_id" ? true : false,
+                        default: null,
+                        type: String,
+                        placeholder: ''
+                    };
+
+                    const value = model[field];
+                    if (value != null)
+                    {
+                        if (typeof value === typeof true)
+                        {
+                            definition.type = Boolean;
+                        }
+                        else if (!isNaN(value))
+                        {
+                            definition.type = Number;
+                        }
+                    }
+
+                    schema[field] = definition;
                 }
-
-                let definition = {
-                    name: field,
-                    display: field,
-                    required: false,
-                    readonly: field == "_id" ? true : false,
-                    default: null,
-                    type: String,
-                    placeholder: ''
-                };
-
-                const value = model[field];
-                if (value != null)
+            }
+            else 
+            {
+                for (const field of Object.keys(schema))
                 {
-                    if (typeof value === typeof true)
-                    {
-                        definition.type = Boolean;
-                    }
-                    else if (!isNaN(value))
-                    {
-                        definition.type = Number;
-                    }
+                    let definition = schema[field];
+                    definition = {
+                        name: definition.name || field,
+                        display: definition.display || field,
+                        required: definition.required || false,
+                        readonly: definition.readonly || field == "_id" ? true : false,
+                        default: definition.default || null,
+                        type: definition.type || String,
+                        placeholder: definition.placeholder || ''
+                    };
+                    schema[field] = definition;
                 }
-
-                schema[field] = definition;
             }
 
             for (const field of Object.keys(schema))
             {
-                const value = model[field] || null;
+                let value = null;
+                if (model != null)
+                {
+                    value = model[field] || null;
+                }
                 this.#appendField(form, schema[field], value);
             }
 
@@ -548,6 +572,14 @@ class InspectorWidget {
                 this.#createForm(td, schema, url, model);
             });
         }
+        else 
+        {
+            Utils.addClasses(parent, ['p-2']);
+            this.#widget = Utils.createChild(parent, 'div', (div) => {
+                Utils.addClasses(div, ['container', 'bg-light']);
+            });
+            this.#createForm(this.widget, schema, url);
+        }
     }
 
     get parent() {
@@ -569,7 +601,7 @@ class InspectorWidget {
 
 class Inspector extends Component {
 
-    Type = {
+    static Type = {
         Create: 'create',
         Edit: 'edit'
     };
@@ -580,9 +612,9 @@ class Inspector extends Component {
         super(table);
 
         // initialize the widgets
-        for (const type of Object.keys(this.Type))
+        for (const type of Object.keys(Inspector.Type))
         {
-            const value = this.Type[type];
+            const value = Inspector.Type[type];
             this.#widgets[value] = new InspectorWidget(value, table);
         }
 
@@ -611,7 +643,7 @@ class Inspector extends Component {
     }
 
     get editInspector() {
-        return this.#getWidget(this.Type.Edit);
+        return this.#getWidget(Inspector.Type.Edit);
     }
 
     #getWidget = (type) => {
@@ -624,8 +656,76 @@ class Inspector extends Component {
         return this.#widgets;
     }
 
+    open(type, parent, url) {
+        const widget = this.#getWidget(type);
+        if (widget)
+        {
+            widget.open(parent, this.schema, url);
+        }
+    }
+
     classes = {
         activeRow: ['table-primary']
+    }
+}
+
+class Toolbar extends Component {
+    #buttons = Array();
+    #widget = null;
+    #createWidget = null;
+    /// constructor
+    /// @param table - The table on which refers to
+    constructor(table) {
+        super(table);
+    }
+
+    #appendButton = (parent, text, icon, classes, callback) => {
+        Utils.createChild(parent, 'button', (button) => {
+            Utils.setAttributes(button, {
+                type: 'button'
+            });
+            Utils.addClasses(button, ['btn', 'btn-sm', 'rounded-0']);
+            Utils.addClasses(button, classes);
+            button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
+            button.onclick = callback;
+        });
+    }
+
+    /// Render/create the component
+    render() {
+        if (this.table == null || this.table.parent == null)
+        {
+            console.error("Cannot initialize the Toolbar component, invalid table object");
+            return;
+        }
+
+        if (this.widget == null)
+        {
+            const self = this;
+            this.#widget = Utils.createChild(this.table.parent, 'div', (div) => {
+                Utils.addClasses(div, ['pt-2', 'pb-2']);
+                this.#appendButton(div, 'New', 'plus', ['btn-success'], (event) => {
+                    event.preventDefault();
+
+                    self.table.inspector.open(
+                        Inspector.Type.Create,
+                        self.#createWidget,
+                        self.table.url
+                    );
+                });
+            });
+            this.#createWidget = Utils.createChild(this.table.parent, 'div', (div) => {
+                
+            });
+        }
+    }
+
+    get buttons() {
+        return this.#buttons;
+    }
+
+    get widget() {
+        return this.#widget;
     }
 }
 
@@ -665,11 +765,12 @@ class Table {
     /// @param id - The id of the table, can be null
     constructor(id) {
         this.#id = id || new Date().valueOf();
-        
+
         // initialize the components
         this.#pagination = new Pagination(this);
         this.#search = new Search(this);
         this.#inspector = new Inspector(this);
+        this.#toolbar = new Toolbar(this);
 
         /// register this instance
         Table.#instances.push(this);
@@ -863,6 +964,12 @@ class Table {
                 return false;
             }
 
+            // create the toolbar 
+            if (this.toolbar.enabled)
+            {
+                this.toolbar.render();
+            }
+
             // create the search box
             if (this.search.enabled)
             {
@@ -991,6 +1098,12 @@ class Table {
         return this.#dom.table;
     }
 
+    /// Retrieve the toolbar component
+    /// @return - The toolbar
+    get toolbar() {
+        return this.#toolbar;
+    }
+
     /// update the data table
     /// @param refresh - Specify if to refresh data
     async update(refresh = true) {
@@ -1049,6 +1162,8 @@ class Table {
     #pagination = null;
     /// The search system
     #search = null;
+    /// The toolbar component
+    #toolbar = null;
     /// The url for Ajax mode
     #url = null;
 }

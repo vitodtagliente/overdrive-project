@@ -92,42 +92,66 @@ class InspectorWidget {
             Utils.addClasses(form, ['container', 'p-2']);
 
             schema = schema || {};
-            for (const field of Object.keys(model))
+            if (model != null)
             {
-                if (schema[field] != null)
+                for (const field of Object.keys(model))
                 {
-                    continue;
+                    if (schema[field] != null)
+                    {
+                        continue;
+                    }
+
+                    let definition = {
+                        name: field,
+                        display: field,
+                        required: false,
+                        readonly: field == "_id" ? true : false,
+                        default: null,
+                        type: String,
+                        placeholder: ''
+                    };
+
+                    const value = model[field];
+                    if (value != null)
+                    {
+                        if (typeof value === typeof true)
+                        {
+                            definition.type = Boolean;
+                        }
+                        else if (!isNaN(value))
+                        {
+                            definition.type = Number;
+                        }
+                    }
+
+                    schema[field] = definition;
                 }
-
-                let definition = {
-                    name: field,
-                    display: field,
-                    required: false,
-                    readonly: field == "_id" ? true : false,
-                    default: null,
-                    type: String,
-                    placeholder: ''
-                };
-
-                const value = model[field];
-                if (value != null)
+            }
+            else 
+            {
+                for (const field of Object.keys(schema))
                 {
-                    if (typeof value === typeof true)
-                    {
-                        definition.type = Boolean;
-                    }
-                    else if (!isNaN(value))
-                    {
-                        definition.type = Number;
-                    }
+                    let definition = schema[field];
+                    definition = {
+                        name: definition.name || field,
+                        display: definition.display || field,
+                        required: definition.required || false,
+                        readonly: definition.readonly || field == "_id" ? true : false,
+                        default: definition.default || null,
+                        type: definition.type || String,
+                        placeholder: definition.placeholder || ''
+                    };
+                    schema[field] = definition;
                 }
-
-                schema[field] = definition;
             }
 
             for (const field of Object.keys(schema))
             {
-                const value = model[field] || null;
+                let value = null;
+                if (model != null)
+                {
+                    value = model[field] || null;
+                }
                 this.#appendField(form, schema[field], value);
             }
 
@@ -213,7 +237,11 @@ class InspectorWidget {
         }
         else 
         {
-
+            Utils.addClasses(parent, ['p-2']);
+            this.#widget = Utils.createChild(parent, 'div', (div) => {
+                Utils.addClasses(div, ['container', 'bg-light']);
+            });
+            this.#createForm(this.widget, schema, url);
         }
     }
 
@@ -236,7 +264,7 @@ class InspectorWidget {
 
 export default class Inspector extends Component {
 
-    Type = {
+    static Type = {
         Create: 'create',
         Edit: 'edit'
     };
@@ -247,9 +275,9 @@ export default class Inspector extends Component {
         super(table);
 
         // initialize the widgets
-        for (const type of Object.keys(this.Type))
+        for (const type of Object.keys(Inspector.Type))
         {
-            const value = this.Type[type];
+            const value = Inspector.Type[type];
             this.#widgets[value] = new InspectorWidget(value, table);
         }
 
@@ -278,7 +306,7 @@ export default class Inspector extends Component {
     }
 
     get editInspector() {
-        return this.#getWidget(this.Type.Edit);
+        return this.#getWidget(Inspector.Type.Edit);
     }
 
     #getWidget = (type) => {
@@ -289,6 +317,14 @@ export default class Inspector extends Component {
 
     get widgets() {
         return this.#widgets;
+    }
+
+    open(type, parent, url) {
+        const widget = this.#getWidget(type);
+        if (widget)
+        {
+            widget.open(parent, this.schema, url);
+        }
     }
 
     classes = {

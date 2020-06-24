@@ -1,6 +1,8 @@
 import Pagination from './pagination';
 import Search from './search';
 import Inspector from './inspector';
+import Toolbar from './toolbar';
+import Utils from './utils';
 
 export default class Table {
 
@@ -38,11 +40,12 @@ export default class Table {
     /// @param id - The id of the table, can be null
     constructor(id) {
         this.#id = id || new Date().valueOf();
-        
+
         // initialize the components
         this.#pagination = new Pagination(this);
         this.#search = new Search(this);
         this.#inspector = new Inspector(this);
+        this.#toolbar = new Toolbar(this);
 
         /// register this instance
         Table.#instances.push(this);
@@ -236,6 +239,12 @@ export default class Table {
                 return false;
             }
 
+            // create the toolbar 
+            if (this.toolbar.enabled)
+            {
+                this.toolbar.render();
+            }
+
             // create the search box
             if (this.search.enabled)
             {
@@ -364,6 +373,12 @@ export default class Table {
         return this.#dom.table;
     }
 
+    /// Retrieve the toolbar component
+    /// @return - The toolbar
+    get toolbar() {
+        return this.#toolbar;
+    }
+
     /// update the data table
     /// @param refresh - Specify if to refresh data
     async update(refresh = true) {
@@ -422,6 +437,8 @@ export default class Table {
     #pagination = null;
     /// The search system
     #search = null;
+    /// The toolbar component
+    #toolbar = null;
     /// The url for Ajax mode
     #url = null;
 }

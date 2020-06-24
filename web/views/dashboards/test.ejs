@@ -48,6 +48,22 @@
         table.render('/api/items', 'table-container');
         */
 
+        table.inspector.schema = {
+            name: {
+                Type: String,
+                required: true
+            },
+            isConsumable: {
+                type: Boolean                
+            },
+            power: {
+                type: Number
+            },
+            type: {
+                required: true
+            }
+        };
+
         table.render('/api/items', 'table-container');
 
     });
