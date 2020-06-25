@@ -32,6 +32,11 @@
         {
             cell.innerHTML = "<i style='color: orange'>" + model._id + "</i>";
         });
+        table.field('power', async (cell, model) =>
+        {
+            let style = model.power > 5 ? "bg-success" : "bg-warning";
+            cell.innerHTML = `<p class="${style} m-0 p-0">${model.power}</p>`;
+        });
         table.renderColumn = async (cell, name) =>
         {
             cell.innerHTML = "<b>" + name + "</b>";
