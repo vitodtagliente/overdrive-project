@@ -28,12 +28,9 @@
         };
 
         const table = new Table();
-        // table.classes.table.push('table-dark');
-        table.classes.table.push('table-sm');
-        table.classes.table.push('mt-2');
-        table.field('id', async (cell, model) =>
+        table.field('_id', async (cell, model) =>
         {
-            cell.innerHTML = "<i style='color: orange'>" + model.id + "</i>";
+            cell.innerHTML = "<i style='color: orange'>" + model._id + "</i>";
         });
         table.renderColumn = async (cell, name) =>
         {

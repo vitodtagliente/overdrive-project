@@ -1139,7 +1139,7 @@ class Table {
         activeRow: ['table-primary'],
         col: Array(),
         row: Array(),
-        table: ['table', 'table-striped', 'table-hover'],
+        table: ['table', 'table-striped', 'table-hover', 'table-sm', 'mt-2'],
         tbody: Array(),
         thead: ['thead-dark']
     };
