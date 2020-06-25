@@ -338,16 +338,13 @@ class Search extends Component {
     }
 }
 
-class InspectorWidget {
+class Inspector extends Component {
     #id = null;
     #parent = null;
-    #table = null;
-    #type = null;
     #widget = null;
-    constructor(type, table) {
-        this.#id = `inspector-${type}-${table.id}`;
-        this.#type = type;
-        this.#table = table;
+    constructor(table, id) {
+        super(table);
+        this.#id = id || new Date().valueOf();
     }
 
     #appendButton = (form, text, classes, callback) => {
@@ -497,7 +494,7 @@ class InspectorWidget {
                 this.#appendField(form, schema[field], value);
             }
 
-            const isEdit = this.type == Inspector.Type.Edit;
+            const isEdit = model != null;
             this.#appendButton(form, 'Save', [isEdit ? 'btn-warning' : 'btn-success'], function (e) {
                 e.preventDefault();
 
@@ -557,15 +554,16 @@ class InspectorWidget {
         return this.widget != null;
     }
 
-    open(parent, schema, url, model) {
+    render(parent, schema, url, model) {
         if (this.isOpen)
         {
             this.close();
         }
 
         this.#parent = parent;
+        const isEdit = model != null;
 
-        if (this.type == 'edit')
+        if (isEdit)
         {
             this.#widget = document.createElement('tr');
             parent.parentNode.insertBefore(this.widget, parent.nextSibling);
@@ -593,109 +591,67 @@ class InspectorWidget {
         return this.#parent;
     }
 
-    get table() {
-        return this.#table;
-    }
-
-    get type() {
-        return this.#type;
-    }
-
     get widget() {
         return this.#widget;
     }
 }
 
-class Inspector extends Component {
-
-    static Type = {
-        Create: 'create',
-        Edit: 'edit'
-    };
-
-    schema = {};
-    #widgets = Array();
-    constructor(table) {
-        super(table);
-
-        // initialize the widgets
-        for (const type of Object.keys(Inspector.Type))
-        {
-            const value = Inspector.Type[type];
-            this.#widgets[value] = new InspectorWidget(value, table);
-        }
-
-        table.onRowClick = (row, model) => {
-            if (this.enabled == false) return;
-
-            const inspector = this.editInspector;
-            if (inspector.parent != null)
-            {
-                Utils.removeClasses(inspector.parent, this.classes.activeRow);
-            }
-            if (row == inspector.parent)
-            {
-                inspector.close();
-            }
-            else 
-            {
-                Utils.addClasses(row, this.classes.activeRow);
-                inspector.open(row, this.schema, `${this.table.url}/${model._id}`, model);
-                inspector.onclose = () => {
-                    Utils.removeClasses(row, this.classes.activeRow);
-                };
-                row.scrollIntoView();
-            }
-        };
-    }
-
-    get editInspector() {
-        return this.#getWidget(Inspector.Type.Edit);
-    }
-
-    #getWidget = (type) => {
-        if (Object.keys(this.widgets).includes(type))
-            return this.widgets[type];
-        return null;
-    }
-
-    get widgets() {
-        return this.#widgets;
-    }
-
-    open(type, parent, url) {
-        const widget = this.#getWidget(type);
-        if (widget)
-        {
-            widget.open(parent, this.schema, url);
-        }
-    }
-
-    classes = {
-        activeRow: ['table-primary']
-    }
-}
-
 class Toolbar extends Component {
+    /// The buttons
     #buttons = Array();
-    #widget = null;
     #createWidget = null;
+    /// Button are stored temporarly here untile the widget is not rendered
+    #pendingButtons = Array();
+    /// The widget DOM
+    #widget = null;
+    #inspector = null;
     /// constructor
     /// @param table - The table on which refers to
     constructor(table) {
         super(table);
+        this.#inspector = new Inspector(table);
     }
 
-    #appendButton = (parent, text, icon, classes, callback) => {
-        Utils.createChild(parent, 'button', (button) => {
-            Utils.setAttributes(button, {
-                type: 'button'
+    /// Add a new button
+    /// @param text - The button text
+    /// @param icon - The button icon
+    /// @param classes - The button classes
+    /// @param callback - The button callback
+    addButton(text, icon, classes, callback) {
+        if (typeof classes == typeof String)
+        {
+            classes = [classes];
+        }
+
+        if (this.widget != null)
+        {
+            Utils.createChild(this.widget, 'button', (button) => {
+                Utils.setAttributes(button, {
+                    type: 'button'
+                });
+                Utils.addClasses(button, this.classes.button);
+                Utils.addClasses(button, classes);
+                button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
+                button.onclick = callback;
             });
-            Utils.addClasses(button, ['btn', 'btn-sm', 'rounded-0']);
-            Utils.addClasses(button, classes);
-            button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
-            button.onclick = callback;
-        });
+        }
+        else 
+        {
+            this.#pendingButtons.push({
+                text: text,
+                icon: icon,
+                classes: classes,
+                callback: callback
+            });
+        }
+    }
+
+    /// Remove all the buttons
+    clear() {
+        for (const button of this.buttons)
+        {
+            button.remove();
+        }
     }
 
     /// Render/create the component
@@ -708,22 +664,28 @@ class Toolbar extends Component {
 
         if (this.widget == null)
         {
-            const self = this;
             this.#widget = Utils.createChild(this.table.parent, 'div', (div) => {
-                Utils.addClasses(div, ['pt-2', 'pb-2']);
-                this.#appendButton(div, 'New', 'plus', ['btn-success'], (event) => {
+                Utils.addClasses(div, this.classes.toolbar);
+                this.addButton('New', 'plus', ['btn-success'], (event) => {
                     event.preventDefault();
 
-                    self.table.inspector.open(
-                        Inspector.Type.Create,
-                        self.#createWidget,
-                        self.table.url
+                    this.inspector.render(
+                        this.#createWidget,
+                        this.table.schema,
+                        this.table.url
                     );
                 });
+
             });
             this.#createWidget = Utils.createChild(this.table.parent, 'div', (div) => {
-                
+
             });
+
+            for (const button of this.#pendingButtons)
+            {
+                this.addButton(button.text, button.icon, button.classes, button.callback);
+            }
+            this.#pendingButtons = Array();
         }
     }
 
@@ -731,8 +693,18 @@ class Toolbar extends Component {
         return this.#buttons;
     }
 
+    get inspector() {
+        return this.#inspector;
+    }
+
     get widget() {
         return this.#widget;
+    }
+
+    /// The style classes
+    classes = {
+        button: ['btn', 'btn-sm', 'rounded-0'],
+        toolbar: ['pt-2', 'pb-2']
     }
 }
 
@@ -774,9 +746,9 @@ class Table {
         this.#id = id || new Date().valueOf();
 
         // initialize the components
+        this.#inspector = new Inspector(this);
         this.#pagination = new Pagination(this);
         this.#search = new Search(this);
-        this.#inspector = new Inspector(this);
         this.#toolbar = new Toolbar(this);
 
         /// register this instance
@@ -908,7 +880,7 @@ class Table {
         return this.#id;
     }
 
-    /// Retrieve the inspector component
+    /// Retrieve the inspector
     /// @return - The inspector
     get inspector() {
         return this.#inspector;
@@ -924,6 +896,11 @@ class Table {
     /// @param row - The selected row
     /// @param model - The model of that row
     onRowClick = (row, model) => {
+
+    };
+
+    /// Notify when the table is ready
+    onReady = (table) => {
 
     };
 
@@ -984,13 +961,10 @@ class Table {
             }
 
             // create the table
-            this.#dom.table = document.createElement('table');
-            for (const css_class of this.classes.table)
-            {
-                this.table.classList.add(css_class);
-            }
-            this.table.setAttribute('id', this.id);
-            this.parent.append(this.table);
+            this.#dom.table = Utils.createChild(this.parent, 'table', (table) => {
+                Utils.addClasses(table, this.classes.table);
+                table.setAttribute('id', this.id);
+            });
 
             // setup the columns if not set at the table initialization
             if ((this.#columns == null
@@ -1002,6 +976,9 @@ class Table {
 
             // render the table head
             this.#renderHead();
+
+            // the table has been created
+            this.onReady(this);
         }
 
         // update the table content
@@ -1016,10 +993,7 @@ class Table {
         if (this.#dom.table_body == null)
         {
             this.#dom.table_body = this.table.createTBody();
-            for (const css_class of this.classes.tbody)
-            {
-                this.body.classList.add(css_class);
-            }
+            Utils.addClasses(this.body, this.classes.tbody);
         }
         else
         {
@@ -1032,6 +1006,7 @@ class Table {
         const offset = this.pagination.enabled
             ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
             : 0;
+
         const columns = Object.keys(this.columns);
         for (let i = offset; i < (offset + count); ++i)
         {
@@ -1041,7 +1016,24 @@ class Table {
             {
                 row.setAttribute('id', model.id || model._id);
                 const self = this;
-                row.onclick = function () {
+                row.onclick = () => {
+                    this.inspector.close();
+                    if (this.selectedRow != null)
+                    {
+                        Utils.removeClasses(this.selectedRow, this.classes.activeRow);
+                        if (this.selectedRow == row)
+                        {
+                            return;
+                        }
+                    }
+                    this.#selectedRow = row;
+                    Utils.addClasses(row, this.classes.activeRow);
+                    this.inspector.render(
+                        row,
+                        this.schema,
+                        `${this.url}/${model._id}`,
+                        model
+                    );
                     self.onRowClick(row, model);
                 };
             }
@@ -1099,6 +1091,12 @@ class Table {
         return this.#search;
     }
 
+    /// Retrieve the selected row
+    /// @return - The selected row
+    get selectedRow() {
+        return this.#selectedRow;
+    }
+
     /// Retrieve the DOM table
     /// @return - The DOM table
     get table() {
@@ -1138,15 +1136,18 @@ class Table {
     /// let to customize the table css per element
     /// basic bootstrap classes by default
     classes = {
+        activeRow: ['table-primary'],
         col: Array(),
         row: Array(),
         table: ['table', 'table-striped', 'table-hover'],
         tbody: Array(),
         thead: ['thead-dark']
     };
+    /// The data schema
+    schema = {
 
-    /// The table id
-    #id = null;
+    };
+
     /// The columns of the table
     /// can contains the showed name
     #columns = Array();
@@ -1161,6 +1162,8 @@ class Table {
     };
     /// Collection of fields renderers
     #fields = Array();
+    /// The table id
+    #id = null;
     /// The inspector component
     #inspector = null;
     /// The mode of the table
@@ -1169,6 +1172,8 @@ class Table {
     #pagination = null;
     /// The search system
     #search = null;
+    /// The selected row
+    #selectedRow = null;
     /// The toolbar component
     #toolbar = null;
     /// The url for Ajax mode

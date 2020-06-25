@@ -42,9 +42,9 @@ export default class Table {
         this.#id = id || new Date().valueOf();
 
         // initialize the components
+        this.#inspector = new Inspector(this);
         this.#pagination = new Pagination(this);
         this.#search = new Search(this);
-        this.#inspector = new Inspector(this);
         this.#toolbar = new Toolbar(this);
 
         /// register this instance
@@ -176,7 +176,7 @@ export default class Table {
         return this.#id;
     }
 
-    /// Retrieve the inspector component
+    /// Retrieve the inspector
     /// @return - The inspector
     get inspector() {
         return this.#inspector;
@@ -192,6 +192,11 @@ export default class Table {
     /// @param row - The selected row
     /// @param model - The model of that row
     onRowClick = (row, model) => {
+
+    };
+
+    /// Notify when the table is ready
+    onReady = (table) => {
 
     };
 
@@ -252,13 +257,10 @@ export default class Table {
             }
 
             // create the table
-            this.#dom.table = document.createElement('table');
-            for (const css_class of this.classes.table)
-            {
-                this.table.classList.add(css_class);
-            }
-            this.table.setAttribute('id', this.id);
-            this.parent.append(this.table);
+            this.#dom.table = Utils.createChild(this.parent, 'table', (table) => {
+                Utils.addClasses(table, this.classes.table);
+                table.setAttribute('id', this.id);
+            });
 
             // setup the columns if not set at the table initialization
             if ((this.#columns == null
@@ -270,6 +272,9 @@ export default class Table {
 
             // render the table head
             this.#renderHead();
+
+            // the table has been created
+            this.onReady(this);
         }
 
         // update the table content
@@ -284,10 +289,7 @@ export default class Table {
         if (this.#dom.table_body == null)
         {
             this.#dom.table_body = this.table.createTBody();
-            for (const css_class of this.classes.tbody)
-            {
-                this.body.classList.add(css_class);
-            }
+            Utils.addClasses(this.body, this.classes.tbody);
         }
         else
         {
@@ -300,6 +302,7 @@ export default class Table {
         const offset = this.pagination.enabled
             ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
             : 0;
+
         const columns = Object.keys(this.columns);
         for (let i = offset; i < (offset + count); ++i)
         {
@@ -309,7 +312,24 @@ export default class Table {
             {
                 row.setAttribute('id', model.id || model._id);
                 const self = this;
-                row.onclick = function () {
+                row.onclick = () => {
+                    this.inspector.close();
+                    if (this.selectedRow != null)
+                    {
+                        Utils.removeClasses(this.selectedRow, this.classes.activeRow);
+                        if (this.selectedRow == row)
+                        {
+                            return;
+                        }
+                    }
+                    this.#selectedRow = row;
+                    Utils.addClasses(row, this.classes.activeRow);
+                    this.inspector.render(
+                        row,
+                        this.schema,
+                        `${this.url}/${model._id}`,
+                        model
+                    );
                     self.onRowClick(row, model);
                 };
             }
@@ -367,6 +387,12 @@ export default class Table {
         return this.#search;
     }
 
+    /// Retrieve the selected row
+    /// @return - The selected row
+    get selectedRow() {
+        return this.#selectedRow;
+    }
+
     /// Retrieve the DOM table
     /// @return - The DOM table
     get table() {
@@ -406,15 +432,18 @@ export default class Table {
     /// let to customize the table css per element
     /// basic bootstrap classes by default
     classes = {
+        activeRow: ['table-primary'],
         col: Array(),
         row: Array(),
         table: ['table', 'table-striped', 'table-hover'],
         tbody: Array(),
         thead: ['thead-dark']
     };
+    /// The data schema
+    schema = {
 
-    /// The table id
-    #id = null;
+    };
+
     /// The columns of the table
     /// can contains the showed name
     #columns = Array();
@@ -429,6 +458,8 @@ export default class Table {
     };
     /// Collection of fields renderers
     #fields = Array();
+    /// The table id
+    #id = null;
     /// The inspector component
     #inspector = null;
     /// The mode of the table
@@ -437,6 +468,8 @@ export default class Table {
     #pagination = null;
     /// The search system
     #search = null;
+    /// The selected row
+    #selectedRow = null;
     /// The toolbar component
     #toolbar = null;
     /// The url for Ajax mode

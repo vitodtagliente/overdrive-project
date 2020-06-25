@@ -1,16 +1,13 @@
 import Component from './component';
 import Utils from './utils';
 
-class InspectorWidget {
+export default class Inspector extends Component {
     #id = null;
     #parent = null;
-    #table = null;
-    #type = null;
     #widget = null;
-    constructor(type, table) {
-        this.#id = `inspector-${type}-${table.id}`;
-        this.#type = type;
-        this.#table = table;
+    constructor(table, id) {
+        super(table)
+        this.#id = id || new Date().valueOf();
     }
 
     #appendButton = (form, text, classes, callback) => {
@@ -160,7 +157,7 @@ class InspectorWidget {
                 this.#appendField(form, schema[field], value);
             }
 
-            const isEdit = this.type == Inspector.Type.Edit;
+            const isEdit = model != null;
             this.#appendButton(form, 'Save', [isEdit ? 'btn-warning' : 'btn-success'], function (e) {
                 e.preventDefault();
 
@@ -220,15 +217,16 @@ class InspectorWidget {
         return this.widget != null;
     }
 
-    open(parent, schema, url, model) {
+    render(parent, schema, url, model) {
         if (this.isOpen)
         {
             this.close();
         }
 
         this.#parent = parent;
+        const isEdit = model != null;
 
-        if (this.type == 'edit')
+        if (isEdit)
         {
             this.#widget = document.createElement('tr');
             parent.parentNode.insertBefore(this.widget, parent.nextSibling);
@@ -256,85 +254,7 @@ class InspectorWidget {
         return this.#parent;
     }
 
-    get table() {
-        return this.#table;
-    }
-
-    get type() {
-        return this.#type;
-    }
-
     get widget() {
         return this.#widget;
-    }
-}
-
-export default class Inspector extends Component {
-
-    static Type = {
-        Create: 'create',
-        Edit: 'edit'
-    };
-
-    schema = {};
-    #widgets = Array();
-    constructor(table) {
-        super(table);
-
-        // initialize the widgets
-        for (const type of Object.keys(Inspector.Type))
-        {
-            const value = Inspector.Type[type];
-            this.#widgets[value] = new InspectorWidget(value, table);
-        }
-
-        table.onRowClick = (row, model) => {
-            if (this.enabled == false) return;
-
-            const inspector = this.editInspector;
-            if (inspector.parent != null)
-            {
-                Utils.removeClasses(inspector.parent, this.classes.activeRow);
-            }
-            if (row == inspector.parent)
-            {
-                inspector.close();
-            }
-            else 
-            {
-                Utils.addClasses(row, this.classes.activeRow);
-                inspector.open(row, this.schema, `${this.table.url}/${model._id}`, model);
-                inspector.onclose = () => {
-                    Utils.removeClasses(row, this.classes.activeRow);
-                };
-                row.scrollIntoView();
-            }
-        };
-    }
-
-    get editInspector() {
-        return this.#getWidget(Inspector.Type.Edit);
-    }
-
-    #getWidget = (type) => {
-        if (Object.keys(this.widgets).includes(type))
-            return this.widgets[type];
-        return null;
-    }
-
-    get widgets() {
-        return this.#widgets;
-    }
-
-    open(type, parent, url) {
-        const widget = this.#getWidget(type);
-        if (widget)
-        {
-            widget.open(parent, this.schema, url);
-        }
-    }
-
-    classes = {
-        activeRow: ['table-primary']
     }
 }

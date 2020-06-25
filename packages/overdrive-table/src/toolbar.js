@@ -3,25 +3,61 @@ import Utils from './utils';
 import Inspector from './inspector';
 
 export default class Toolbar extends Component {
+    /// The buttons
     #buttons = Array();
-    #widget = null;
     #createWidget = null;
+    /// Button are stored temporarly here untile the widget is not rendered
+    #pendingButtons = Array();
+    /// The widget DOM
+    #widget = null;
+    #inspector = null;
     /// constructor
     /// @param table - The table on which refers to
     constructor(table) {
         super(table);
+        this.#inspector = new Inspector(table);
     }
 
-    #appendButton = (parent, text, icon, classes, callback) => {
-        Utils.createChild(parent, 'button', (button) => {
-            Utils.setAttributes(button, {
-                type: 'button'
+    /// Add a new button
+    /// @param text - The button text
+    /// @param icon - The button icon
+    /// @param classes - The button classes
+    /// @param callback - The button callback
+    addButton(text, icon, classes, callback) {
+        if (typeof classes == typeof String)
+        {
+            classes = [classes];
+        }
+
+        if (this.widget != null)
+        {
+            Utils.createChild(this.widget, 'button', (button) => {
+                Utils.setAttributes(button, {
+                    type: 'button'
+                });
+                Utils.addClasses(button, this.classes.button);
+                Utils.addClasses(button, classes);
+                button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
+                button.onclick = callback;
             });
-            Utils.addClasses(button, ['btn', 'btn-sm', 'rounded-0']);
-            Utils.addClasses(button, classes);
-            button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
-            button.onclick = callback;
-        });
+        }
+        else 
+        {
+            this.#pendingButtons.push({
+                text: text,
+                icon: icon,
+                classes: classes,
+                callback: callback
+            });
+        }
+    }
+
+    /// Remove all the buttons
+    clear() {
+        for (const button of this.buttons)
+        {
+            button.remove();
+        }
     }
 
     /// Render/create the component
@@ -34,22 +70,28 @@ export default class Toolbar extends Component {
 
         if (this.widget == null)
         {
-            const self = this;
             this.#widget = Utils.createChild(this.table.parent, 'div', (div) => {
-                Utils.addClasses(div, ['pt-2', 'pb-2']);
-                this.#appendButton(div, 'New', 'plus', ['btn-success'], (event) => {
+                Utils.addClasses(div, this.classes.toolbar);
+                this.addButton('New', 'plus', ['btn-success'], (event) => {
                     event.preventDefault();
 
-                    self.table.inspector.open(
-                        Inspector.Type.Create,
-                        self.#createWidget,
-                        self.table.url
+                    this.inspector.render(
+                        this.#createWidget,
+                        this.table.schema,
+                        this.table.url
                     );
                 });
+
             });
             this.#createWidget = Utils.createChild(this.table.parent, 'div', (div) => {
-                
+
             });
+
+            for (const button of this.#pendingButtons)
+            {
+                this.addButton(button.text, button.icon, button.classes, button.callback);
+            }
+            this.#pendingButtons = Array();
         }
     }
 
@@ -57,7 +99,17 @@ export default class Toolbar extends Component {
         return this.#buttons;
     }
 
+    get inspector() {
+        return this.#inspector;
+    }
+
     get widget() {
         return this.#widget;
+    }
+
+    /// The style classes
+    classes = {
+        button: ['btn', 'btn-sm', 'rounded-0'],
+        toolbar: ['pt-2', 'pb-2']
     }
 }
