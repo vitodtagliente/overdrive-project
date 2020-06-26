@@ -16,6 +16,7 @@ export default class Toolbar extends Component {
     constructor(table) {
         super(table);
         this.#inspector = new Inspector(table);
+        /*
         table.onRowClick.push((row, model) => {
             if (table.selectedRow != null)
             {
@@ -41,6 +42,7 @@ export default class Toolbar extends Component {
                 }
             }
         });
+        */
     }
 
     /// Add a new button

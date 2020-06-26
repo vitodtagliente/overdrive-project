@@ -1,6 +1,6 @@
+import Event from './event';
 import Pagination from './pagination';
 import Search from './search';
-import Inspector from './inspector';
 import Toolbar from './toolbar';
 import Utils from './utils';
 
@@ -42,7 +42,6 @@ export default class Table {
         this.#id = id || new Date().valueOf();
 
         // initialize the components
-        this.#inspector = new Inspector(this);
         this.#pagination = new Pagination(this);
         this.#search = new Search(this);
         this.#toolbar = new Toolbar(this);
@@ -176,27 +175,26 @@ export default class Table {
         return this.#id;
     }
 
-    /// Retrieve the inspector
-    /// @return - The inspector
-    get inspector() {
-        return this.#inspector;
-    }
-
     /// Retrieve the table mode
     /// @return - The mode
     get mode() {
         return this.#mode;
     }
 
-    /// On row click event
+    /// On row selection event
     /// @param row - The selected row
     /// @param model - The model of that row
-    onRowClick = Array();
+    /// @param selected - If the row is selected or not
+    onRowSelection = new Event();
 
     /// Notify when the table is ready
-    onReady = (table) => {
+    /// @param table - The table
+    onReady = new Event();
 
-    };
+    /// Notify before rendering a row
+    /// @param table - The table
+    /// @param model -The rendered model
+    onRowRendering = new Event();
 
     /// Retrieve the pagination system
     /// @return - The pagination
@@ -272,7 +270,7 @@ export default class Table {
             this.#renderHead();
 
             // the table has been created
-            this.onReady(this);
+            this.onReady.broadcast(this);
         }
 
         // update the table content
@@ -305,39 +303,25 @@ export default class Table {
         for (let i = offset; i < (offset + count); ++i)
         {
             const model = this.data.data[i];
+            this.onRowRendering.broadcast(this, model);
             const row = this.body.insertRow();
             if (model != null)
             {
                 row.setAttribute('id', model.id || model._id);
-                const self = this;
                 row.onclick = () => {
-                    this.inspector.close();
                     if (this.selectedRow != null)
                     {
                         Utils.removeClasses(this.selectedRow, this.classes.activeRow);
                         if (this.selectedRow == row)
                         {
                             this.#selectedRow = null;
-                            for (const event of this.onRowClick)
-                            {
-                                event(row, model);
-                            }
+                            this.onRowSelection.broadcast(row, model, false);
                             return;
                         }
                     }
                     this.#selectedRow = row;
                     Utils.addClasses(row, this.classes.activeRow);
-                    this.inspector.render(
-                        row,
-                        this.schema,
-                        `${this.url}/${model._id}`,
-                        model
-                    );
-
-                    for (const event of this.onRowClick)
-                    {
-                        event(row, model);
-                    }
+                    this.onRowSelection.broadcast(row, model, true);
                 };
             }
             this.renderRow(row, model, columns);
@@ -467,8 +451,6 @@ export default class Table {
     #fields = Array();
     /// The table id
     #id = null;
-    /// The inspector component
-    #inspector = null;
     /// The mode of the table
     #mode = null;
     /// The pagination system
