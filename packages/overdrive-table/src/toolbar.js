@@ -1,93 +1,135 @@
 import Component from './component';
 import Utils from './utils';
-import Inspector from './inspector';
+
+class ToolbarButton {
+    /// Prefab buttons
+    static get Prefabs() {
+        return {
+            Add: new ToolbarButton(
+                'New',
+                'plus',
+                'btn-success',
+                () => {
+
+                }
+            ),
+            Edit: new ToolbarButton(
+                'Edit',
+                'pen',
+                'btn-light',
+                () => {
+
+                },
+                ToolbarButton.RenderMode.OnRowSelection
+            ),
+            Remove: new ToolbarButton(
+                'Delete',
+                'trash',
+                'btn-danger',
+                () => {
+
+                },
+                ToolbarButton.RenderMode.OnRowSelection
+            ),
+        }
+    }
+
+    static get RenderMode() {
+        return {
+            Always: 'always',
+            OnRowSelection: 'selection'
+        };
+    }
+
+    /// The id
+    #id = null;
+    name = null;
+    icon = null;
+    style = [];
+    #behaviour = null;
+    #mode = null;
+    #widget = null;
+    /// Constructor
+    constructor(name, icon, style, behaviour, mode) {
+        this.#id = `toolbar-button-${new Date().valueOf()}`;
+        this.name = name;
+        this.icon = icon;
+        this.style = style;
+        if (!Array.isArray(this.style))
+        {
+            this.style = [this.style];
+        }
+        this.#behaviour = behaviour;
+        this.#mode = mode || ToolbarButton.RenderMode.Always;
+    }
+
+    show(parent, visible, classes) {
+        if (visible && this.widget == null)
+        {
+            this.#widget = Utils.createChild(parent, 'button', (button) => {
+                Utils.setAttributes(button, {
+                    type: 'button'
+                });
+                Utils.addClasses(button, this.style.concat(classes));
+                button.innerHTML = `<i class="fa fa-${this.icon}"></i> ${this.name}`;
+                button.onclick = this.behaviour;
+            });
+        }
+        else if (!visible && this.widget != null)
+        {
+            this.widget.remove();
+            this.#widget = null;
+        }
+    }
+
+    get id() {
+        return this.#id;
+    }
+
+    get behaviour() {
+        return this.#behaviour;
+    }
+
+    get mode() {
+        return this.#mode;
+    }
+
+    get widget() {
+        return this.#widget;
+    }
+}
 
 export default class Toolbar extends Component {
+    static Button = ToolbarButton;
     /// The buttons
     #buttons = Array();
-    #createWidget = null;
-    /// Button are stored temporarly here untile the widget is not rendered
-    #pendingButtons = Array();
     /// The widget DOM
     #widget = null;
-    #inspector = null;
     /// constructor
     /// @param table - The table on which refers to
     constructor(table) {
         super(table);
-        this.#inspector = new Inspector(table);
-        /*
-        table.onRowClick.push((row, model) => {
-            if (table.selectedRow != null)
-            {
-                this.addButton('Delete', 'trash', ['btn-danger'], (event) => {
+        this.buttons.push(ToolbarButton.Prefabs.Add);
+        this.buttons.push(ToolbarButton.Prefabs.Edit);
+        this.buttons.push(ToolbarButton.Prefabs.Remove);
 
-                });
-            }
-            else 
-            {
-                for (const button of this.buttons)
-                {
-                    if (button.getAttribute('name') == 'Delete')
-                    {
-                        const index = this.buttons.indexOf(button);
-                        if (index > -1)
-                        {
-                            this.buttons.splice(index, 1);
-                        }
-                        button.remove();
-                        console.log(this.buttons);
-                        break;
-                    }
-                }
-            }
+        table.onRowSelection.bind((row, model, selected) => {
+            this.#update();
         });
-        */
-    }
-
-    /// Add a new button
-    /// @param text - The button text
-    /// @param icon - The button icon
-    /// @param classes - The button classes
-    /// @param callback - The button callback
-    addButton(text, icon, classes, callback) {
-        if (typeof classes == typeof String)
-        {
-            classes = [classes];
-        }
-
-        if (this.widget != null)
-        {
-            this.#buttons.push(Utils.createChild(this.widget, 'button', (button) => {
-                Utils.setAttributes(button, {
-                    type: 'button'
-                });
-                Utils.addClasses(button, this.classes.button);
-                Utils.addClasses(button, classes);
-                button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
-                button.onclick = callback;
-                Utils.setAttributes(button, {
-                    name: text
-                });
-            }));
-        }
-        else 
-        {
-            this.#pendingButtons.push({
-                text: text,
-                icon: icon,
-                classes: classes,
-                callback: callback
-            });
-        }
     }
 
     /// Remove all the buttons
     clear() {
-        for (const button of this.buttons)
-        {
-            button.remove();
-        }
+        this.#buttons = Array();
+        this.update(false);
+    }
+
+    /// Create the widget
+    create = () => {
+        this.#widget = Utils.createChild(this.table.parent, 'div', (div) => {
+            Utils.addClasses(div, this.classes.toolbar);
+
+        });
     }
 
     /// Render/create the component
@@ -100,37 +142,25 @@ export default class Toolbar extends Component {
 
         if (this.widget == null)
         {
-            this.#widget = Utils.createChild(this.table.parent, 'div', (div) => {
-                Utils.addClasses(div, this.classes.toolbar);
-                this.addButton('New', 'plus', ['btn-success'], (event) => {
-                    event.preventDefault();
+            this.create();
+        }
 
-                    this.inspector.render(
-                        this.#createWidget,
-                        this.table.schema,
-                        this.table.url
-                    );
-                });
+        this.#update();
+    }
 
-            });
-            this.#createWidget = Utils.createChild(this.table.parent, 'div', (div) => {
-
-            });
-
-            for (const button of this.#pendingButtons)
+    #update = () => {
+        for (const button of this.buttons)
+        {
+            if (button != null)
             {
-                this.addButton(button.text, button.icon, button.classes, button.callback);
+                const visible = button.mode == ToolbarButton.RenderMode.Always || this.table.selectedRow != null;
+                button.show(this.widget, visible, this.classes.button);
             }
-            this.#pendingButtons = Array();
         }
     }
 
     get buttons() {
         return this.#buttons;
-    }
-
-    get inspector() {
-        return this.#inspector;
     }
 
     get widget() {

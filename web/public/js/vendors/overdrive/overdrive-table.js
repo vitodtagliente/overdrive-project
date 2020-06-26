@@ -388,257 +388,97 @@ class Search extends Component {
     };
 }
 
-class Inspector extends Component {
-    #id = null;
-    #parent = null;
-    #widget = null;
-    constructor(table, id) {
-        super(table);
-        this.#id = id || new Date().valueOf();
-    }
+class ToolbarButton {
+    /// Prefab buttons
+    static get Prefabs() {
+        return {
+            Add: new ToolbarButton(
+                'New',
+                'plus',
+                'btn-success',
+                () => {
 
-    #appendButton = (form, text, classes, callback) => {
-        Utils.createChild(form, 'button', (button) => {
-            Utils.setAttributes(button, {
-                type: 'button'
-            });
-            Utils.addClasses(button, ['btn', 'btn-sm', 'rounded-0']);
-            Utils.addClasses(button, classes);
-            button.innerHTML = text;
-            button.onclick = callback;
-        });
-    }
-
-    #appendField = (form, definition, value) => {
-        Utils.createChild(form, 'div', (div) => {
-            Utils.addClasses(div, ['form-group', 'row']);
-            Utils.createChild(div, 'label', (label) => {
-                Utils.addClasses(label, ['col-sm-2', 'col-form-label', 'pt-0', 'pb-0']);
-                Utils.setAttributes(label, {
-                    for: definition.display
-                });
-                label.innerHTML = `<b>${definition.name}</b>`;
-            });
-            Utils.createChild(div, 'div', (inputDiv) => {
-                Utils.addClasses(inputDiv, ['col-sm-10']);
-                Utils.createChild(inputDiv, 'input', (input) => {
-                    Utils.setAttributes(input, {
-                        id: definition.name,
-                        name: definition.name,
-                        placeholder: definition.placeholder
-                    });
-
-                    if (definition.required)
-                    {
-                        Utils.setAttributes(input, { required: 'required' });
-                    }
-
-                    if (definition.readonly)
-                    {
-                        Utils.setAttributes(input, { readonly: true });
-                    }
-
-                    if (definition.default)
-                    {
-                        Utils.setAttributes(input, { default: definition.default });
-                    }
-
-                    if (definition.type == Boolean)
-                    {
-                        Utils.addClasses(input, ['form-check-input', 'ml-0']);
-                        Utils.setAttributes(input, { type: 'checkbox' });
-                        input.checked = value;
-                        input.value = true;
-                    }
-                    else if (definition.type == Number)
-                    {
-                        Utils.addClasses(input, ['form-control', 'form-control-sm']);
-                        Utils.setAttributes(input, { type: 'number' });
-                        input.value = value;
-                    }
-                    else 
-                    {
-                        Utils.addClasses(input, ['form-control', 'form-control-sm']);
-                        Utils.setAttributes(input, { type: 'text' });
-                        input.value = value;
-                    }
-                });
-            });
-        });
-    }
-
-    #createForm = (parent, schema, url, model) => {
-        const self = this;
-        return Utils.createChild(parent, 'form', (form) => {
-            Utils.setAttributes(form, {
-                id: self.id
-            });
-            Utils.addClasses(form, ['container', 'p-2']);
-
-            schema = schema || {};
-            if (model != null)
-            {
-                for (const field of Object.keys(model))
-                {
-                    if (schema[field] != null)
-                    {
-                        continue;
-                    }
-
-                    let definition = {
-                        name: field,
-                        display: field,
-                        required: false,
-                        readonly: field == "_id" ? true : false,
-                        default: null,
-                        type: String,
-                        placeholder: ''
-                    };
-
-                    const value = model[field];
-                    if (value != null)
-                    {
-                        if (typeof value === typeof true)
-                        {
-                            definition.type = Boolean;
-                        }
-                        else if (!isNaN(value))
-                        {
-                            definition.type = Number;
-                        }
-                    }
-
-                    schema[field] = definition;
                 }
-            }
-            else 
-            {
-                for (const field of Object.keys(schema))
-                {
-                    let definition = schema[field];
-                    definition = {
-                        name: definition.name || field,
-                        display: definition.display || field,
-                        required: definition.required || false,
-                        readonly: definition.readonly || field == "_id" ? true : false,
-                        default: definition.default || null,
-                        type: definition.type || String,
-                        placeholder: definition.placeholder || ''
-                    };
-                    schema[field] = definition;
-                }
-            }
+            ),
+            Edit: new ToolbarButton(
+                'Edit',
+                'pen',
+                'btn-light',
+                () => {
 
-            for (const field of Object.keys(schema))
-            {
-                if (field == "_id")
-                {
-                    continue;
-                }
+                },
+                ToolbarButton.RenderMode.OnRowSelection
+            ),
+            Remove: new ToolbarButton(
+                'Delete',
+                'trash',
+                'btn-danger',
+                () => {
 
-                let value = null;
-                if (model != null)
-                {
-                    value = model[field] || null;
-                }
-                this.#appendField(form, schema[field], value);
-            }
-
-            const isEdit = model != null;
-            this.#appendButton(form, 'Save', [isEdit ? 'btn-warning' : 'btn-success'], function (e) {
-                e.preventDefault();
-
-                let data = $(`#${self.id}`).serialize();
-
-                // include unchecked checkboxes. use filter to only include unchecked boxes.
-                $.each($(`#${self.id} form input[type=checkbox]`)
-                    .filter(function (idx) {
-                        return $(this).prop('checked') === false
-                    }),
-                    function (idx, el) {
-                        // attach matched element names to the formData with a chosen value.
-                        data += '&' + $(el).attr('name') + '=false';
-                    }
-                );
-
-                console.log("sending data to " + url);
-
-                $.ajax({
-                    type: isEdit ? 'PATCH' : 'POST',
-                    url: url,
-                    data: data,
-                }).done(function () {
-                    self.close();
-                    self.table.update();
-                }).fail(function (error) {
-                    console.log(error);
-                });
-            });
-
-            this.#appendButton(form, 'Close', ['btn-dark'], function (e) {
-                // close function
-                self.close();
-            });
-        });
-    }
-
-    close() {
-        if (this.isOpen)
-        {
-            this.widget.remove();
-            this.#widget = null;
-            this.#parent = null;
-            this.onclose();
+                },
+                ToolbarButton.RenderMode.OnRowSelection
+            ),
         }
     }
 
-    onclose = () => {
+    static get RenderMode() {
+        return {
+            Always: 'always',
+            OnRowSelection: 'selection'
+        };
+    }
 
+    /// The id
+    #id = null;
+    name = null;
+    icon = null;
+    style = [];
+    #behaviour = null;
+    #mode = null;
+    #widget = null;
+    /// Constructor
+    constructor(name, icon, style, behaviour, mode) {
+        this.#id = `toolbar-button-${new Date().valueOf()}`;
+        this.name = name;
+        this.icon = icon;
+        this.style = style;
+        if (!Array.isArray(this.style))
+        {
+            this.style = [this.style];
+        }
+        this.#behaviour = behaviour;
+        this.#mode = mode || ToolbarButton.RenderMode.Always;
+    }
+
+    show(parent, visible, classes) {
+        if (visible && this.widget == null)
+        {
+            this.#widget = Utils.createChild(parent, 'button', (button) => {
+                Utils.setAttributes(button, {
+                    type: 'button'
+                });
+                Utils.addClasses(button, this.style.concat(classes));
+                button.innerHTML = `<i class="fa fa-${this.icon}"></i> ${this.name}`;
+                button.onclick = this.behaviour;
+            });
+        }
+        else if (!visible && this.widget != null)
+        {
+            this.widget.remove();
+            this.#widget = null;
+        }
     }
 
     get id() {
         return this.#id;
     }
 
-    get isOpen() {
-        return this.widget != null;
+    get behaviour() {
+        return this.#behaviour;
     }
 
-    render(parent, schema, url, model) {
-        if (this.isOpen)
-        {
-            this.close();
-        }
-
-        this.#parent = parent;
-        const isEdit = model != null;
-
-        if (isEdit)
-        {
-            this.#widget = document.createElement('tr');
-            parent.parentNode.insertBefore(this.widget, parent.nextSibling);
-
-            Utils.addClasses(this.widget, ['table-light']);
-            Utils.createChild(this.widget, 'td', (td) => {
-                Utils.setAttributes(td, {
-                    colspan: '100%'
-                });
-
-                this.#createForm(td, schema, url, model);
-            });
-        }
-        else 
-        {
-            Utils.addClasses(parent, ['p-2']);
-            this.#widget = Utils.createChild(parent, 'div', (div) => {
-                Utils.addClasses(div, ['bg-light']);
-            });
-            this.#createForm(this.widget, schema, url);
-        }
-    }
-
-    get parent() {
-        return this.#parent;
+    get mode() {
+        return this.#mode;
     }
 
     get widget() {
@@ -647,91 +487,36 @@ class Inspector extends Component {
 }
 
 class Toolbar extends Component {
+    static Button = ToolbarButton;
     /// The buttons
     #buttons = Array();
-    #createWidget = null;
-    /// Button are stored temporarly here untile the widget is not rendered
-    #pendingButtons = Array();
     /// The widget DOM
     #widget = null;
-    #inspector = null;
     /// constructor
     /// @param table - The table on which refers to
     constructor(table) {
         super(table);
-        this.#inspector = new Inspector(table);
-        /*
-        table.onRowClick.push((row, model) => {
-            if (table.selectedRow != null)
-            {
-                this.addButton('Delete', 'trash', ['btn-danger'], (event) => {
+        this.buttons.push(ToolbarButton.Prefabs.Add);
+        this.buttons.push(ToolbarButton.Prefabs.Edit);
+        this.buttons.push(ToolbarButton.Prefabs.Remove);
 
-                });
-            }
-            else 
-            {
-                for (const button of this.buttons)
-                {
-                    if (button.getAttribute('name') == 'Delete')
-                    {
-                        const index = this.buttons.indexOf(button);
-                        if (index > -1)
-                        {
-                            this.buttons.splice(index, 1);
-                        }
-                        button.remove();
-                        console.log(this.buttons);
-                        break;
-                    }
-                }
-            }
+        table.onRowSelection.bind((row, model, selected) => {
+            this.#update();
         });
-        */
-    }
-
-    /// Add a new button
-    /// @param text - The button text
-    /// @param icon - The button icon
-    /// @param classes - The button classes
-    /// @param callback - The button callback
-    addButton(text, icon, classes, callback) {
-        if (typeof classes == typeof String)
-        {
-            classes = [classes];
-        }
-
-        if (this.widget != null)
-        {
-            this.#buttons.push(Utils.createChild(this.widget, 'button', (button) => {
-                Utils.setAttributes(button, {
-                    type: 'button'
-                });
-                Utils.addClasses(button, this.classes.button);
-                Utils.addClasses(button, classes);
-                button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
-                button.onclick = callback;
-                Utils.setAttributes(button, {
-                    name: text
-                });
-            }));
-        }
-        else 
-        {
-            this.#pendingButtons.push({
-                text: text,
-                icon: icon,
-                classes: classes,
-                callback: callback
-            });
-        }
     }
 
     /// Remove all the buttons
     clear() {
-        for (const button of this.buttons)
-        {
-            button.remove();
-        }
+        this.#buttons = Array();
+        this.update(false);
+    }
+
+    /// Create the widget
+    create = () => {
+        this.#widget = Utils.createChild(this.table.parent, 'div', (div) => {
+            Utils.addClasses(div, this.classes.toolbar);
+
+        });
     }
 
     /// Render/create the component
@@ -744,37 +529,25 @@ class Toolbar extends Component {
 
         if (this.widget == null)
         {
-            this.#widget = Utils.createChild(this.table.parent, 'div', (div) => {
-                Utils.addClasses(div, this.classes.toolbar);
-                this.addButton('New', 'plus', ['btn-success'], (event) => {
-                    event.preventDefault();
+            this.create();
+        }
 
-                    this.inspector.render(
-                        this.#createWidget,
-                        this.table.schema,
-                        this.table.url
-                    );
-                });
+        this.#update();
+    }
 
-            });
-            this.#createWidget = Utils.createChild(this.table.parent, 'div', (div) => {
-
-            });
-
-            for (const button of this.#pendingButtons)
+    #update = () => {
+        for (const button of this.buttons)
+        {
+            if (button != null)
             {
-                this.addButton(button.text, button.icon, button.classes, button.callback);
+                const visible = button.mode == ToolbarButton.RenderMode.Always || this.table.selectedRow != null;
+                button.show(this.widget, visible, this.classes.button);
             }
-            this.#pendingButtons = Array();
         }
     }
 
     get buttons() {
         return this.#buttons;
-    }
-
-    get inspector() {
-        return this.#inspector;
     }
 
     get widget() {
