@@ -13,7 +13,7 @@ export default class Component {
     render() {
 
     }
-
+    
     /// Retrieve the table
     get table() {
         return this.#table;

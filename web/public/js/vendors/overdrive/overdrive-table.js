@@ -11,7 +11,7 @@ class Component {
     render() {
 
     }
-
+    
     /// Retrieve the table
     get table() {
         return this.#table;
@@ -610,6 +610,31 @@ class Toolbar extends Component {
     constructor(table) {
         super(table);
         this.#inspector = new Inspector(table);
+        table.onRowClick.push((row, model) => {
+            if (table.selectedRow != null)
+            {
+                this.addButton('Delete', 'trash', ['btn-danger'], (event) => {
+
+                });
+            }
+            else 
+            {
+                for (const button of this.buttons)
+                {
+                    if (button.getAttribute('name') == 'Delete')
+                    {
+                        const index = this.buttons.indexOf(button);
+                        if (index > -1)
+                        {
+                            this.buttons.splice(index, 1);
+                        }
+                        button.remove();
+                        console.log(this.buttons);
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     /// Add a new button
@@ -625,7 +650,7 @@ class Toolbar extends Component {
 
         if (this.widget != null)
         {
-            Utils.createChild(this.widget, 'button', (button) => {
+            this.#buttons.push(Utils.createChild(this.widget, 'button', (button) => {
                 Utils.setAttributes(button, {
                     type: 'button'
                 });
@@ -633,7 +658,10 @@ class Toolbar extends Component {
                 Utils.addClasses(button, classes);
                 button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
                 button.onclick = callback;
-            });
+                Utils.setAttributes(button, {
+                    name: text
+                });
+            }));
         }
         else 
         {
@@ -895,9 +923,7 @@ class Table {
     /// On row click event
     /// @param row - The selected row
     /// @param model - The model of that row
-    onRowClick = (row, model) => {
-
-    };
+    onRowClick = Array();
 
     /// Notify when the table is ready
     onReady = (table) => {
@@ -1015,7 +1041,6 @@ class Table {
             if (model != null)
             {
                 row.setAttribute('id', model.id || model._id);
-                const self = this;
                 row.onclick = () => {
                     this.inspector.close();
                     if (this.selectedRow != null)
@@ -1023,6 +1048,11 @@ class Table {
                         Utils.removeClasses(this.selectedRow, this.classes.activeRow);
                         if (this.selectedRow == row)
                         {
+                            this.#selectedRow = null;
+                            for (const event of this.onRowClick)
+                            {
+                                event(row, model);
+                            }
                             return;
                         }
                     }
@@ -1034,7 +1064,11 @@ class Table {
                         `${this.url}/${model._id}`,
                         model
                     );
-                    self.onRowClick(row, model);
+
+                    for (const event of this.onRowClick)
+                    {
+                        event(row, model);
+                    }
                 };
             }
             this.renderRow(row, model, columns);

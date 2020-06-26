@@ -16,6 +16,31 @@ export default class Toolbar extends Component {
     constructor(table) {
         super(table);
         this.#inspector = new Inspector(table);
+        table.onRowClick.push((row, model) => {
+            if (table.selectedRow != null)
+            {
+                this.addButton('Delete', 'trash', ['btn-danger'], (event) => {
+
+                });
+            }
+            else 
+            {
+                for (const button of this.buttons)
+                {
+                    if (button.getAttribute('name') == 'Delete')
+                    {
+                        const index = this.buttons.indexOf(button);
+                        if (index > -1)
+                        {
+                            this.buttons.splice(index, 1);
+                        }
+                        button.remove();
+                        console.log(this.buttons);
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     /// Add a new button
@@ -31,7 +56,7 @@ export default class Toolbar extends Component {
 
         if (this.widget != null)
         {
-            Utils.createChild(this.widget, 'button', (button) => {
+            this.#buttons.push(Utils.createChild(this.widget, 'button', (button) => {
                 Utils.setAttributes(button, {
                     type: 'button'
                 });
@@ -39,7 +64,10 @@ export default class Toolbar extends Component {
                 Utils.addClasses(button, classes);
                 button.innerHTML = `<i class="fa fa-${icon}"></i> ${text}`;
                 button.onclick = callback;
-            });
+                Utils.setAttributes(button, {
+                    name: text
+                });
+            }));
         }
         else 
         {

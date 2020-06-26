@@ -191,9 +191,7 @@ export default class Table {
     /// On row click event
     /// @param row - The selected row
     /// @param model - The model of that row
-    onRowClick = (row, model) => {
-
-    };
+    onRowClick = Array();
 
     /// Notify when the table is ready
     onReady = (table) => {
@@ -319,6 +317,11 @@ export default class Table {
                         Utils.removeClasses(this.selectedRow, this.classes.activeRow);
                         if (this.selectedRow == row)
                         {
+                            this.#selectedRow = null;
+                            for (const event of this.onRowClick)
+                            {
+                                event(row, model);
+                            }
                             return;
                         }
                     }
@@ -330,7 +333,11 @@ export default class Table {
                         `${this.url}/${model._id}`,
                         model
                     );
-                    self.onRowClick(row, model);
+
+                    for (const event of this.onRowClick)
+                    {
+                        event(row, model);
+                    }
                 };
             }
             this.renderRow(row, model, columns);
