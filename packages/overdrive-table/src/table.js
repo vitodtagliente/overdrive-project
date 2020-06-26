@@ -414,6 +414,10 @@ export default class Table {
                 this.#data = await this.#fetch();
             }
 
+            // reset the row selection events
+            this.#selectedRow = null;
+            this.onRowSelection.broadcast(null, null, false);
+
             // render the table body
             this.#renderBody();
 
