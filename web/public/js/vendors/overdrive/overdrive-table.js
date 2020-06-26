@@ -816,7 +816,15 @@ class Table {
     /// Retrieve the columns of the table
     /// @return - The columns
     get columns() {
-        return this.#columns;
+        let columns = {};
+        for (const column of Object.keys(this.#columns))
+        {
+            if (this.hiddenColumns.includes(column) == false)
+            {
+                columns[column] = this.#columns[column];
+            }
+        }
+        return columns;
     }
 
     /// Set the columns
@@ -1187,6 +1195,8 @@ class Table {
         tbody: Array(),
         thead: ['thead-dark']
     };
+    /// The hidden columns
+    hiddenColumns = ['_id', 'id'];
     /// The data schema
     schema = {
 
