@@ -319,7 +319,7 @@ export default class Table {
                 row.onclick = () => {
                     if (this.selectedRow != null)
                     {
-                        Utils.removeClasses(this.selectedRow, this.classes.activeRow);
+                        Utils.removeClasses(this.selectedRow, this.classes.selectedRow);
                         if (this.selectedRow == row)
                         {
                             this.#selectedRow = null;
@@ -328,7 +328,7 @@ export default class Table {
                         }
                     }
                     this.#selectedRow = row;
-                    Utils.addClasses(row, this.classes.activeRow);
+                    Utils.addClasses(row, this.classes.selectedRow);
                     this.onRowSelection.broadcast(row, model, true);
                 };
             }
@@ -431,7 +431,7 @@ export default class Table {
     /// let to customize the table css per element
     /// basic bootstrap classes by default
     classes = {
-        activeRow: ['table-primary'],
+        selectedRow: ['table-primary'],
         col: Array(),
         row: Array(),
         table: ['table', 'table-striped', 'table-hover', 'table-sm', 'mt-2'],
