@@ -29,22 +29,15 @@ export default class Table {
         return null;
     }
 
-    /// The usage method type
-    static get Mode() {
-        return {
-            Ajax: 'ajax',
-            Data: 'data'
-        };
-    }
     /// constructor
     /// @param id - The id of the table, can be null
     constructor(id) {
         this.#id = id || new Date().valueOf();
 
         // initialize the components
-        this.#pagination = new Pagination(this);
-        this.#search = new Search(this);
-        this.#toolbar = new Toolbar(this);
+        this.#components.pagination = new Pagination(this);
+        this.#components.search = new Search(this);
+        this.#components.toolbar = new Toolbar(this);
 
         /// register this instance
         Table.#instances.push(this);
@@ -87,10 +80,16 @@ export default class Table {
         }
     }
 
+    /// Retrieve the components
+    /// @return - The components
+    get components() {
+        return this.#components;
+    }
+
     /// Generate the request url including the pagination
     /// @return - The url for the request
     #composeRequest = () => {
-        const url = [this.url];
+        const url = [this.url.read];
         let first = true;
         if (this.search.enabled)
         {
@@ -131,23 +130,20 @@ export default class Table {
     /// #param url - The new url on which request data
     /// @return - The fetched data
     #fetch = async () => {
-        if (this.mode == Table.Mode.Ajax)
+        const url = this.#composeRequest();
+        console.log(`Datatable ${this.id} request: ${url}`);
+        let result = await $.get(
+            url
+        );
+        if (Array.isArray(result))
         {
-            const url = this.#composeRequest();
-            console.log(`Datatable ${this.id} request: ${url}`);
-            let result = await $.get(
-                url
-            );
-            if (Array.isArray(result))
-            {
-                result = {
-                    data: result,
-                    recordsTotal: result.length,
-                    recordsFiltered: result.length
-                };
-            }
-            return result;
+            result = {
+                data: result,
+                recordsTotal: result.length,
+                recordsFiltered: result.length
+            };
         }
+        return result;
     }
 
     /// Register a custom renderer for a specific field
@@ -183,12 +179,6 @@ export default class Table {
         return this.#id;
     }
 
-    /// Retrieve the table mode
-    /// @return - The mode
-    get mode() {
-        return this.#mode;
-    }
-
     /// On row selection event
     /// @param row - The selected row
     /// @param model - The model of that row
@@ -207,7 +197,7 @@ export default class Table {
     /// Retrieve the pagination system
     /// @return - The pagination
     get pagination() {
-        return this.#pagination;
+        return this.components.pagination;
     }
 
     /// Return the parent widget
@@ -215,33 +205,54 @@ export default class Table {
         return this.#dom.parent;
     }
 
+    /// Parse the configuration file
+    /// @param config - The configuration file
+    #parseConfig = (config) => {
+        // url
+        if (typeof config.url === typeof "")
+        {
+            this.url = {
+                create: config.url,
+                read: config.url,
+                update: config.url,
+                delete: config.url
+            };
+        }
+        else 
+        {
+            this.url = {
+                create: config.url.create || null,
+                read: config.url.read || null,
+                update: config.url.update || null,
+                delete: config.url.delete || null
+            };
+        }
+        // columns
+        this.columns = config.columns.visible || {};
+        this.hiddenColumns = config.columns.hidden || ['id', '_id'];
+        // schema
+        this.schema = config.schema;
+        // fields
+        if (config.fields)
+        {
+            for (const field of Object.keys(config.fields))
+            {
+                this.#fields[field] = config.fields[field];
+            }
+        }
+    }
+
     /// Render the datatable 
     /// @param data - Can be an array of records or the url on which fetch data
     /// @param container_id - The id of the DOM container
-    async render(data, container_id) {
-        if (data != null)
-        {
-            if (Array.isArray(data))
-            {
-                this.#mode = Table.Mode.Data;
-                this.#data = {
-                    data,
-                    recordsTotal: data.length,
-                    recordsFiltered: data.length
-                };
-            }
-            else
-            {
-                this.#url = data;
-                this.#mode = Table.Mode.Ajax;
-                this.#data = await this.#fetch();
-            }
-        }
-
+    async render(parent_id, config) {
         // create the table at the first time
         if (this.table == null)
         {
-            this.#dom.parent = document.getElementById(container_id);
+            this.#parseConfig(config);
+            this.#data = await this.#fetch();
+
+            this.#dom.parent = document.getElementById(parent_id);
             if (this.parent == null)
             {
                 console.error(`Unable to create the table! Invalid container ${container_id}`);
@@ -268,6 +279,7 @@ export default class Table {
 
             // setup the columns if not set at the table initialization
             if ((this.#columns == null
+                || JSON.stringify(this.#columns) == JSON.stringify({})
                 || (Array.isArray(this.#columns) && this.#columns.length == 0))
                 && this.data.recordsFiltered > 0)
             {
@@ -304,7 +316,7 @@ export default class Table {
             ? Math.min(this.data.recordsFiltered, this.pagination.limit)
             : this.data.recordsFiltered;
         const offset = this.pagination.enabled
-            ? (this.mode == Table.Mode.Data ? this.pagination.offset : 0)
+            ? this.pagination.offset
             : 0;
 
         const columns = Object.keys(this.columns);
@@ -383,7 +395,7 @@ export default class Table {
     /// Retrieve the search system
     /// @return - The search
     get search() {
-        return this.#search;
+        return this.components.search;
     }
 
     /// Retrieve the selected row
@@ -401,7 +413,7 @@ export default class Table {
     /// Retrieve the toolbar component
     /// @return - The toolbar
     get toolbar() {
-        return this.#toolbar;
+        return this.components.toolbar;
     }
 
     /// update the data table
@@ -409,10 +421,8 @@ export default class Table {
     async update(refresh = true) {
         if (this.table != null)
         {
-            if (refresh && this.mode == Table.Mode.Ajax)
-            {
-                this.#data = await this.#fetch();
-            }
+            // fetch the data
+            this.#data = await this.#fetch();
 
             // reset the row selection events
             this.#selectedRow = null;
@@ -426,12 +436,6 @@ export default class Table {
         }
     }
 
-    /// Retrieve the url
-    /// #return - The url
-    get url() {
-        return this.#url;
-    }
-
     /// let to customize the table css per element
     /// basic bootstrap classes by default
     classes = {
@@ -443,15 +447,21 @@ export default class Table {
         thead: ['thead-dark']
     };
     /// The hidden columns
-    hiddenColumns = ['_id', 'id'];
+    hiddenColumns = Array();
     /// The data schema
-    schema = {
-
-    };
+    schema = {};
+    /// The url for Ajax requests
+    url = null;
 
     /// The columns of the table
     /// can contains the showed name
     #columns = Array();
+    /// The components
+    #components = {
+        pagination: null,
+        search: null,
+        toolbar: null
+    }
     /// The fetched data
     #data = null;
     /// The DOM elements
@@ -465,16 +475,6 @@ export default class Table {
     #fields = Array();
     /// The table id
     #id = null;
-    /// The mode of the table
-    #mode = null;
-    /// The pagination system
-    #pagination = null;
-    /// The search system
-    #search = null;
     /// The selected row
     #selectedRow = null;
-    /// The toolbar component
-    #toolbar = null;
-    /// The url for Ajax mode
-    #url = null;
 }

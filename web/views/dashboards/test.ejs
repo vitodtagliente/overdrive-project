@@ -28,46 +28,34 @@
         };
 
         const table = new Table();
-        table.field('_id', async (cell, model) =>
-        {
-            cell.innerHTML = "<i style='color: orange'>" + model._id + "</i>";
-        });
-        table.field('power', async (cell, model) =>
-        {
-            let style = model.power > 5 ? "bg-success" : "bg-warning";
-            cell.innerHTML = `<p class="${style} m-0 p-0">${model.power}</p>`;
-        });
         table.renderColumn = async (cell, name) =>
         {
             cell.innerHTML = "<b>" + name + "</b>";
         };
-
-        /*
-        table.columns = {
-            _id: 'id',
-            name: 'name'
-        };
-        table.render('/api/items', 'table-container');
-        */
-
-        /*
-        table.inspector.schema = {
-            name: {
-                Type: String,
-                required: true
+        table.render('table-container', {
+            columns: {
+                visible: {},
+                hidden: ['id', '_id']
             },
-            isConsumable: {
-                type: Boolean                
+            schema: {
+                name: {
+                    Type: String,
+                    required: true
+                },
+                type: {
+                    Type: String,
+                    required: true
+                }
             },
-            power: {
-                type: Number
-            },
-            type: {
-                required: true
+            url: '/api/items',
+            fields: {
+                power: async (cell, model) =>
+                {
+                    let style = model.power > 5 ? "bg-success" : "bg-warning";
+                    cell.innerHTML = `<p class="${style} m-0 p-0">${model.power}</p>`;
+                }
             }
-        };
-        */
-        table.render('/api/items', 'table-container');
+        });
 
     });
 </script>
