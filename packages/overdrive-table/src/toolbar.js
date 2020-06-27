@@ -29,7 +29,7 @@ class ToolbarButton {
                         $.ajax({
                             type: 'POST',
                             url: url,
-                            data: data,
+                            data: data
                         }).done(function () {
                             dialog.close();
                             table.update();
@@ -46,7 +46,34 @@ class ToolbarButton {
                 'pen',
                 'btn-light',
                 (table) => {
+                    const dialog = table.dialog;
+                    dialog.clear();
+                    dialog.title.innerHTML = "Edit";
+                    const inspector = new Inspector(table);
+                    const model = table.selectedModel;
+                    inspector.render(dialog.body, table.schema, table.url.create, model);
+                    dialog.addButton('Save', 'btn-warning', (e) => {
+                        e.preventDefault();
 
+                        const data = inspector.serialize();
+                        console.log(data);
+
+                        const url = `${table.url.update}/${model.id || model._id}`;
+                        console.log("Sending update request to " + url);
+
+                        $.ajax({
+                            type: 'PATCH',
+                            url: url,
+                            data: data
+                        }).done(function () {
+                            dialog.close();
+                            table.update();
+                        }).fail(function (error) {
+                            console.log(error);
+                        });
+                    });
+                    dialog.addCancelButton();
+                    dialog.show();
                 },
                 ToolbarButton.RenderMode.OnRowSelection
             ),
@@ -65,7 +92,28 @@ class ToolbarButton {
                 'trash',
                 'btn-danger',
                 (table) => {
+                    const dialog = table.dialog;
+                    dialog.clear();
+                    dialog.title.innerHTML = "Delete record";
+                    const model = table.selectedModel;
+                    dialog.addButton('Delete', 'btn-danger', (e) => {
+                        e.preventDefault();
 
+                        const url = `${table.url.delete}/${model.id || model._id}`;
+                        console.log("Sending delete request to " + url);
+
+                        $.ajax({
+                            type: 'DELETE',
+                            url: url
+                        }).done(function () {
+                            dialog.close();
+                            table.update();
+                        }).fail(function (error) {
+                            console.log(error);
+                        });
+                    });
+                    dialog.addCancelButton();
+                    dialog.show();
                 },
                 ToolbarButton.RenderMode.OnRowSelection
             ),
