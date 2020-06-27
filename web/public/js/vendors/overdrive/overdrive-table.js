@@ -163,6 +163,8 @@ class Dialog extends Component {
         {
             this.title.innerHTML = "";
             this.body.innerHTML = "";
+            this.DOM.footer.innerHTML = "";
+            this.hideFooter();
         }
     }
 
@@ -181,6 +183,48 @@ class Dialog extends Component {
         $(`#${this.id}`).modal('hide');
     }
 
+    hideFooter() {
+        if (this.footer)
+        {
+            this.footer.style.display = "none";
+        }
+    }
+
+    showFooter() {
+        if (this.footer)
+        {
+            this.footer.style.display = "display";
+        }
+    }
+
+    addButton(name, style, callback, closeModal = true) {
+        if (this.DOM.footer)
+        {
+            Utils.createChild(this.DOM.footer, 'button', (button) => {
+                if (!Array.isArray(style))
+                {
+                    style = [style];
+                }
+                Utils.addClasses(button, this.classes.button);
+                Utils.addClasses(button, style);
+                if (closeModal)
+                {
+                    Utils.setAttributes(button, {
+                        'data-dismiss': 'modal'
+                    });
+                }
+                Utils.setAttributes(button, { type: 'button' });
+                button.innerHTML = name;
+                button.onclick = callback;
+            });
+            this.showFooter();
+        }
+    }
+
+    addCancelButton(name = 'Cancel', style = 'btn-secondary') {
+        this.addButton(name, style);
+    }
+
     /// DOM elements
     #DOM = {
         parent: null,
@@ -191,8 +235,7 @@ class Dialog extends Component {
     }
     /// style classes
     classes = {
-        div: Array(),
-        input: ["form-control"]
+        button: ['btn', 'btn-sm', 'rounded-0']
     };
 }
 
@@ -517,6 +560,252 @@ class Search extends Component {
     };
 }
 
+class Inspector extends Component {
+    #id = null;
+    #parent = null;
+    #widget = null;
+    constructor(table) {
+        super(table);
+        this.#id = `inspector-${new Date().valueOf()}`;
+    }
+
+    #appendButton = (form, text, classes, callback) => {
+        Utils.createChild(form, 'button', (button) => {
+            Utils.setAttributes(button, {
+                type: 'button'
+            });
+            Utils.addClasses(button, ['btn', 'btn-sm', 'rounded-0']);
+            Utils.addClasses(button, classes);
+            button.innerHTML = text;
+            button.onclick = callback;
+        });
+    }
+
+    #appendField = (form, definition, value) => {
+        Utils.createChild(form, 'div', (div) => {
+            Utils.addClasses(div, ['form-group', 'row']);
+            Utils.createChild(div, 'label', (label) => {
+                Utils.addClasses(label, ['col-sm-2', 'col-form-label', 'pt-0', 'pb-0']);
+                Utils.setAttributes(label, {
+                    for: definition.display
+                });
+                label.innerHTML = `<b>${definition.name}</b>`;
+            });
+            Utils.createChild(div, 'div', (inputDiv) => {
+                Utils.addClasses(inputDiv, ['col-sm-10']);
+                Utils.createChild(inputDiv, 'input', (input) => {
+                    Utils.setAttributes(input, {
+                        id: definition.name,
+                        name: definition.name,
+                        placeholder: definition.placeholder
+                    });
+
+                    if (definition.required)
+                    {
+                        Utils.setAttributes(input, { required: 'required' });
+                    }
+
+                    if (definition.readonly)
+                    {
+                        Utils.setAttributes(input, { readonly: true });
+                    }
+
+                    if (definition.default)
+                    {
+                        Utils.setAttributes(input, { default: definition.default });
+                    }
+
+                    if (definition.type == Boolean)
+                    {
+                        Utils.addClasses(input, ['form-check-input', 'ml-0']);
+                        Utils.setAttributes(input, { type: 'checkbox' });
+                        input.checked = value;
+                        input.value = true;
+                    }
+                    else if (definition.type == Number)
+                    {
+                        Utils.addClasses(input, ['form-control', 'form-control-sm']);
+                        Utils.setAttributes(input, { type: 'number' });
+                        input.value = value;
+                    }
+                    else 
+                    {
+                        Utils.addClasses(input, ['form-control', 'form-control-sm']);
+                        Utils.setAttributes(input, { type: 'text' });
+                        input.value = value;
+                    }
+                });
+            });
+        });
+    }
+
+    #createForm = (parent, schema, url, model) => {
+        const self = this;
+        return Utils.createChild(parent, 'form', (form) => {
+            Utils.setAttributes(form, {
+                id: self.id
+            });
+            Utils.addClasses(form, ['container', 'p-2']);
+
+            schema = schema || {};
+            if (model != null)
+            {
+                for (const field of Object.keys(model))
+                {
+                    if (schema[field] != null)
+                    {
+                        continue;
+                    }
+
+                    let definition = {
+                        name: field,
+                        display: field,
+                        required: false,
+                        readonly: field == "_id" ? true : false,
+                        default: null,
+                        type: String,
+                        placeholder: ''
+                    };
+
+                    const value = model[field];
+                    if (value != null)
+                    {
+                        if (typeof value === typeof true)
+                        {
+                            definition.type = Boolean;
+                        }
+                        else if (!isNaN(value))
+                        {
+                            definition.type = Number;
+                        }
+                    }
+
+                    schema[field] = definition;
+                }
+            }
+            else 
+            {
+                for (const field of Object.keys(schema))
+                {
+                    let definition = schema[field];
+                    definition = {
+                        name: definition.name || field,
+                        display: definition.display || field,
+                        required: definition.required || false,
+                        readonly: definition.readonly || field == "_id" ? true : false,
+                        default: definition.default || null,
+                        type: definition.type || String,
+                        placeholder: definition.placeholder || ''
+                    };
+                    schema[field] = definition;
+                }
+            }
+
+            for (const field of Object.keys(schema))
+            {
+                if (field == "_id")
+                {
+                    continue;
+                }
+
+                let value = null;
+                if (model != null)
+                {
+                    value = model[field] || null;
+                }
+                this.#appendField(form, schema[field], value);
+            }
+
+            const isEdit = model != null;
+            this.#appendButton(form, 'Save', [isEdit ? 'btn-warning' : 'btn-success'], function (e) {
+                e.preventDefault();
+
+                let data = $(`#${self.id}`).serialize();
+
+                // include unchecked checkboxes. use filter to only include unchecked boxes.
+                $.each($(`#${self.id} form input[type=checkbox]`)
+                    .filter(function (idx) {
+                        return $(this).prop('checked') === false
+                    }),
+                    function (idx, el) {
+                        // attach matched element names to the formData with a chosen value.
+                        data += '&' + $(el).attr('name') + '=false';
+                    }
+                );
+
+                console.log("sending data to " + url);
+
+                $.ajax({
+                    type: isEdit ? 'PATCH' : 'POST',
+                    url: url,
+                    data: data,
+                }).done(function () {
+                    self.close();
+                    self.table.update();
+                }).fail(function (error) {
+                    console.log(error);
+                });
+            });
+
+            this.#appendButton(form, 'Close', ['btn-dark'], function (e) {
+                // close function
+                self.close();
+            });
+        });
+    }
+
+    close() {
+        if (this.isOpen)
+        {
+            this.widget.remove();
+            this.#widget = null;
+            this.#parent = null;
+            this.onclose();
+        }
+    }
+
+    onclose = () => {
+
+    }
+
+    get id() {
+        return this.#id;
+    }
+
+    /// Check if the inspector is open
+    /// @return - True if open
+    get isOpen() {
+        return this.widget != null;
+    }
+
+    /// Render the inspector
+    /// @param parent - The parent element
+    /// @param schema - The schema
+    /// @param url - The url
+    /// @param model - The model
+    render(parent, schema, url, model) {
+        if (this.isOpen)
+        {
+            this.close();
+        }
+
+        this.#parent = parent;
+        this.#createForm(parent, schema, url, model);
+    }
+
+    /// Retrieve the parent DOM
+    /// @return - The parent
+    get parent() {
+        return this.#parent;
+    }
+
+    /// Retrieve the DOM widget
+    /// @return - The widget
+    get widget() {
+        return this.#widget;
+    }
+}
+
 class ToolbarButton {
     /// Prefab buttons
     static get Prefabs() {
@@ -525,15 +814,21 @@ class ToolbarButton {
                 'New',
                 'plus',
                 'btn-success',
-                () => {
-
+                (table) => {
+                    const dialog = table.dialog;
+                    dialog.clear();
+                    dialog.title.innerHTML = "Add new";
+                    const inspector = new Inspector(table);
+                    inspector.render(dialog.body, table.schema, table.url.create);
+                    dialog.addCancelButton();
+                    dialog.show();
                 }
             ),
             Edit: new ToolbarButton(
                 'Edit',
                 'pen',
                 'btn-light',
-                () => {
+                (table) => {
 
                 },
                 ToolbarButton.RenderMode.OnRowSelection
@@ -552,7 +847,7 @@ class ToolbarButton {
                 'Delete',
                 'trash',
                 'btn-danger',
-                () => {
+                (table) => {
 
                 },
                 ToolbarButton.RenderMode.OnRowSelection

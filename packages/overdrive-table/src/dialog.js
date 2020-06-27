@@ -97,6 +97,8 @@ export default class Dialog extends Component {
         {
             this.title.innerHTML = "";
             this.body.innerHTML = "";
+            this.DOM.footer.innerHTML = "";
+            this.hideFooter();
         }
     }
 
@@ -115,6 +117,48 @@ export default class Dialog extends Component {
         $(`#${this.id}`).modal('hide');
     }
 
+    hideFooter() {
+        if (this.footer)
+        {
+            this.footer.style.display = "none";
+        }
+    }
+
+    showFooter() {
+        if (this.footer)
+        {
+            this.footer.style.display = "display";
+        }
+    }
+
+    addButton(name, style, callback, closeModal = true) {
+        if (this.DOM.footer)
+        {
+            Utils.createChild(this.DOM.footer, 'button', (button) => {
+                if (!Array.isArray(style))
+                {
+                    style = [style];
+                }
+                Utils.addClasses(button, this.classes.button);
+                Utils.addClasses(button, style);
+                if (closeModal)
+                {
+                    Utils.setAttributes(button, {
+                        'data-dismiss': 'modal'
+                    });
+                }
+                Utils.setAttributes(button, { type: 'button' });
+                button.innerHTML = name;
+                button.onclick = callback;
+            });
+            this.showFooter();
+        }
+    }
+
+    addCancelButton(name = 'Cancel', style = 'btn-secondary') {
+        this.addButton(name, style);
+    }
+
     /// DOM elements
     #DOM = {
         parent: null,
@@ -125,7 +169,6 @@ export default class Dialog extends Component {
     }
     /// style classes
     classes = {
-        div: Array(),
-        input: ["form-control"]
+        button: ['btn', 'btn-sm', 'rounded-0']
     };
 }

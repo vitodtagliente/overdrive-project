@@ -1,4 +1,6 @@
 import Component from './component';
+import Dialog from './dialog';
+import Inspector from './inspector';
 import Utils from './utils';
 
 class ToolbarButton {
@@ -9,15 +11,21 @@ class ToolbarButton {
                 'New',
                 'plus',
                 'btn-success',
-                () => {
-
+                (table) => {
+                    const dialog = table.dialog;
+                    dialog.clear();
+                    dialog.title.innerHTML = "Add new";
+                    const inspector = new Inspector(table);
+                    inspector.render(dialog.body, table.schema, table.url.create);
+                    dialog.addCancelButton();
+                    dialog.show();
                 }
             ),
             Edit: new ToolbarButton(
                 'Edit',
                 'pen',
                 'btn-light',
-                () => {
+                (table) => {
 
                 },
                 ToolbarButton.RenderMode.OnRowSelection
@@ -36,7 +44,7 @@ class ToolbarButton {
                 'Delete',
                 'trash',
                 'btn-danger',
-                () => {
+                (table) => {
 
                 },
                 ToolbarButton.RenderMode.OnRowSelection
