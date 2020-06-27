@@ -315,9 +315,7 @@ export default class Table {
         const count = this.pagination.enabled
             ? Math.min(this.data.recordsFiltered, this.pagination.limit)
             : this.data.recordsFiltered;
-        const offset = this.pagination.enabled
-            ? this.pagination.offset
-            : 0;
+        const offset = 0;
 
         const columns = Object.keys(this.columns);
         for (let i = offset; i < (offset + count); ++i)
