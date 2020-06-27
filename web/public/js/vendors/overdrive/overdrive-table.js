@@ -1,26 +1,3 @@
-class Event {
-    #listeners = Array();
-
-    constructor() {
-
-    }
-
-    broadcast() {
-        for (const listener of this.#listeners)
-        {
-            listener(...arguments);
-        }
-    }
-
-    bind(listener) {
-        this.#listeners.push(listener);
-    }
-
-    unbind(listener) {
-        this.#listeners.splice(listener, 1);
-    }
-}
-
 class Component {
     enabled = true;
     #table = null;
@@ -87,6 +64,158 @@ class Utils {
             callback(element);
         }
         return element;
+    }
+}
+
+class Dialog extends Component {
+    /// The component id
+    #id = null;
+    /// constructor
+    /// @param table - The table on which refers to
+    constructor(table) {
+        super(table);
+        this.#id = `dialog-component-${table.id}`;
+    }
+
+    /// Create the element
+    /// @param parent - The parent DOM element
+    create = () => {
+        this.#DOM.widget = Utils.createChild(this.table.parent, 'div', (modal) => {
+            Utils.addClasses(modal, ['modal', 'fade']);
+            Utils.setAttributes(modal, {
+                id: this.id,
+                'data-backdrop': 'static',
+                'data-keyboard': false,
+                tabIndex: -1,
+                role: 'dialog',
+                'aria-labelledby': "staticBackdropLabel",
+                'aria-hidden': true
+            });
+        });
+        Utils.createChild(this.widget, 'div', (dialog) => {
+            Utils.addClasses(dialog, ['modal-dialog']);
+            Utils.createChild(dialog, 'div', (content) => {
+                Utils.addClasses(content, ['modal-content']);
+                Utils.createChild(content, 'div', (header) => {
+                    Utils.addClasses(header, ['modal-header']);
+                    this.#DOM.title = Utils.createChild(header, 'div', (title) => { Utils.addClasses(title, ['modal-title']); });
+                    Utils.createChild(header, 'button', (button) => {
+                        Utils.addClasses(button, ['close']);
+                        Utils.setAttributes(button, {
+                            'data-dismiss': 'modal',
+                            'aria-label': 'Close'
+                        });
+                        button.innerHTML = '<span aria-hidden="true">&times;</span>';
+                    });
+                });
+                this.#DOM.body = Utils.createChild(content, 'div', (body) => { Utils.addClasses(body, ['modal-body']); });
+                this.#DOM.footer = Utils.createChild(content, 'div', (footer) => { Utils.addClasses(footer, ['modal-footer']); });
+            });
+        });
+    }
+
+    /// Retrieve the DOM elements
+    /// @return - The DOM elements
+    get DOM() {
+        return this.#DOM;
+    }
+
+    /// Retrieve the component id
+    /// @return - The id
+    get id() {
+        return this.#id;
+    }
+
+    /// Retrieve the parent DOM element
+    /// @return - The parent DOM 
+    get parent() {
+        return this.table.parent;
+    }
+
+    /// Render/create the component
+    render() {
+        if (this.table == null || this.table.parent == null)
+        {
+            console.error("Cannot initialize the Search component, invalid table object");
+            return;
+        }
+
+        if (this.widget == null)
+        {
+            this.create();
+        }
+    }
+
+    get body() {
+        return this.DOM.body;
+    }
+
+    get title() {
+        return this.DOM.title;
+    }
+
+    get widget() {
+        return this.DOM.widget;
+    }
+
+    clear() {
+        if (this.widget)
+        {
+            this.title.innerHTML = "";
+            this.body.innerHTML = "";
+        }
+    }
+
+    bind(element) {
+        Utils.setAttributes(element, {
+            'data-toggle': 'modal',
+            'data-target': `#${this.id}`
+        });
+    }
+
+    show() {
+        $(`#${this.id}`).modal('show');
+    }
+
+    close() {
+        $(`#${this.id}`).modal('hide');
+    }
+
+    /// DOM elements
+    #DOM = {
+        parent: null,
+        widget: null,
+        title: null,
+        body: null,
+        footer: null
+    }
+    /// style classes
+    classes = {
+        div: Array(),
+        input: ["form-control"]
+    };
+}
+
+class Event {
+    #listeners = Array();
+
+    constructor() {
+
+    }
+
+    broadcast() {
+        for (const listener of this.#listeners)
+        {
+            listener(...arguments);
+        }
+    }
+
+    bind(listener) {
+        this.#listeners.push(listener);
+    }
+
+    unbind(listener) {
+        this.#listeners.splice(listener, 1);
     }
 }
 
@@ -600,6 +729,7 @@ class Table {
         this.#id = id || new Date().valueOf();
 
         // initialize the components
+        this.#components.dialog = new Dialog(this);
         this.#components.pagination = new Pagination(this);
         this.#components.search = new Search(this);
         this.#components.toolbar = new Toolbar(this);
@@ -683,6 +813,12 @@ class Table {
     /// @return - The table
     get data() {
         return this.#data;
+    }
+
+    /// Retrieve the dialog component
+    /// @return - The component
+    get dialog() {
+        return this.components.dialog;
     }
 
     /// Retrieve the DOM object
@@ -842,6 +978,9 @@ class Table {
                 this.search.render();
             }
 
+            /// render the dialog component
+            this.dialog.render();
+
             // create the table
             this.#dom.table = Utils.createChild(this.parent, 'table', (table) => {
                 Utils.addClasses(table, this.classes.table);
@@ -923,7 +1062,7 @@ class Table {
     /// @param cell - The head row cell
     /// @param name - The name of the column
     renderColumn = async (cell, name) => {
-        cell.innerHTML = name;
+        cell.innerHTML = `<b>${name}</b>`;
     }
 
     /// Render the head of the table
@@ -1035,6 +1174,7 @@ class Table {
     #columns = Array();
     /// The components
     #components = {
+        dialog: null,
         pagination: null,
         search: null,
         toolbar: null

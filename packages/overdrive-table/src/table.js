@@ -1,3 +1,4 @@
+import Dialog from './dialog';
 import Event from './event';
 import Pagination from './pagination';
 import Search from './search';
@@ -35,6 +36,7 @@ export default class Table {
         this.#id = id || new Date().valueOf();
 
         // initialize the components
+        this.#components.dialog = new Dialog(this);
         this.#components.pagination = new Pagination(this);
         this.#components.search = new Search(this);
         this.#components.toolbar = new Toolbar(this);
@@ -118,6 +120,12 @@ export default class Table {
     /// @return - The table
     get data() {
         return this.#data;
+    }
+
+    /// Retrieve the dialog component
+    /// @return - The component
+    get dialog() {
+        return this.components.dialog;
     }
 
     /// Retrieve the DOM object
@@ -277,6 +285,9 @@ export default class Table {
                 this.search.render();
             }
 
+            /// render the dialog component
+            this.dialog.render();
+
             // create the table
             this.#dom.table = Utils.createChild(this.parent, 'table', (table) => {
                 Utils.addClasses(table, this.classes.table);
@@ -358,7 +369,7 @@ export default class Table {
     /// @param cell - The head row cell
     /// @param name - The name of the column
     renderColumn = async (cell, name) => {
-        cell.innerHTML = name;
+        cell.innerHTML = `<b>${name}</b>`;
     }
 
     /// Render the head of the table
@@ -470,6 +481,7 @@ export default class Table {
     #columns = Array();
     /// The components
     #components = {
+        dialog: null,
         pagination: null,
         search: null,
         toolbar: null

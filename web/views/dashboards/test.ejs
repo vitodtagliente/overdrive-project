@@ -19,10 +19,6 @@
     window.addEventListener('load', () =>
     {
         const table = new Table();
-        table.renderColumn = async (cell, name) =>
-        {
-            cell.innerHTML = "<b>" + name + "</b>";
-        };
         table.render('table-container', {
             columns: {
                 visible: {},

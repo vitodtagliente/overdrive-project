@@ -5,9 +5,9 @@ export default class Inspector extends Component {
     #id = null;
     #parent = null;
     #widget = null;
-    constructor(table, id) {
+    constructor(table) {
         super(table)
-        this.#id = id || new Date().valueOf();
+        this.#id = `inspector-${new Date().valueOf()}`;
     }
 
     #appendButton = (form, text, classes, callback) => {
@@ -213,10 +213,17 @@ export default class Inspector extends Component {
         return this.#id;
     }
 
+    /// Check if the inspector is open
+    /// @return - True if open
     get isOpen() {
         return this.widget != null;
     }
 
+    /// Render the inspector
+    /// @param parent - The parent element
+    /// @param schema - The schema
+    /// @param url - The url
+    /// @param model - The model
     render(parent, schema, url, model) {
         if (this.isOpen)
         {
@@ -224,36 +231,17 @@ export default class Inspector extends Component {
         }
 
         this.#parent = parent;
-        const isEdit = model != null;
-
-        if (isEdit)
-        {
-            this.#widget = document.createElement('tr');
-            parent.parentNode.insertBefore(this.widget, parent.nextSibling);
-
-            Utils.addClasses(this.widget, ['table-light']);
-            Utils.createChild(this.widget, 'td', (td) => {
-                Utils.setAttributes(td, {
-                    colspan: '100%'
-                });
-
-                this.#createForm(td, schema, url, model);
-            });
-        }
-        else 
-        {
-            Utils.addClasses(parent, ['p-2']);
-            this.#widget = Utils.createChild(parent, 'div', (div) => {
-                Utils.addClasses(div, ['bg-light']);
-            });
-            this.#createForm(this.widget, schema, url);
-        }
+        this.#createForm(parent, schema, url, model);
     }
 
+    /// Retrieve the parent DOM
+    /// @return - The parent
     get parent() {
         return this.#parent;
     }
 
+    /// Retrieve the DOM widget
+    /// @return - The widget
     get widget() {
         return this.#widget;
     }
