@@ -10,18 +10,6 @@ export default class Inspector extends Component {
         this.#id = `inspector-${new Date().valueOf()}`;
     }
 
-    #appendButton = (form, text, classes, callback) => {
-        Utils.createChild(form, 'button', (button) => {
-            Utils.setAttributes(button, {
-                type: 'button'
-            });
-            Utils.addClasses(button, ['btn', 'btn-sm', 'rounded-0']);
-            Utils.addClasses(button, classes);
-            button.innerHTML = text;
-            button.onclick = callback;
-        });
-    }
-
     #appendField = (form, definition, value) => {
         Utils.createChild(form, 'div', (div) => {
             Utils.addClasses(div, ['form-group', 'row']);
@@ -156,42 +144,6 @@ export default class Inspector extends Component {
                 }
                 this.#appendField(form, schema[field], value);
             }
-
-            const isEdit = model != null;
-            this.#appendButton(form, 'Save', [isEdit ? 'btn-warning' : 'btn-success'], function (e) {
-                e.preventDefault();
-
-                let data = $(`#${self.id}`).serialize();
-
-                // include unchecked checkboxes. use filter to only include unchecked boxes.
-                $.each($(`#${self.id} form input[type=checkbox]`)
-                    .filter(function (idx) {
-                        return $(this).prop('checked') === false
-                    }),
-                    function (idx, el) {
-                        // attach matched element names to the formData with a chosen value.
-                        data += '&' + $(el).attr('name') + '=false';
-                    }
-                );
-
-                console.log("sending data to " + url);
-
-                $.ajax({
-                    type: isEdit ? 'PATCH' : 'POST',
-                    url: url,
-                    data: data,
-                }).done(function () {
-                    self.close();
-                    self.table.update();
-                }).fail(function (error) {
-                    console.log(error);
-                });
-            });
-
-            this.#appendButton(form, 'Close', ['btn-dark'], function (e) {
-                // close function
-                self.close();
-            });
         });
     }
 
@@ -217,6 +169,23 @@ export default class Inspector extends Component {
     /// @return - True if open
     get isOpen() {
         return this.widget != null;
+    }
+
+    serialize() {
+        let data = $(`#${self.id}`).serialize();
+
+        // include unchecked checkboxes. use filter to only include unchecked boxes.
+        $.each($(`#${self.id} form input[type=checkbox]`)
+            .filter(function (idx) {
+                return $(this).prop('checked') === false
+            }),
+            function (idx, el) {
+                // attach matched element names to the formData with a chosen value.
+                data += '&' + $(el).attr('name') + '=false';
+            }
+        );
+
+        return data;
     }
 
     /// Render the inspector

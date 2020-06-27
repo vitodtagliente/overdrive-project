@@ -17,6 +17,26 @@ class ToolbarButton {
                     dialog.title.innerHTML = "Add new";
                     const inspector = new Inspector(table);
                     inspector.render(dialog.body, table.schema, table.url.create);
+                    dialog.addButton('Save', 'btn-success', (e) => {
+                        e.preventDefault();
+
+                        const data = inspector.serialize();
+                        console.log(data);
+
+                        const url = table.url.create;
+                        console.log("Sending create request to " + url);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            data: data,
+                        }).done(function () {
+                            dialog.close();
+                            self.table.update();
+                        }).fail(function (error) {
+                            console.log(error);
+                        });
+                    });
                     dialog.addCancelButton();
                     dialog.show();
                 }
