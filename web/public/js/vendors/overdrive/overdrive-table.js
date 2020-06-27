@@ -731,10 +731,10 @@ class Inspector extends Component {
     }
 
     serialize() {
-        let data = $(`#${self.id}`).serialize();
+        let data = $(`#${this.id}`).serialize();
 
         // include unchecked checkboxes. use filter to only include unchecked boxes.
-        $.each($(`#${self.id} form input[type=checkbox]`)
+        $.each($(`#${this.id} form input[type=checkbox]`)
             .filter(function (idx) {
                 return $(this).prop('checked') === false
             }),
@@ -804,7 +804,7 @@ class ToolbarButton {
                             data: data,
                         }).done(function () {
                             dialog.close();
-                            self.table.update();
+                            table.update();
                         }).fail(function (error) {
                             console.log(error);
                         });

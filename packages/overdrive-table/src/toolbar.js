@@ -32,7 +32,7 @@ class ToolbarButton {
                             data: data,
                         }).done(function () {
                             dialog.close();
-                            self.table.update();
+                            table.update();
                         }).fail(function (error) {
                             console.log(error);
                         });
