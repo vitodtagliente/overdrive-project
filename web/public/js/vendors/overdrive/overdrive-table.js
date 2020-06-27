@@ -409,6 +409,16 @@ class ToolbarButton {
                 },
                 ToolbarButton.RenderMode.OnRowSelection
             ),
+            EditWithRedirect: new ToolbarButton(
+                'Edit',
+                'pen',
+                'btn-light',
+                (table) => {
+                    const id = table.selectedModel._id || table.selectedModel.id;
+                    window.location.href = `${table.url.read}/${id}`;
+                },
+                ToolbarButton.RenderMode.OnRowSelection
+            ),
             Remove: new ToolbarButton(
                 'Delete',
                 'trash',
@@ -450,7 +460,7 @@ class ToolbarButton {
         this.#mode = mode || ToolbarButton.RenderMode.Always;
     }
 
-    show(parent, visible, classes) {
+    show(parent, visible, classes, table) {
         if (visible && this.widget == null)
         {
             this.#widget = Utils.createChild(parent, 'button', (button) => {
@@ -459,7 +469,9 @@ class ToolbarButton {
                 });
                 Utils.addClasses(button, this.style.concat(classes));
                 button.innerHTML = `<i class="fa fa-${this.icon}"></i> ${this.name}`;
-                button.onclick = this.behaviour;
+                button.onclick = () => {
+                    this.#behaviour(table);
+                };
             });
         }
         else if (!visible && this.widget != null)
@@ -489,7 +501,7 @@ class ToolbarButton {
 class Toolbar extends Component {
     static Button = ToolbarButton;
     /// The buttons
-    #buttons = Array();
+    buttons = Array();
     /// The widget DOM
     #widget = null;
     /// constructor
@@ -507,7 +519,7 @@ class Toolbar extends Component {
 
     /// Remove all the buttons
     clear() {
-        this.#buttons = Array();
+        this.buttons = Array();
         this.update(false);
     }
 
@@ -541,13 +553,9 @@ class Toolbar extends Component {
             if (button != null)
             {
                 const visible = button.mode == ToolbarButton.RenderMode.Always || this.table.selectedRow != null;
-                button.show(this.widget, visible, this.classes.button);
+                button.show(this.widget, visible, this.classes.button, this.table);
             }
         }
-    }
-
-    get buttons() {
-        return this.#buttons;
     }
 
     get widget() {
@@ -797,6 +805,12 @@ class Table {
                 this.#fields[field] = config.fields[field];
             }
         }
+        // toolbar
+        if (config.toolbar)
+        {
+            this.toolbar.enabled = config.toolbar.enabled || true;
+            this.toolbar.buttons = config.toolbar.buttons || this.toolbar.buttons;
+        }
     }
 
     /// Render the datatable 
@@ -890,11 +904,13 @@ class Table {
                         if (this.selectedRow == row)
                         {
                             this.#selectedRow = null;
+                            this.#selectedModel = null;
                             this.onRowSelection.broadcast(row, model, false);
                             return;
                         }
                     }
                     this.#selectedRow = row;
+                    this.#selectedModel = model;
                     Utils.addClasses(row, this.classes.selectedRow);
                     this.onRowSelection.broadcast(row, model, true);
                 };
@@ -951,6 +967,12 @@ class Table {
     /// @return - The search
     get search() {
         return this.components.search;
+    }
+
+    /// Retrieve the selected model
+    /// @return - The model
+    get selectedModel() {
+        return this.#selectedModel;
     }
 
     /// Retrieve the selected row
@@ -1030,6 +1052,8 @@ class Table {
     #fields = Array();
     /// The table id
     #id = null;
+    /// The selected model
+    #selectedModel = null;
     /// The selected row
     #selectedRow = null;
 }

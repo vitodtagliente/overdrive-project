@@ -22,6 +22,16 @@ class ToolbarButton {
                 },
                 ToolbarButton.RenderMode.OnRowSelection
             ),
+            EditWithRedirect: new ToolbarButton(
+                'Edit',
+                'pen',
+                'btn-light',
+                (table) => {
+                    const id = table.selectedModel._id || table.selectedModel.id;
+                    window.location.href = `${table.url.read}/${id}`;
+                },
+                ToolbarButton.RenderMode.OnRowSelection
+            ),
             Remove: new ToolbarButton(
                 'Delete',
                 'trash',
@@ -63,7 +73,7 @@ class ToolbarButton {
         this.#mode = mode || ToolbarButton.RenderMode.Always;
     }
 
-    show(parent, visible, classes) {
+    show(parent, visible, classes, table) {
         if (visible && this.widget == null)
         {
             this.#widget = Utils.createChild(parent, 'button', (button) => {
@@ -72,7 +82,9 @@ class ToolbarButton {
                 });
                 Utils.addClasses(button, this.style.concat(classes));
                 button.innerHTML = `<i class="fa fa-${this.icon}"></i> ${this.name}`;
-                button.onclick = this.behaviour;
+                button.onclick = () => {
+                    this.#behaviour(table);
+                }
             });
         }
         else if (!visible && this.widget != null)
@@ -102,7 +114,7 @@ class ToolbarButton {
 export default class Toolbar extends Component {
     static Button = ToolbarButton;
     /// The buttons
-    #buttons = Array();
+    buttons = Array();
     /// The widget DOM
     #widget = null;
     /// constructor
@@ -120,7 +132,7 @@ export default class Toolbar extends Component {
 
     /// Remove all the buttons
     clear() {
-        this.#buttons = Array();
+        this.buttons = Array();
         this.update(false);
     }
 
@@ -154,13 +166,9 @@ export default class Toolbar extends Component {
             if (button != null)
             {
                 const visible = button.mode == ToolbarButton.RenderMode.Always || this.table.selectedRow != null;
-                button.show(this.widget, visible, this.classes.button);
+                button.show(this.widget, visible, this.classes.button, this.table);
             }
         }
-    }
-
-    get buttons() {
-        return this.#buttons;
     }
 
     get widget() {

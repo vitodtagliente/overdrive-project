@@ -240,6 +240,12 @@ export default class Table {
                 this.#fields[field] = config.fields[field];
             }
         }
+        // toolbar
+        if (config.toolbar)
+        {
+            this.toolbar.enabled = config.toolbar.enabled || true;
+            this.toolbar.buttons = config.toolbar.buttons || this.toolbar.buttons;
+        }
     }
 
     /// Render the datatable 
@@ -333,11 +339,13 @@ export default class Table {
                         if (this.selectedRow == row)
                         {
                             this.#selectedRow = null;
+                            this.#selectedModel = null;
                             this.onRowSelection.broadcast(row, model, false);
                             return;
                         }
                     }
                     this.#selectedRow = row;
+                    this.#selectedModel = model;
                     Utils.addClasses(row, this.classes.selectedRow);
                     this.onRowSelection.broadcast(row, model, true);
                 };
@@ -394,6 +402,12 @@ export default class Table {
     /// @return - The search
     get search() {
         return this.components.search;
+    }
+
+    /// Retrieve the selected model
+    /// @return - The model
+    get selectedModel() {
+        return this.#selectedModel;
     }
 
     /// Retrieve the selected row
@@ -473,6 +487,8 @@ export default class Table {
     #fields = Array();
     /// The table id
     #id = null;
+    /// The selected model
+    #selectedModel = null;
     /// The selected row
     #selectedRow = null;
 }
