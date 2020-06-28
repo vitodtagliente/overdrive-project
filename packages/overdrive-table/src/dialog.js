@@ -32,7 +32,7 @@ export default class Dialog extends Component {
                 Utils.addClasses(content, ['modal-content']);
                 Utils.createChild(content, 'div', (header) => {
                     Utils.addClasses(header, ['modal-header']);
-                    this.#DOM.title = Utils.createChild(header, 'div', (title) => { Utils.addClasses(title, ['modal-title']); });
+                    this.#DOM.title = Utils.createChild(header, 'h5', (title) => { Utils.addClasses(title, ['modal-title']); });
                     Utils.createChild(header, 'button', (button) => {
                         Utils.addClasses(button, ['close']);
                         Utils.setAttributes(button, {

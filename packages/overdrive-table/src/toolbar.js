@@ -14,12 +14,10 @@ class ToolbarButton {
                 (table) => {
                     const dialog = table.dialog;
                     dialog.clear();
-                    dialog.title.innerHTML = "Add new";
+                    dialog.title.innerHTML = '<i class="fa fa-plus"></i> New';
                     const inspector = new Inspector(table);
-                    inspector.render(dialog.body, table.schema, table.url.create);
+                    inspector.render(dialog.body);
                     dialog.addButton('Save', 'btn-success', (e) => {
-                        e.preventDefault();
-
                         const data = inspector.serialize();
                         console.log(data);
 
@@ -36,7 +34,7 @@ class ToolbarButton {
                         }).fail(function (error) {
                             console.log(error);
                         });
-                    });
+                    }, false);
                     dialog.addCancelButton();
                     dialog.show();
                 }
@@ -48,13 +46,11 @@ class ToolbarButton {
                 (table) => {
                     const dialog = table.dialog;
                     dialog.clear();
-                    dialog.title.innerHTML = "Edit";
+                    dialog.title.innerHTML = '<i class="fa fa-pen"></i> Edit';
                     const inspector = new Inspector(table);
                     const model = table.selectedModel;
-                    inspector.render(dialog.body, table.schema, table.url.create, model);
+                    inspector.render(dialog.body, model);
                     dialog.addButton('Save', 'btn-warning', (e) => {
-                        e.preventDefault();
-
                         const data = inspector.serialize();
                         console.log(data);
 
@@ -71,7 +67,7 @@ class ToolbarButton {
                         }).fail(function (error) {
                             console.log(error);
                         });
-                    });
+                    }, false);
                     dialog.addCancelButton();
                     dialog.show();
                 },
@@ -94,12 +90,10 @@ class ToolbarButton {
                 (table) => {
                     const dialog = table.dialog;
                     dialog.clear();
-                    dialog.title.innerHTML = "Delete record";
+                    dialog.title.innerHTML = '<i class="fa fa-trash"></i> Delete';
                     dialog.body.innerHTML = "Are you sure to delete the selected item?";
                     const model = table.selectedModel;
                     dialog.addButton('Delete', 'btn-danger', (e) => {
-                        e.preventDefault();
-
                         const url = `${table.url.delete}/${model.id || model._id}`;
                         console.log("[DELETE] request: " + url);
 

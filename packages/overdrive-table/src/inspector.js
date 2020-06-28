@@ -16,23 +16,20 @@ export default class Inspector extends Component {
             Utils.createChild(div, 'label', (label) => {
                 Utils.addClasses(label, ['col-sm-2', 'col-form-label', 'pt-0', 'pb-0']);
                 Utils.setAttributes(label, {
-                    for: definition.display
+                    for: `inspector-${definition.name}`
                 });
-                label.innerHTML = `<b>${definition.name}</b>`;
+                label.innerHTML = `<b>${definition.display}</b>`;
             });
             Utils.createChild(div, 'div', (inputDiv) => {
                 Utils.addClasses(inputDiv, ['col-sm-10']);
                 Utils.createChild(inputDiv, 'input', (input) => {
                     Utils.setAttributes(input, {
-                        id: definition.name,
-                        name: definition.name,
-                        placeholder: definition.placeholder
+                        id: `inspector-${definition.name}`,
+                        name: definition.name
                     });
 
-                    if (definition.required)
-                    {
-                        Utils.setAttributes(input, { required: 'required' });
-                    }
+                    input.required = definition.required;
+                    input.placeholder = definition.placeholder;
 
                     if (definition.readonly)
                     {
@@ -48,91 +45,85 @@ export default class Inspector extends Component {
                     {
                         Utils.addClasses(input, ['form-check-input', 'ml-0']);
                         Utils.setAttributes(input, { type: 'checkbox' });
-                        input.checked = value;
+                        input.checked = value || false;
                         input.value = true;
                     }
                     else if (definition.type == Number)
                     {
                         Utils.addClasses(input, ['form-control', 'form-control-sm']);
                         Utils.setAttributes(input, { type: 'number' });
-                        input.value = value;
+                        input.value = value || 0;
                     }
                     else 
                     {
                         Utils.addClasses(input, ['form-control', 'form-control-sm']);
                         Utils.setAttributes(input, { type: 'text' });
-                        input.value = value;
+                        input.value = value || "";
                     }
                 });
             });
         });
     }
 
-    #createForm = (parent, schema, url, model) => {
-        const self = this;
-        return Utils.createChild(parent, 'form', (form) => {
+    #getSchema = (model) => {
+        let schema = {};
+
+        const definition = (name, def) => {
+            return {
+                name: def.name || name,
+                display: def.display || name,
+                required: def.required || false,
+                readonly: def.readonly || false,
+                default: def.default || null,
+                type: def.type || String,
+                placeholder: def.placeholder || ""
+            };
+        }
+
+        for (const field of Object.keys(this.table.schema))
+        {
+            schema[field] = definition(field, this.table.schema[field]);
+        }
+
+        if (model != null)
+        {
+            for (const field of Object.keys(model))
+            {
+                const value = model[field];
+                let type = String;
+                if (value != null)
+                {
+                    if (typeof value === typeof true)
+                    {
+                        type = Boolean;
+                    }
+                    else if (!isNaN(value))
+                    {
+                        type = Number;
+                    }
+                }
+
+                let def = schema[field] || definition(field, {});
+                def.type = type;
+                schema[field] = def;
+            }
+        }
+
+        return schema;
+    }
+
+    #create = (parent, model) => {
+        this.#parent = parent;
+        this.#widget = Utils.createChild(parent, 'form', (form) => {
             Utils.setAttributes(form, {
                 id: self.id
             });
             Utils.addClasses(form, ['container', 'p-2']);
 
-            schema = schema || {};
-            if (model != null)
-            {
-                for (const field of Object.keys(model))
-                {
-                    if (schema[field] != null)
-                    {
-                        continue;
-                    }
-
-                    let definition = {
-                        name: field,
-                        display: field,
-                        required: false,
-                        readonly: field == "_id" ? true : false,
-                        default: null,
-                        type: String,
-                        placeholder: ''
-                    };
-
-                    const value = model[field];
-                    if (value != null)
-                    {
-                        if (typeof value === typeof true)
-                        {
-                            definition.type = Boolean;
-                        }
-                        else if (!isNaN(value))
-                        {
-                            definition.type = Number;
-                        }
-                    }
-
-                    schema[field] = definition;
-                }
-            }
-            else 
-            {
-                for (const field of Object.keys(schema))
-                {
-                    let definition = schema[field];
-                    definition = {
-                        name: definition.name || field,
-                        display: definition.display || field,
-                        required: definition.required || false,
-                        readonly: definition.readonly || field == "_id" ? true : false,
-                        default: definition.default || null,
-                        type: definition.type || String,
-                        placeholder: definition.placeholder || ''
-                    };
-                    schema[field] = definition;
-                }
-            }
-
+            const schema = this.#getSchema(model);
             for (const field of Object.keys(schema))
             {
-                if (field == "_id")
+                if (this.table.hiddenColumns.includes(field)) 
                 {
                     continue;
                 }
@@ -140,7 +131,7 @@ export default class Inspector extends Component {
                 let value = null;
                 if (model != null)
                 {
-                    value = model[field] || null;
+                    value = model[field];
                 }
                 this.#appendField(form, schema[field], value);
             }
@@ -193,14 +184,12 @@ export default class Inspector extends Component {
     /// @param schema - The schema
     /// @param url - The url
     /// @param model - The model
-    render(parent, schema, url, model) {
+    render(parent, model) {
         if (this.isOpen)
         {
             this.close();
         }
-
-        this.#parent = parent;
-        this.#createForm(parent, schema, url, model);
+        this.#create(parent, model);
     }
 
     /// Retrieve the parent DOM
