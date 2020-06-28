@@ -185,7 +185,7 @@ export default class Inspector extends Component {
         let data = $(`#${this.id}`).serialize();
 
         // include unchecked checkboxes. use filter to only include unchecked boxes.
-        $.each($(`#${this.id} form input[type=checkbox]`)
+        $.each($(`#${this.id} input[type=checkbox]`)
             .filter(function (idx) {
                 return $(this).prop('checked') === false
             }),
