@@ -124,12 +124,14 @@ export default class Pagination extends Component {
             this.#state.offset = 0;
         }
 
+        let delta = Math.round(this.maxPages / 2);
         let startPage = this.pages > this.maxPages
-            ? Math.max(0, this.page - Math.round(this.maxPages / 2))
+            ? Math.max(0, this.page - delta)
             : 0;
+        delta = Math.max(delta, delta * 2 - this.page);
 
         let endPage = this.pages > this.maxPages
-            ? Math.min(this.pages, this.page + Math.round(this.maxPages / 2) + 1)
+            ? Math.min(this.pages, this.page + delta)
             : this.pages;
 
         const createChild = (isActive, text, callback) => {
@@ -162,7 +164,7 @@ export default class Pagination extends Component {
         }
         createChild(false, '<span aria-hidden="true">&raquo;</span>', async () => {
             this.#state.offset = Math.min(
-                Math.max((this.pages - 1) * this.limit, 0),
+                Math.max((this.pages) * this.limit, 0),
                 this.limit * (this.page + 1)
             );
             await this.table.update();
