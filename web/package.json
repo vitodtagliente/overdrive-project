@@ -17,6 +17,7 @@
     "overdrive-db": "file:../packages/overdrive-db",
     "overdrive-logger": "file:../packages/overdrive-logger",
     "overdrive-status": "file:../packages/overdrive-status",
-    "shared": "file:../shared"
+    "shared": "file:../shared",
+    "showdown": "^1.9.1"
   }
 }
