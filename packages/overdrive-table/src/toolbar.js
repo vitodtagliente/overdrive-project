@@ -32,7 +32,10 @@ class ToolbarButton {
                             dialog.close();
                             table.update();
                         }).fail(function (error) {
-                            console.log(error);
+                            dialog.alert(
+                                'Unable to add the new item. Make sure that all required info are set up.',
+                                'alert-danger'
+                            );
                         });
                     }, false);
                     dialog.addCancelButton();
@@ -65,7 +68,7 @@ class ToolbarButton {
                             dialog.close();
                             table.update();
                         }).fail(function (error) {
-                            console.log(error);
+                            dialog.alert('Unable to update the selected item.', 'alert-danger');
                         });
                     }, false);
                     dialog.addCancelButton();
@@ -120,7 +123,7 @@ class ToolbarButton {
                             dialog.close();
                             table.update();
                         }).fail(function (error) {
-                            console.log(error);
+                            dialog.alert('Unable to delete the selected item', 'alert-danger');
                         });
                     });
                     dialog.addCancelButton();

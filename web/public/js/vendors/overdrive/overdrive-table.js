@@ -225,13 +225,29 @@ class Dialog extends Component {
         this.addButton(name, style);
     }
 
+    alert(text, style) {
+        this.#DOM.alert = Utils.createChild(this.body, 'div', (alert) => {
+            if (!Array.isArray(style))
+            {
+                style = [style];
+            }
+
+            Utils.addClasses(alert, ['alert', 'alert-dismissible', 'fade', 'show']);
+            Utils.addClasses(alert, style);
+            Utils.setAttributes(alert, { role: 'alert' });
+            alert.innerHTML = `${text}<button type="button" class="close" data-dismiss="alert" aria-label="Close">` +
+                `<span aria-hidden="true">&times;</span></button>`;
+        });
+    }
+
     /// DOM elements
     #DOM = {
         parent: null,
         widget: null,
         title: null,
         body: null,
-        footer: null
+        footer: null,
+        alert: null
     }
     /// style classes
     classes = {
@@ -797,7 +813,10 @@ class ToolbarButton {
                             dialog.close();
                             table.update();
                         }).fail(function (error) {
-                            console.log(error);
+                            dialog.alert(
+                                'Unable to add the new item. Make sure that all required info are set up.',
+                                'alert-danger'
+                            );
                         });
                     }, false);
                     dialog.addCancelButton();
@@ -830,7 +849,7 @@ class ToolbarButton {
                             dialog.close();
                             table.update();
                         }).fail(function (error) {
-                            console.log(error);
+                            dialog.alert('Unable to update the selected item.', 'alert-danger');
                         });
                     }, false);
                     dialog.addCancelButton();
@@ -885,7 +904,7 @@ class ToolbarButton {
                             dialog.close();
                             table.update();
                         }).fail(function (error) {
-                            console.log(error);
+                            dialog.alert('Unable to delete the selected item', 'alert-danger');
                         });
                     });
                     dialog.addCancelButton();
