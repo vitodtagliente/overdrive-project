@@ -11,6 +11,10 @@ export default class Inspector extends Component {
     }
 
     #appendField = (form, definition, value) => {
+        const isEmpty = (str) => {
+            return (str == null || str.length === 0 || !str.trim());
+        }
+
         Utils.createChild(form, 'div', (div) => {
             Utils.addClasses(div, ['form-group', 'row']);
             Utils.createChild(div, 'label', (label) => {
@@ -29,7 +33,6 @@ export default class Inspector extends Component {
                     });
 
                     input.required = definition.required;
-                    input.placeholder = definition.placeholder;
 
                     if (definition.readonly)
                     {
@@ -39,6 +42,11 @@ export default class Inspector extends Component {
                     if (definition.default)
                     {
                         Utils.setAttributes(input, { default: definition.default });
+                    }
+
+                    if (!isEmpty(definition.placeholder))
+                    {
+                        Utils.setAttributes(input, { placeholder: definition.placeholder });
                     }
 
                     if (definition.type == Boolean)
@@ -55,14 +63,21 @@ export default class Inspector extends Component {
                     else if (definition.type == Number)
                     {
                         Utils.addClasses(input, ['form-control', 'form-control-sm']);
-                        Utils.setAttributes(input, { type: 'number' });
-                        input.value = value || 0;
+                        Utils.setAttributes(input, {
+                            type: 'number',
+                            value: value || 0
+                        });
                     }
                     else 
                     {
                         Utils.addClasses(input, ['form-control', 'form-control-sm']);
-                        Utils.setAttributes(input, { type: 'text' });
-                        input.value = value || "";
+                        Utils.setAttributes(input, {
+                            type: 'text'
+                        });
+                        if (!isEmpty(value))
+                        {
+                            Utils.setAttributes(input, { value: value });
+                        }
                     }
                 });
             });
