@@ -27,7 +27,7 @@ export default class Dialog extends Component {
             });
         });
         Utils.createChild(this.widget, 'div', (dialog) => {
-            Utils.addClasses(dialog, ['modal-dialog', 'modal-dialog-scrollable']);
+            Utils.addClasses(dialog, ['modal-dialog', 'modal-dialog-scrollable', 'modal-lg']);
             Utils.createChild(dialog, 'div', (content) => {
                 Utils.addClasses(content, ['modal-content']);
                 Utils.createChild(content, 'div', (header) => {

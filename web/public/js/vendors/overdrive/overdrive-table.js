@@ -93,7 +93,7 @@ class Dialog extends Component {
             });
         });
         Utils.createChild(this.widget, 'div', (dialog) => {
-            Utils.addClasses(dialog, ['modal-dialog', 'modal-dialog-scrollable']);
+            Utils.addClasses(dialog, ['modal-dialog', 'modal-dialog-scrollable', 'modal-lg']);
             Utils.createChild(dialog, 'div', (content) => {
                 Utils.addClasses(content, ['modal-content']);
                 Utils.createChild(content, 'div', (header) => {
@@ -796,7 +796,7 @@ class ToolbarButton {
                         console.log(data);
 
                         const url = table.url.create;
-                        console.log("Sending create request to " + url);
+                        console.log("[POST] request:" + url);
 
                         $.ajax({
                             type: 'POST',
@@ -831,7 +831,7 @@ class ToolbarButton {
                         console.log(data);
 
                         const url = `${table.url.update}/${model.id || model._id}`;
-                        console.log("Sending update request to " + url);
+                        console.log("[PATCH] request: " + url);
 
                         $.ajax({
                             type: 'PATCH',
@@ -867,12 +867,13 @@ class ToolbarButton {
                     const dialog = table.dialog;
                     dialog.clear();
                     dialog.title.innerHTML = "Delete record";
+                    dialog.body.innerHTML = "Are you sure to delete the selected item?";
                     const model = table.selectedModel;
                     dialog.addButton('Delete', 'btn-danger', (e) => {
                         e.preventDefault();
 
                         const url = `${table.url.delete}/${model.id || model._id}`;
-                        console.log("Sending delete request to " + url);
+                        console.log("[DELETE] request: " + url);
 
                         $.ajax({
                             type: 'DELETE',
