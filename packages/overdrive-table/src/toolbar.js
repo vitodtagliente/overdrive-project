@@ -42,7 +42,7 @@ class ToolbarButton {
             Edit: new ToolbarButton(
                 'Edit',
                 'pen',
-                'btn-light',
+                'btn-warning',
                 (table) => {
                     const dialog = table.dialog;
                     dialog.clear();
@@ -80,6 +80,22 @@ class ToolbarButton {
                 (table) => {
                     const id = table.selectedModel._id || table.selectedModel.id;
                     window.location.href = `${table.url.read}/${id}`;
+                },
+                ToolbarButton.RenderMode.OnRowSelection
+            ),
+            Inspect: new ToolbarButton(
+                'Inspect',
+                'eye',
+                'btn-info',
+                (table) => {
+                    const dialog = table.dialog;
+                    dialog.clear();
+                    dialog.title.innerHTML = '<i class="fa fa-eye"></i> Inspect';
+                    const inspector = new Inspector(table);
+                    const model = table.selectedModel;
+                    inspector.render(dialog.body, model, true);
+                    dialog.addCancelButton('Close', 'btn-info');
+                    dialog.show();
                 },
                 ToolbarButton.RenderMode.OnRowSelection
             ),
@@ -194,6 +210,7 @@ export default class Toolbar extends Component {
         super(table);
         this.buttons.push(ToolbarButton.Prefabs.Add);
         this.buttons.push(ToolbarButton.Prefabs.Edit);
+        this.buttons.push(ToolbarButton.Prefabs.Inspect);
         this.buttons.push(ToolbarButton.Prefabs.Remove);
 
         table.onRowSelection.bind((row, model, selected) => {

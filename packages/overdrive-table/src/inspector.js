@@ -47,6 +47,10 @@ export default class Inspector extends Component {
                         Utils.setAttributes(input, { type: 'checkbox' });
                         input.checked = value || false;
                         input.value = true;
+                        if (definition.readonly)
+                        {
+                            input.disabled = true;
+                        }
                     }
                     else if (definition.type == Number)
                     {
@@ -65,7 +69,7 @@ export default class Inspector extends Component {
         });
     }
 
-    #getSchema = (model) => {
+    #getSchema = (model, forceReadonly = false) => {
         let schema = {};
 
         const definition = (name, def) => {
@@ -73,7 +77,7 @@ export default class Inspector extends Component {
                 name: def.name || name,
                 display: def.display || name,
                 required: def.required || false,
-                readonly: def.readonly || false,
+                readonly: (def.readonly || forceReadonly) || false,
                 default: def.default || null,
                 type: def.type || String,
                 placeholder: def.placeholder || ""
@@ -112,7 +116,7 @@ export default class Inspector extends Component {
         return schema;
     }
 
-    #create = (parent, model) => {
+    #create = (parent, model, forceReadonly = false) => {
         this.#parent = parent;
         this.#widget = Utils.createChild(parent, 'form', (form) => {
             Utils.setAttributes(form, {
@@ -120,7 +124,7 @@ export default class Inspector extends Component {
             });
             Utils.addClasses(form, ['container', 'p-2']);
 
-            const schema = this.#getSchema(model);
+            const schema = this.#getSchema(model, forceReadonly);
             for (const field of Object.keys(schema))
             {
                 if (this.table.hiddenColumns.includes(field)) 
@@ -184,12 +188,12 @@ export default class Inspector extends Component {
     /// @param schema - The schema
     /// @param url - The url
     /// @param model - The model
-    render(parent, model) {
+    render(parent, model, forceReadonly = false) {
         if (this.isOpen)
         {
             this.close();
         }
-        this.#create(parent, model);
+        this.#create(parent, model, forceReadonly);
     }
 
     /// Retrieve the parent DOM

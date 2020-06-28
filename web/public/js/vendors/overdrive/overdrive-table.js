@@ -606,6 +606,10 @@ class Inspector extends Component {
                         Utils.setAttributes(input, { type: 'checkbox' });
                         input.checked = value || false;
                         input.value = true;
+                        if (definition.readonly)
+                        {
+                            input.disabled = true;
+                        }
                     }
                     else if (definition.type == Number)
                     {
@@ -624,7 +628,7 @@ class Inspector extends Component {
         });
     }
 
-    #getSchema = (model) => {
+    #getSchema = (model, forceReadonly = false) => {
         let schema = {};
 
         const definition = (name, def) => {
@@ -632,7 +636,7 @@ class Inspector extends Component {
                 name: def.name || name,
                 display: def.display || name,
                 required: def.required || false,
-                readonly: def.readonly || false,
+                readonly: (def.readonly || forceReadonly) || false,
                 default: def.default || null,
                 type: def.type || String,
                 placeholder: def.placeholder || ""
@@ -671,7 +675,7 @@ class Inspector extends Component {
         return schema;
     }
 
-    #create = (parent, model) => {
+    #create = (parent, model, forceReadonly = false) => {
         this.#parent = parent;
         this.#widget = Utils.createChild(parent, 'form', (form) => {
             Utils.setAttributes(form, {
@@ -679,7 +683,7 @@ class Inspector extends Component {
             });
             Utils.addClasses(form, ['container', 'p-2']);
 
-            const schema = this.#getSchema(model);
+            const schema = this.#getSchema(model, forceReadonly);
             for (const field of Object.keys(schema))
             {
                 if (this.table.hiddenColumns.includes(field)) 
@@ -743,12 +747,12 @@ class Inspector extends Component {
     /// @param schema - The schema
     /// @param url - The url
     /// @param model - The model
-    render(parent, model) {
+    render(parent, model, forceReadonly = false) {
         if (this.isOpen)
         {
             this.close();
         }
-        this.#create(parent, model);
+        this.#create(parent, model, forceReadonly);
     }
 
     /// Retrieve the parent DOM
@@ -803,7 +807,7 @@ class ToolbarButton {
             Edit: new ToolbarButton(
                 'Edit',
                 'pen',
-                'btn-light',
+                'btn-warning',
                 (table) => {
                     const dialog = table.dialog;
                     dialog.clear();
@@ -841,6 +845,22 @@ class ToolbarButton {
                 (table) => {
                     const id = table.selectedModel._id || table.selectedModel.id;
                     window.location.href = `${table.url.read}/${id}`;
+                },
+                ToolbarButton.RenderMode.OnRowSelection
+            ),
+            Inspect: new ToolbarButton(
+                'Inspect',
+                'eye',
+                'btn-info',
+                (table) => {
+                    const dialog = table.dialog;
+                    dialog.clear();
+                    dialog.title.innerHTML = '<i class="fa fa-eye"></i> Inspect';
+                    const inspector = new Inspector(table);
+                    const model = table.selectedModel;
+                    inspector.render(dialog.body, model, true);
+                    dialog.addCancelButton('Close', 'btn-info');
+                    dialog.show();
                 },
                 ToolbarButton.RenderMode.OnRowSelection
             ),
@@ -955,6 +975,7 @@ class Toolbar extends Component {
         super(table);
         this.buttons.push(ToolbarButton.Prefabs.Add);
         this.buttons.push(ToolbarButton.Prefabs.Edit);
+        this.buttons.push(ToolbarButton.Prefabs.Inspect);
         this.buttons.push(ToolbarButton.Prefabs.Remove);
 
         table.onRowSelection.bind((row, model, selected) => {
