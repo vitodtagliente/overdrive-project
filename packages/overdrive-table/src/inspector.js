@@ -135,9 +135,10 @@ export default class Inspector extends Component {
         this.#parent = parent;
         this.#widget = Utils.createChild(parent, 'form', (form) => {
             Utils.setAttributes(form, {
-                id: this.id
+                id: this.id,
+                novalidate: true
             });
-            Utils.addClasses(form, ['container', 'p-2']);
+            Utils.addClasses(form, ['container', 'p-2', 'needs-validation']);
 
             const schema = this.#getSchema(model, forceReadonly);
             for (const field of Object.keys(schema))
@@ -209,6 +210,19 @@ export default class Inspector extends Component {
             this.close();
         }
         this.#create(parent, model, forceReadonly);
+    }
+
+    validate() {
+        if (this.widget)
+        {
+            if (this.widget.checkValidity() === false)
+            {
+                Utils.addClasses(this.widget, ['was-validated']);
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     /// Retrieve the parent DOM

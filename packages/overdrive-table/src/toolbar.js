@@ -18,6 +18,11 @@ class ToolbarButton {
                     const inspector = new Inspector(table);
                     inspector.render(dialog.body);
                     dialog.addButton('Save', 'btn-success', (e) => {
+                        if (!inspector.validate())
+                        {
+                            return;
+                        }
+
                         const data = inspector.serialize();
                         console.log(data);
 
@@ -54,6 +59,11 @@ class ToolbarButton {
                     const model = table.selectedModel;
                     inspector.render(dialog.body, model);
                     dialog.addButton('Save', 'btn-warning', (e) => {
+                        if (!inspector.validate())
+                        {
+                            return;
+                        }
+
                         const data = inspector.serialize();
                         console.log(data);
 

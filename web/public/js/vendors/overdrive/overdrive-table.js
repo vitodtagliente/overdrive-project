@@ -710,9 +710,10 @@ class Inspector extends Component {
         this.#parent = parent;
         this.#widget = Utils.createChild(parent, 'form', (form) => {
             Utils.setAttributes(form, {
-                id: this.id
+                id: this.id,
+                novalidate: true
             });
-            Utils.addClasses(form, ['container', 'p-2']);
+            Utils.addClasses(form, ['container', 'p-2', 'needs-validation']);
 
             const schema = this.#getSchema(model, forceReadonly);
             for (const field of Object.keys(schema))
@@ -786,6 +787,19 @@ class Inspector extends Component {
         this.#create(parent, model, forceReadonly);
     }
 
+    validate() {
+        if (this.widget)
+        {
+            if (this.widget.checkValidity() === false)
+            {
+                Utils.addClasses(this.widget, ['was-validated']);
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     /// Retrieve the parent DOM
     /// @return - The parent
     get parent() {
@@ -814,6 +828,11 @@ class ToolbarButton {
                     const inspector = new Inspector(table);
                     inspector.render(dialog.body);
                     dialog.addButton('Save', 'btn-success', (e) => {
+                        if (!inspector.validate())
+                        {
+                            return;
+                        }
+
                         const data = inspector.serialize();
                         console.log(data);
 
@@ -850,6 +869,11 @@ class ToolbarButton {
                     const model = table.selectedModel;
                     inspector.render(dialog.body, model);
                     dialog.addButton('Save', 'btn-warning', (e) => {
+                        if (!inspector.validate())
+                        {
+                            return;
+                        }
+
                         const data = inspector.serialize();
                         console.log(data);
 
