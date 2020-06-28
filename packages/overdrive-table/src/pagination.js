@@ -163,10 +163,7 @@ export default class Pagination extends Component {
             );
         }
         createChild(false, '<span aria-hidden="true">&raquo;</span>', async () => {
-            this.#state.offset = Math.min(
-                Math.max((this.pages) * this.limit, 0),
-                this.limit * (this.page + 1)
-            );
+            this.#state.offset = Math.min(this.limit * (this.pages - 1), this.limit * (this.page + 1));
             await this.table.update();
         });
     }
