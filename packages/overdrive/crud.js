@@ -166,7 +166,7 @@ class CRUD {
     /// @param router - The express router
     /// @param schema - The data schema
     /// @param route - The base route
-    static create(router, schema, route, validate = (data) => { return data; }) {
+    static create(router, schema, route, validate = (data) => { return data; }, behaviour = (model) => { }) {
         /// Create a new entry
         /// @return - The new model, if succeed
         router.post(route, async (req, res) => {
@@ -174,6 +174,10 @@ class CRUD {
             if (data)
             {
                 const model = await schema.insert(data);
+                if (model)
+                {
+                    behaviour(model);
+                }
                 res.respond(model ? Status.Code.Created : Status.Code.BadRequest, model);
             }
             else 
