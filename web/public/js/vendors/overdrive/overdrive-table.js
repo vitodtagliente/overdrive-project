@@ -679,7 +679,7 @@ class Inspector extends Component {
         this.#parent = parent;
         this.#widget = Utils.createChild(parent, 'form', (form) => {
             Utils.setAttributes(form, {
-                id: self.id
+                id: this.id
             });
             Utils.addClasses(form, ['container', 'p-2']);
 
