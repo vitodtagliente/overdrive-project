@@ -31,11 +31,19 @@ class Singleton {
         app.use((req, res, next) => {
             /// Generate a new dashboard
             /// @param view - The view to render in the dashboard
-            res.dashboard = (view) => {
-                res.render('dashboard/dashboard', {
+            res.dashboard = (view, ...args) => {
+                let data = {
                     dashboard: this.instance,
                     view: `../${view}`
-                });
+                };
+                for (const arg of [...args])
+                {
+                    for (const field of Object.keys(arg))
+                    {
+                        data[field] = arg[field];
+                    }
+                }
+                res.render('dashboard/dashboard', data);
             };
             next();
         });
