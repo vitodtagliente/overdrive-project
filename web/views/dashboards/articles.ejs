@@ -63,7 +63,7 @@
                         (table) =>
                         {
                             const id = table.selectedModel._id || table.selectedModel.id;
-                            window.open(`/articles/${id}`, '_blank');
+                            window.location.href = `/articles/${id}`;
                         },
                         ToolbarButton.RenderMode.OnRowSelection
                     ),

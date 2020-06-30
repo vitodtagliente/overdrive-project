@@ -10,7 +10,7 @@ class ArticlesController extends Controller {
 
     static async edit(req, res) {
         const article = await Article.findById(req.params.id);
-        res.dashboard('dashboards/article_editor', { article, ciao: 9 });
+        res.dashboard('dashboards/article_editor', { article });
     }
     /// Register the controller routes
     /// @param router - The router
