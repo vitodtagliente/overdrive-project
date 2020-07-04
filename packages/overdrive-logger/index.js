@@ -1,3 +1,4 @@
+const Color = require('./color');
 const Stack = require('./stack');
 const path = require('path');
 
@@ -8,12 +9,14 @@ function getCurrentDateTime() {
 }
 
 class Logger {
+    /// The color class utility
+    static Color = Color;
     /// Log an info
     /// @param data - The data to log
     /// @param category - The category, default Info
     static log(data, category) {
         const datafy = (typeof data === "object") ? JSON.stringify(data) : data;
-        console.log(`[${category || 'Info'}] [${getCurrentDateTime()}] [${Stack.getFormatedStackTraceElement(1)}]: ${datafy}`);
+        console.log(`[${Color.decorate(category || 'Info', Color.Foreground.Cyan)}] [${getCurrentDateTime()}] [${Stack.getFormatedStackTraceElement(1)}]: ${datafy}`);
     }
 
     /// Log a development info
@@ -21,14 +24,14 @@ class Logger {
     /// @param category - The category, default Dev
     static dev(data, category) {
         const datafy = (typeof data === "object") ? JSON.stringify(data) : data;
-        console.log(`[${category || 'Dev'}] [${getCurrentDateTime()}] [${Stack.getFormatedStackTraceElement(1)}]: ${datafy}`);
+        console.log(`[${Color.decorate(category || 'Dev', Color.Foreground.Magenta)}] [${getCurrentDateTime()}] [${Stack.getFormatedStackTraceElement(1)}]: ${datafy}`);
     }
 
     /// Log an error
     /// @param data - The data to log
     static error(data) {
         const datafy = (typeof data === "object") ? JSON.stringify(data) : data;
-        console.error(`[Error] [${getCurrentDateTime()}] [${Stack.getFormatedStackTraceElement(1)}]: ${datafy}`);
+        console.error(`[${Color.decorate('Error', Color.Foreground.Red)}] [${getCurrentDateTime()}] [${Stack.getFormatedStackTraceElement(1)}]: ${datafy}`);
     }
 
     /// Log an HTTP request
@@ -43,7 +46,7 @@ class Logger {
 
         const data = req.method == 'POST' ? req.body : req.params;
         const datafy = JSON.stringify(data);
-        console.log(`[${req.method}] ` +
+        console.log(`[${Color.decorate(req.method, Color.Foreground.Green)}] ` +
             `[${getCurrentDateTime()}] ` +
             `[${Stack.getFormatedStackTraceElement(1)}] ` +
             `${req.url} ` +

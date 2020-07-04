@@ -14,8 +14,14 @@
 <script>
     window.addEventListener('load', () =>
     {
+        /*
         var editor = ace.edit('editor');
         editor.setTheme('ace/theme/monokai');
         editor.session.setMode("ace/mode/javascript");
+        */
+
+        var editor = new SimpleMDE({
+            element: document.getElementById("editor")
+        });
     });
 </script>
