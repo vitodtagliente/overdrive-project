@@ -13,11 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "data": "file:../data",
+    "marked": "^1.1.0",
     "overdrive": "file:../packages/overdrive",
     "overdrive-db": "file:../packages/overdrive-db",
     "overdrive-logger": "file:../packages/overdrive-logger",
     "overdrive-status": "file:../packages/overdrive-status",
-    "shared": "file:../shared",
-    "showdown": "^1.9.1"
+    "shared": "file:../shared"
   }
 }

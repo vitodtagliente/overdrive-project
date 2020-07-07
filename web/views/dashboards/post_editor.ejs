@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-12">
+        <h3>Post Editor</h3>
+        <p class="lead">
+            Edit your Post
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <form id="post-form">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" value="<%- post.name %>" placeholder="Name"
+                        name="name" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="description" value="<%- post.description %>"
+                        name="description" placeholder="Description">
+                </div>
+            </div>
+            <div class="form-group">
+                <textarea id="editor" name="content" style="height: 500px; width: 100%"><%- post.content %></textarea>
+            </div>
+            <button type="button" class="btn btn-info rounded-0" onclick="save()">Save</button>
+        </form>
+    </div>
+</div>
+<script>
+    var editor = null;
+    window.addEventListener('load', () =>
+    {
+        editor = new SimpleMDE({
+            element: document.getElementById("editor"),
+            placeholder: "Type here...",
+            showIcons: ["code", "table"],
+            renderingConfig: {
+                singleLineBreaks: false,
+                codeSyntaxHighlighting: true,
+            }
+        });
+    });
+
+    function save()
+    {
+        $('#editor').val(editor.value());
+        let data = $(`#post-form`).serialize();
+        console.log(data);
+
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/posts/<%- post._id %>',
+            data: data
+        }).done(function ()
+        {
+        }).fail(function (error)
+        {
+
+        });
+    }
+</script>

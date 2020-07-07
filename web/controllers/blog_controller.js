@@ -1,8 +1,6 @@
+const Article = require('data').Models.Article;
 const Controller = require('overdrive').Controller;
-const fs = require('fs');
-const Logger = require('overdrive').Logger;
-const path = require('path');
-const showdown = require('showdown');
+const Marked = require('marked');
 
 class BlogController extends Controller {
     static async home(req, res) {
@@ -10,15 +8,9 @@ class BlogController extends Controller {
     }
 
     static async get(req, res) {
-
-        const converter = new showdown.Converter();
-        const filename = path.join(__dirname, `../assets/articles/prova.md`);
-        Logger.log(filename);
-        const text = fs.readFileSync(filename, 'utf8');
-        const html = converter.makeHtml(text);
-
+        const article = await Article.findById(req.params.id);
         res.render('overdrive/article', {
-            article: html
+            article: Marked(article.content)
         });
     }
     /// Register the controller routes
