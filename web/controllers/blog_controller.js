@@ -1,6 +1,6 @@
-const Article = require('data').Models.Article;
 const Controller = require('overdrive').Controller;
 const Marked = require('marked');
+const Post = require('data').Models.Post;
 
 class BlogController extends Controller {
     static async home(req, res) {
@@ -8,9 +8,9 @@ class BlogController extends Controller {
     }
 
     static async get(req, res) {
-        const article = await Article.findById(req.params.id);
-        res.render('overdrive/article', {
-            article: Marked(article.content)
+        const post = await Post.findById(req.params.id);
+        res.render('overdrive/post', {
+            post: Marked(post.content)
         });
     }
     /// Register the controller routes
