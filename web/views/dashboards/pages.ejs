@@ -1,0 +1,75 @@
+<div class="row">
+    <div class="col-12">
+        <h3>Pages</h3>
+        <p class="lead">
+            Manage your Pages
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div id="table-container">
+        </div>
+    </div>
+</div>
+<script>
+    window.addEventListener('load', () =>
+    {
+        const table = new Table();
+        table.render('table-container', {
+            columns: {
+                visible: {},
+                hidden: ['_id', 'id', '__v', 'createdAt', 'updatedAt', 'content']
+            },
+            schema: {
+                name: {
+                    type: String,
+                    required: true,
+                    trim: true,
+                    unique: true
+                },
+                description: {
+                    type: String,
+                    required: false,
+                    trim: true
+                },
+                category: {
+                    type: String,
+                    trim: true
+                },
+                tags: {
+                    type: String
+                },
+                isEnabled: {
+                    type: Boolean,
+                    default: true
+                },
+                isHome: {
+                    type: Boolean,
+                    default: false
+                }
+            },
+            url: '/api/pages',
+            toolbar: {
+                enabled: true,
+                buttons: [
+                    Toolbar.Button.Prefabs.Add,
+                    Toolbar.Button.Prefabs.Edit,
+                    new ToolbarButton(
+                        'Editor',
+                        'keyboard',
+                        'btn-info',
+                        (table) =>
+                        {
+                            const id = table.selectedModel._id || table.selectedModel.id;
+                            window.location.href = `/pages/${id}`;
+                        },
+                        ToolbarButton.RenderMode.OnRowSelection
+                    ),
+                    Toolbar.Button.Prefabs.Remove
+                ]
+            }
+        });
+
+    });
+</script>
