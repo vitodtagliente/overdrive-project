@@ -1,8 +1,17 @@
-exports.Models = {
-    Item: require('./models/item_model'),
-    Post: require('./models/post_model'),
-    User: require('./models/user_model')
-};
+const Directory = require('overdrive').IO.Directory;
+const path = require('path');
+
+function findModels(){
+    let models = {};
+    for (const file of Directory.getFiles(path.join(__dirname, 'models')))
+    {
+        const model = require(file);
+        models[model.name] = model;
+    }
+    return models;
+}
+
+exports.Models = findModels();
 
 exports.Seeds = [
     require('./seeds/user_seeds'),
