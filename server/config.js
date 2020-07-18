@@ -4,6 +4,5 @@ module.exports = {
     ENV: process.env.ENV || "development",
     PORT: process.env.PORT || 3000,
     SECRET: process.env.SECRET || 'OVERDRIVE-SECRET',
-    URL: process.env.URL || "http://localshost:3000",
-    WEB_INTERFACE_ENABLED: true
+    URL: process.env.URL || "http://localshost:3000"
 };

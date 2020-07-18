@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
+    <title>Foo</title>
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png" />
+
+    <!-- vendors -->
+    <link rel="stylesheet" href="/css/vendors/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/vendors/all.min.css">
+    <link rel="stylesheet" href="/css/vendors/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" hreF="/vendors/simplemde/dist/simplemde.min.css">
+    <link rel="stylesheet" hreF="/vendors/highlight.js/dist/github.min.css">
+    <!-- overdrive -->
+    <link rel="stylesheet" href="/css/overdrive/overdrive.css">
+    <link rel="stylesheet" href="/css/dashboard/dashboard.css">
+    <link rel="stylesheet" href="/css/dashboard/navbar.css">
+    <link rel="stylesheet" href="/css/dashboard/sidebar.css">
+    <link rel="stylesheet" href="/css/dashboard/components.css">
+</head>
+
+<body>
+
+    <!-- page-wrapper -->
+
+    <!-- vendors -->
+    <script src="/js/vendors/jquery.min.js"></script>
+    <script src="/js/vendors/popper.min.js"></script>
+    <script src="/js/vendors/bootstrap.min.js"></script>
+    <script src="/js/vendors/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="/vendors/ace/src/ace.js"></script>
+    <script src="/vendors/simplemde/dist/simplemde.min.js"></script>
+    <script src="/vendors/markdown-it/dist/markdown-it.min.js"></script>
+    <script src="/vendors/highlight.js/dist/highlight.min.js"></script>
+    <!-- overdrive -->
+    <script src="/js/dashboard/dashboard.js"></script>
+    <!--<script src="/js/overdrive/datatable.js"></script>-->
+    <!--<script src="/js/overdrive/inspector.js"></script>-->
+    <script src="/js/vendors/overdrive/overdrive-table.js"></script>
+    <script src="/js/chocolate.js"></script>
+    <script src="/js/chocolate-bootstrap.js"></script>
+    <script src="/js/chocolate-overdrive.js"></script>
+
+    <script>
+
+        var dashboard = new Overdrive.Dashboard();
+        Chocolate.DOM.render(dashboard, document.body);
+
+    </script>
+</body>
+
+</html>

@@ -8,7 +8,7 @@ export default [
 	{
 		input: 'src/main.js',
 		output: {
-			name: 'overdrive-table',
+			name: 'chocolate',
 			file: pkg.release,
 			format: 'es'
 		},
@@ -21,7 +21,7 @@ export default [
 	{
 		input: 'src/main.js',
 		output: {
-			name: 'overdrive-table',
+			name: 'chocolate',
 			file: pkg.final,
 			format: 'es'
 		},

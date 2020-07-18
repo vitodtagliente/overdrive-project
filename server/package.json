@@ -1,22 +1,27 @@
 {
-  "name": "server",
+  "name": "overdrive-project",
   "version": "1.0.0",
-  "description": "",
+  "description": "overdrive node based project",
   "main": "index.js",
   "scripts": {
+    "debug": "nodemon --inspect index.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "seed": "node scripts/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "server"
+    "overdrive",
+    "project"
   ],
   "author": "Vito Domenico Tagliente",
   "license": "ISC",
   "dependencies": {
     "data": "file:../data",
+    "express": "^4.17.1",
     "overdrive": "file:../packages/overdrive",
     "overdrive-db": "file:../packages/overdrive-db",
     "overdrive-logger": "file:../packages/overdrive-logger",
-    "overdrive-status": "file:../packages/overdrive-status",
-    "shared": "file:../shared"
+    "overdrive-status": "file:../packages/overdrive-status"
   }
 }

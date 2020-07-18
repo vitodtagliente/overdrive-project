@@ -12,6 +12,7 @@
   "author": "Vito Domenico Tagliente",
   "license": "ISC",
   "dependencies": {
+    "overdrive": "file:../packages/overdrive",
     "overdrive-db": "file:../packages/overdrive-db",
     "overdrive-logger": "file:../packages/overdrive-logger",
     "overdrive-status": "file:../packages/overdrive-status"

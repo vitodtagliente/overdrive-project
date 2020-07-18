@@ -1,8 +1,8 @@
 {
-  "name": "overdrive-table",
+  "name": "chocolate",
   "version": "1.0.0",
-  "release": "../../web/public/js/vendors/overdrive/overdrive-table.js",
-  "final": "dist/overdrive-table.min.js",
+  "release": "../../web/public/js/vendors/chocolate.js",
+  "final": "dist/chocolate.min.js",
   "dependencies": {
     "ms": "^2.0.0",
     "rollup-plugin-closure-compiler": "^0.1.0"
