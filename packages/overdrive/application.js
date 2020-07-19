@@ -1,5 +1,6 @@
 const Auth = require('./auth');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const Connection = require('overdrive-db').Connection;
 const cookieParser = require('cookie-parser');
 const express = require('express');
@@ -73,6 +74,8 @@ class Application {
         this.#app.use(Logger.middleware);
         // add the respond method
         this.#app.use(Respond);
+        // allow cross origin requests
+        this.#app.use(cors());
     }
 
     /// Get the application configuration 
