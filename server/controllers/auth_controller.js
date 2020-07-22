@@ -44,7 +44,7 @@ class AuthController extends Controller {
 
     /// Handle the register request
     static async signup(req, res) {
-        const { username, email, password } = req.body;
+        const { username, email, password } = req.body; 
         // validate the data
         if (!Validation.empty([username, email, password])
             && Validation.email(email))

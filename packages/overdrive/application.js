@@ -92,7 +92,7 @@ class Application {
             // server already initialized
             return;
         }
-
+        
         // parse the configuration
         this.#config = new ApplicationConfig(config);
 
