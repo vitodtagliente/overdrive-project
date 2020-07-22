@@ -18,7 +18,7 @@ export default class extends React.Component {
 
     render() {
         return (
-            <Navbar bg="light" fixed="top">
+            <Navbar bg="light">
                 <Container>
                     <Navbar.Brand href="#">Navbar</Navbar.Brand>
                 </Container>
