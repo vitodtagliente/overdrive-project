@@ -21,7 +21,7 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <div className="page-wrapper default-theme toggled">
-                <Sidebar />
+                <Sidebar brand="Dashboard" />
                 <main className="page-content">
                     <Navbar />
                 </main>

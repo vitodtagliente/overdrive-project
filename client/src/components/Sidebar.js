@@ -40,7 +40,7 @@ export default class Sidebar extends React.Component {
     }
 
     componentDidMount() {
-
+        
     }
 
     componentDidUpdate() {
@@ -52,7 +52,7 @@ export default class Sidebar extends React.Component {
             <nav id="sidebar" className="sidebar-wrapper">
                 <div className="sidebar-content">
                     <div className="sidebar-item sidebar-brand">
-                        <a href="/">Name</a>
+                        <a href="/">{this.props.brand}</a>
                     </div>
                     <SidebarUser name="Vito Domenico" surname="Tagliente" role="Administrator" />
                 </div>

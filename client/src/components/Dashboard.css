@@ -76,7 +76,7 @@
     .sidebar-wrapper .sidebar-content {
       max-height: calc(100% -35px);
       height: calc(100% - 35px);
-      overflow-y: scroll;
+      overflow-y: auto;
       position: relative; }
       .sidebar-wrapper .sidebar-content.desktop {
         overflow-y: hidden; }
