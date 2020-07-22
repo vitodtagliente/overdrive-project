@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sidebar.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faPowerOff } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faPowerOff, faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 
 function User(props) {
     const userImg = `${process.env.PUBLIC_URL}/img/${props.img || 'user.jpg'}`;
@@ -17,10 +17,6 @@ function User(props) {
                     <strong>{props.surname}</strong>
                 </span>
                 <span className="user-role">{props.role}</span>
-                <span className="user-status">
-                    <FontAwesomeIcon icon={faCircle} />
-                    <span> Online</span>
-                </span>
             </div>
         </div>
     );
@@ -41,6 +37,41 @@ function LogoutModal(props) {
     );
 }
 */
+
+function Section(props) {
+    return (
+        <li className="header-menu">
+            <span>{props.name}</span>
+        </li>
+    );
+}
+
+function Item(props) {
+    return (
+        <li>
+            <a href={props.url}>
+                <FontAwesomeIcon icon={props.icon} />
+                <span className="menu-text">{props.name}</span>
+            </a>
+        </li>
+    );
+}
+
+function DropdownItem(props) {
+    return (
+        <li className="sidebar-dropdown">
+            <a href="#">
+                <FontAwesomeIcon icon={props.icon} />
+                <span className="menu-text">{props.name}</span>
+            </a>
+            <div className="sidebar-submenu">
+                <ul>
+                    {props.children}
+                </ul>
+            </div>
+        </li>
+    );
+}
 
 export default class Sidebar extends React.Component {
     constructor(props) {
@@ -63,6 +94,15 @@ export default class Sidebar extends React.Component {
                 <div className="sidebar-content">
                     <Brand name="Dashboard" />
                     <User name="Vito Domenico" surname="Tagliente" role="Administrator" />
+                    <div className=" sidebar-item sidebar-menu">
+                        <ul>
+                            <Section name="General" />
+                            <Item name="Dashboard" icon={faTachometerAlt} url="/" />
+                            <DropdownItem name="Test" icon={faCircle}>
+                                <Item name="Dashboard222" icon={faTachometerAlt} url="/" />
+                            </DropdownItem>
+                        </ul>
+                    </div>
                 </div>
                 <div className="sidebar-footer">
                     <div>

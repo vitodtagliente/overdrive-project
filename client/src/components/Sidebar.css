@@ -77,7 +77,7 @@
   .default-theme.sidebar-bg .sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
     background-color: rgba(81, 81, 81, 0.5); }
   
-  .default-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a i {
+  .default-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a svg {
     background-color: rgba(81, 81, 81, 0.5); }
   
   .default-theme.sidebar-bg .sidebar-wrapper .sidebar-footer {
@@ -165,7 +165,7 @@
   .chiller-theme.sidebar-bg .sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
     background-color: rgba(90, 106, 105, 0.5); }
   
-  .chiller-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a i {
+  .chiller-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a svg {
     background-color: rgba(90, 106, 105, 0.5); }
   
   .chiller-theme.sidebar-bg .sidebar-wrapper .sidebar-footer {
@@ -253,7 +253,7 @@
   .legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
     background-color: rgba(79, 88, 103, 0.5); }
   
-  .legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a i {
+  .legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a svg {
     background-color: rgba(79, 88, 103, 0.5); }
   
   .legacy-theme.sidebar-bg .sidebar-wrapper .sidebar-footer {
@@ -341,7 +341,7 @@
   .cool-theme.sidebar-bg .sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
     background-color: rgba(107, 105, 116, 0.5); }
   
-  .cool-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a i {
+  .cool-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a svg {
     background-color: rgba(107, 105, 116, 0.5); }
   
   .cool-theme.sidebar-bg .sidebar-wrapper .sidebar-footer {
@@ -429,7 +429,7 @@
   .ice-theme.sidebar-bg .sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
     background-color: rgba(89, 118, 132, 0.5); }
   
-  .ice-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a i {
+  .ice-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a svg {
     background-color: rgba(89, 118, 132, 0.5); }
   
   .ice-theme.sidebar-bg .sidebar-wrapper .sidebar-footer {
@@ -517,7 +517,7 @@
   .light-theme.sidebar-bg .sidebar-wrapper .sidebar-menu .sidebar-dropdown div {
     background-color: rgba(255, 255, 255, 0.5); }
   
-  .light-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a i {
+  .light-theme.sidebar-bg .sidebar-wrapper .sidebar-menu ul li a svg {
     background-color: rgba(255, 255, 255, 0.5); }
   
   .light-theme.sidebar-bg .sidebar-wrapper .sidebar-footer {

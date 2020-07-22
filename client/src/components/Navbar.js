@@ -20,7 +20,7 @@ export default class extends React.Component {
 
     toggleSidebar() {
         const elements = document.getElementsByClassName('page-wrapper');
-        if (elements.lenght > 0)
+        if (elements.length > 0)
         {
             const container = elements[0];
             if (container.className.includes('toggled'))
