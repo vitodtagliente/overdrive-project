@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Container } from 'react-bootstrap';
+import { Navbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -19,16 +19,17 @@ export default class extends React.Component {
     }
 
     toggleSidebar() {
-        const [page, others] = document.getElementsByClassName('page-wrapper');
-        if (page)
+        const elements = document.getElementsByClassName('page-wrapper');
+        if (elements.lenght > 0)
         {
-            if (page.className.includes('toggled'))
+            const container = elements[0];
+            if (container.className.includes('toggled'))
             {
-                page.classList.remove('toggled');
+                container.classList.remove('toggled');
             }
             else 
             {
-                page.classList.add('toggled');
+                container.classList.add('toggled');
             }
         }
     }

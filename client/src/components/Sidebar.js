@@ -4,10 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle, faPowerOff } from "@fortawesome/free-solid-svg-icons";
 
 function User(props) {
+    const userImg = `${process.env.PUBLIC_URL}/img/${props.img || 'user.jpg'}`;
+
     return (
         <div className="sidebar-item sidebar-header d-flex flex-nowrap">
             <div className="user-pic">
-
+                <img className="img-responsive img-rounded mCS_img_loaded" src={userImg} alt="" />
             </div>
             <div className="user-info">
                 <span className="user-name">{props.name}</span>
@@ -32,11 +34,13 @@ function Brand(props) {
     );
 }
 
+/*
 function LogoutModal(props) {
     return (
         <div></div>
     );
 }
+*/
 
 export default class Sidebar extends React.Component {
     constructor(props) {
