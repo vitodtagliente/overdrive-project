@@ -18,8 +18,9 @@ class SidebarUser extends React.Component {
 
                 </div>
                 <div className="user-info">
+                    <span className="user-name">{this.props.name}</span>
                     <span className="user-name">
-                        {this.props.name} <strong>{this.props.surname}</strong>
+                        <strong>{this.props.surname}</strong>
                     </span>
                     <span className="user-role">{this.props.role}</span>
                     <span className="user-status">
