@@ -1,9 +1,8 @@
 import React from 'react';
 import './Sidebar.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle, faPowerOff, faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 
-function User(props) {
+export function User(props) {
     const userImg = `${process.env.PUBLIC_URL}/img/${props.img || 'user.jpg'}`;
 
     return (
@@ -22,7 +21,7 @@ function User(props) {
     );
 }
 
-function Brand(props) {
+export function Brand(props) {
     return (
         <div className="sidebar-item sidebar-brand">
             <a href="/">{props.name}</a>
@@ -30,15 +29,7 @@ function Brand(props) {
     );
 }
 
-/*
-function LogoutModal(props) {
-    return (
-        <div></div>
-    );
-}
-*/
-
-function Section(props) {
+export function Section(props) {
     return (
         <li className="header-menu">
             <span>{props.name}</span>
@@ -46,7 +37,7 @@ function Section(props) {
     );
 }
 
-function Item(props) {
+export function Item(props) {
     return (
         <li>
             <a href={props.url}>
@@ -57,7 +48,7 @@ function Item(props) {
     );
 }
 
-function DropdownItem(props) {
+export function DropdownItem(props) {
     return (
         <li className="sidebar-dropdown">
             <a href="#">
@@ -73,45 +64,38 @@ function DropdownItem(props) {
     );
 }
 
-export default class Sidebar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-    }
+export function Content(props) {
+    return (
+        <div className="sidebar-content">
+            {props.children}
+        </div>
+    );
+}
 
-    componentDidMount() {
+export function Footer(props) {
+    return (
+        <div className="sidebar-footer">
+            <div>
+                {props.children}
+            </div>
+        </div>
+    );
+}
 
-    }
+export function Menu(props) {
+    return (
+        <div className=" sidebar-item sidebar-menu">
+            <ul>
+                {props.children}
+            </ul>
+        </div>
+    );
+}
 
-    componentDidUpdate() {
-
-    }
-
-    render() {
-        return (
-            <nav id="sidebar" className="sidebar-wrapper">
-                <div className="sidebar-content">
-                    <Brand name="Dashboard" />
-                    <User name="Vito Domenico" surname="Tagliente" role="Administrator" />
-                    <div className=" sidebar-item sidebar-menu">
-                        <ul>
-                            <Section name="General" />
-                            <Item name="Dashboard" icon={faTachometerAlt} url="/" />
-                            <DropdownItem name="Test" icon={faCircle}>
-                                <Item name="Dashboard222" icon={faTachometerAlt} url="/" />
-                            </DropdownItem>
-                        </ul>
-                    </div>
-                </div>
-                <div className="sidebar-footer">
-                    <div>
-                        <a data-toggle="modal" data-target="#logout-modal" href="#">
-                            <FontAwesomeIcon icon={faPowerOff} />
-                        </a>
-                    </div>
-                </div>
-            </nav>
-        );
-    }
+export function Sidebar(props) {
+    return (
+        <nav id="sidebar" className="sidebar-wrapper">
+            {props.children}
+        </nav>
+    );
 }
