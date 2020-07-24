@@ -6,6 +6,7 @@ import { faPowerOff, faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 import './Dashboard.css';
 import { Container } from 'react-bootstrap';
 import { Datatable } from './Datatable';
+import DataProvider from '../DataProvider';
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -23,21 +24,6 @@ export default class Dashboard extends React.Component {
     }
 
     render() {
-        const data = [
-            {
-                name: "ciao",
-                id: 1
-            },
-            {
-                name: "ciao2",
-                id: 2
-            },
-            {
-                name: "ciao3",
-                id: 3
-            }
-        ]
-
         return (
             <div className="page-wrapper default-theme toggled">
                 <Sidebar>
@@ -57,15 +43,16 @@ export default class Dashboard extends React.Component {
                 </Sidebar>
                 <main className="page-content">
                     <Navbar />
-                    <Container>
+                    <Container fluid className="mt-3">
                         <Datatable
-                            columns={Datatable.columns(data)}
-                            data={data}
+                            columns={{ _id: 'Id', name: 'Name' }}
+                            dataProvider={new DataProvider('http://localhost:9000/api/items')}
                             paginate={true}
+                            search={true}
                         ></Datatable>
                     </Container>
                 </main>
-            </div>
+            </div >
         );
     }
 }

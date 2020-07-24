@@ -28,7 +28,7 @@ class DatatablePagination extends React.Component {
         const items = [];
         for (let i = min; i <= max; ++i)
         {
-            if (i == page)
+            if (i === page)
             {
                 items.push(
                     <Pagination.Item
@@ -67,15 +67,30 @@ export class Datatable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            dataProvider: props.dataProvider || null,
+            data: []
         };
     }
 
-    static columns(data) {
-        if (data.length > 0)
+    get dataProvider() {
+        return this.state.dataProvider;
+    }
+
+    get data() {
+        return this.state.data;
+    }
+
+    componentDidMount() {
+        if (this.dataProvider)
         {
-            return Object.keys(data[0]).sort();
+            this.dataProvider.getList().then((res => {
+                this.setState({
+                    data: res.data.data
+                });
+            })).catch((err) => {
+                console.log(err);
+            });
         }
-        return [];
     }
 
     handleRowSelection(record) {
@@ -83,26 +98,40 @@ export class Datatable extends React.Component {
     }
 
     render() {
-        const columns = this.props.columns ? this.props.columns.map((column) =>
-            <th key={column}>{column}</th>
-        ) : '';
+        let columns = [];
+        if (this.props.columns)
+        {
+            columns = Array.isArray(this.props.columns)
+                ? this.props.columns :
+                Object.keys(this.props.columns);
+        }
+        else if (this.data.length > 0) 
+        {
+            columns = Object.keys(this.data[0]);
+        }
 
-        const content = this.props.data ? this.props.data.map((record) =>
-            <tr key={record.id} onClick={() => this.handleRowSelection(record)}>
-                {Object.keys(record).map((key, index) => <td key={key}>{record[key]}</td>)}
+        const head = columns.map((column, index) =>
+            <th key={index}>{this.props.columns[column] || column}</th>
+        );
+
+        const body = this.data.map((record, index) =>
+            <tr key={index} onClick={() => this.handleRowSelection(record)}>
+                {columns.map((column) =>
+                    <td key={record.id + column}>{record[column]}</td>
+                )}
             </tr>
-        ) : '';
+        );
 
         return (
             <>
-                <Table responsive bordered size="sm">
+                <Table responsive striped bordered hover size="sm">
                     <thead>
                         <tr>
-                            {columns}
+                            {head}
                         </tr>
                     </thead>
                     <tbody>
-                        {content}
+                        {body}
                     </tbody>
                 </Table>
                 {this.props.paginate && <DatatablePagination pages={5} />}
