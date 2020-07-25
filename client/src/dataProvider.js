@@ -12,7 +12,7 @@ export default class DataProvider {
 
     getList(params = {}) {
         return axios.get(this.url, {
-            params: { ...params }
+            params: { ...params, limit: 10 }
         });
     }
 }
