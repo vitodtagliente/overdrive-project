@@ -53,6 +53,11 @@ class DatatablePagination extends React.Component {
         this.setState({
             page
         });
+
+        if (this.props['onPageChange'])
+        {
+            this.props.onPageChange(page);
+        }
     }
 
     render() {
@@ -108,7 +113,9 @@ export class Datatable extends React.Component {
         super(props);
         this.state = {
             dataProvider: props.dataProvider || null,
-            data: []
+            data: [],
+            limit: 10,
+            page: 1
         };
     }
 
@@ -123,7 +130,10 @@ export class Datatable extends React.Component {
     #fetch = (search) => {
         if (!this.dataProvider) return;
 
-        this.dataProvider.getList().then((res => {
+        this.dataProvider.getList({
+            offset: (this.state.page - 1) * this.state.limit,
+            limit: this.state.limit
+        }).then((res => {
             this.setState({
                 data: res.data.data
             });
@@ -142,6 +152,13 @@ export class Datatable extends React.Component {
 
     handleSearch(text) {
         this.#fetch(text);
+    }
+
+    handlePageChange(page) {
+        this.setState({
+            page
+        });
+        this.#fetch();
     }
 
     render() {
@@ -183,7 +200,10 @@ export class Datatable extends React.Component {
                         {body}
                     </tbody>
                 </Table>
-                {this.props.paginate && <DatatablePagination pages={5} />}
+                {this.props.paginate && <DatatablePagination
+                    pages={this.props.pages || 5}
+                    onPageChange={(e) => this.handlePageChange(e)}
+                />}
             </>
         );
     }
