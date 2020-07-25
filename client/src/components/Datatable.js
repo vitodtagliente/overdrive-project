@@ -120,21 +120,28 @@ export class Datatable extends React.Component {
         return this.state.data;
     }
 
-    componentDidMount() {
-        if (this.dataProvider)
-        {
-            this.dataProvider.getList().then((res => {
-                this.setState({
-                    data: res.data.data
-                });
-            })).catch((err) => {
-                console.log(err);
+    #fetch = (search) => {
+        if (!this.dataProvider) return;
+
+        this.dataProvider.getList().then((res => {
+            this.setState({
+                data: res.data.data
             });
-        }
+        })).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    componentDidMount() {
+        this.#fetch();
     }
 
     handleRowSelection(record) {
         console.log(record);
+    }
+
+    handleSearch(text) {
+        this.#fetch(text);
     }
 
     render() {
@@ -165,7 +172,7 @@ export class Datatable extends React.Component {
         return (
             <>
                 {this.props.crud && <Actions actions={this.props.crud} />}
-                {this.props.search && <Search onTextChange={(e) => {console.log(e)}} />}
+                {this.props.search && <Search onTextChange={(e) => this.handleSearch(e)} />}
                 <Table responsive striped bordered hover size="sm">
                     <thead>
                         <tr>
