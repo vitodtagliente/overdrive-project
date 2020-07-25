@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Pagination, Button, ButtonGroup } from 'react-bootstrap';
+import { Table, Pagination, Button, ButtonGroup, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 
@@ -26,6 +26,19 @@ class Actions extends React.Component {
             </ButtonGroup>
         );
     }
+}
+
+function Search(props) {
+    return (
+        <div className="mb-2">
+            <Form.Control
+                type="text"
+                placeholder="Search"
+                size="sm"
+                onKeyUp={(e) => { if (props['onTextChange']) props.onTextChange(e.target.value); }}
+            />
+        </div>
+    );
 }
 
 class DatatablePagination extends React.Component {
@@ -151,7 +164,8 @@ export class Datatable extends React.Component {
 
         return (
             <>
-                <Actions />
+                {this.props.crud && <Actions actions={this.props.crud} />}
+                {this.props.search && <Search onTextChange={(e) => {console.log(e)}} />}
                 <Table responsive striped bordered hover size="sm">
                     <thead>
                         <tr>

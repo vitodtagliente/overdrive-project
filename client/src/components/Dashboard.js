@@ -49,6 +49,11 @@ export default class Dashboard extends React.Component {
                             dataProvider={new DataProvider('http://localhost:9000/api/items')}
                             paginate={true}
                             search={true}
+                            crud={{
+                                create: null,
+                                update: null,
+                                delete: null
+                            }}
                         ></Datatable>
                     </Container>
                 </main>
