@@ -115,7 +115,8 @@ export class Datatable extends React.Component {
             dataProvider: props.dataProvider || null,
             data: [],
             limit: 10,
-            page: 1
+            page: 1,
+            filter: ''
         };
     }
 
@@ -127,15 +128,18 @@ export class Datatable extends React.Component {
         return this.state.data;
     }
 
-    #fetch = (search) => {
+    #fetch = (filter, page) => {
         if (!this.dataProvider) return;
-
+        
         this.dataProvider.getList({
-            offset: (this.state.page - 1) * this.state.limit,
-            limit: this.state.limit
+            offset: (page - 1) * this.state.limit,
+            limit: this.state.limit,
+            filter: filter
         }).then((res => {
             this.setState({
-                data: res.data.data
+                data: res.data.data,
+                page: page,
+                filter: filter
             });
         })).catch((err) => {
             console.log(err);
@@ -143,7 +147,7 @@ export class Datatable extends React.Component {
     }
 
     componentDidMount() {
-        this.#fetch();
+        this.#fetch(this.state.filter, this.state.page);
     }
 
     handleRowSelection(record) {
@@ -151,14 +155,11 @@ export class Datatable extends React.Component {
     }
 
     handleSearch(text) {
-        this.#fetch(text);
+        this.#fetch(text, this.state.page);
     }
 
     handlePageChange(page) {
-        this.setState({
-            page
-        });
-        this.#fetch();
+        this.#fetch(this.state.filter, page);
     }
 
     render() {

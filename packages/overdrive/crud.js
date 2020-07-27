@@ -144,7 +144,7 @@ class Search {
         if (limit != null && limit > 0)
         {
             params.limit = limit;
-            params.skip = parseInt(req.query.skip, 10) || 0;
+            params.skip = parseInt(req.query.offset, 10) || 0;
         }
         return params;
     }
