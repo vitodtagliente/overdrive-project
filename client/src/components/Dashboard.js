@@ -6,7 +6,7 @@ import { faPowerOff, faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
 import './Dashboard.css';
 import { Container } from 'react-bootstrap';
 import { CreateItems, EditItems } from '../modules/Items';
-import { Module, DatatableModule } from './DatatableModule';
+import { Module, DatatableModule } from './Module';
 
 export default class Dashboard extends React.Component {
     constructor(props) {
