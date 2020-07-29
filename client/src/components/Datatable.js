@@ -105,7 +105,7 @@ class DatatablePagination extends React.Component {
         }
 
         return (
-            <Pagination>
+            <Pagination size="sm" className="justify-content-end">
                 <Pagination.First onClick={() => this.handlePageSelection(1)} />
                 <Pagination.Prev onClick={() => this.handlePageSelection(Math.max(1, page - 1))} />
                 {items}
@@ -220,10 +220,12 @@ export class Datatable extends React.Component {
                         {body}
                     </tbody>
                 </Table>
-                {this.props.paginate && <DatatablePagination
-                    pages={pages}
-                    onPageChange={(e) => this.handlePageChange(e)}
-                />}
+                <div>
+                    {this.props.paginate && <DatatablePagination
+                        pages={pages}
+                        onPageChange={(e) => this.handlePageChange(e)}
+                    />}
+                </div>
             </>
         );
     }
