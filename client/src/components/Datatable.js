@@ -69,11 +69,11 @@ class DatatablePagination extends React.Component {
         let min = Math.max(1, page - delta);
         let max = Math.min(pages, page + delta);
 
-        if (page == min)
+        if (page === min)
         {
             max = Math.min(pages, max + 1);
         }
-        else if (page == pages)
+        else if (page === pages)
         {
             min = Math.max(1, min - 1);
         }
