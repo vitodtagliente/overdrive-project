@@ -96,12 +96,20 @@ export class DatatableModule extends React.Component {
             case Action.Create:
                 {
                     if (this.props.create)
-                        return this.props.create;
+                    {
+                        return (
+                            <>{this.props.create}</>
+                        );
+                    }
                 }
             case Action.Edit:
                 {
                     if (this.props.edit)
-                        return this.props.edit;
+                    {
+                        return (
+                            <>{this.props.edit}</>
+                        );
+                    }
                 }
             default: return (<></>);
         }

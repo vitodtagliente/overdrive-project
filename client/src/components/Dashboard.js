@@ -49,6 +49,8 @@ export default class Dashboard extends React.Component {
                             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In feugiat interdum nibh, vitae aliquam leo"
                             api="http://localhost:9000/api/items"
                             columns={{ _id: 'Id', name: 'Name' }}
+                            create={CreateItems}
+                            edit={EditItems}
                         ></DatatableModule>
                     </Container>
                 </main>
