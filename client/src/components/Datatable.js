@@ -61,8 +61,7 @@ class DatatablePagination extends React.Component {
     }
 
     render() {
-
-        const range = this.props.range || 5;
+        const range = this.props.range || 3;
         const page = this.state.page;
         const pages = this.props.pages || 1;
 
@@ -98,11 +97,11 @@ class DatatablePagination extends React.Component {
 
         return (
             <Pagination>
-                <Pagination.First />
-                <Pagination.Prev />
+                <Pagination.First onClick={() => this.handlePageSelection(1)} />
+                <Pagination.Prev onClick={() => this.handlePageSelection(Math.max(1, page - 1))} />
                 {items}
-                <Pagination.Next />
-                <Pagination.Last />
+                <Pagination.Next onClick={() => this.handlePageSelection(Math.min(pages, page + 1))} />
+                <Pagination.Last onClick={() => this.handlePageSelection(pages)} />
             </Pagination>
         );
     }
@@ -114,6 +113,8 @@ export class Datatable extends React.Component {
         this.state = {
             dataProvider: props.dataProvider || null,
             data: [],
+            recordsTotal: 0,
+            recordsFiltered: 0,
             limit: 10,
             page: 1,
             filter: ''
@@ -130,7 +131,7 @@ export class Datatable extends React.Component {
 
     #fetch = (filter, page) => {
         if (!this.dataProvider) return;
-        
+
         this.dataProvider.getList({
             offset: (page - 1) * this.state.limit,
             limit: this.state.limit,
@@ -139,7 +140,9 @@ export class Datatable extends React.Component {
             this.setState({
                 data: res.data.data,
                 page: page,
-                filter: filter
+                filter: filter,
+                recordsTotal: res.data.recordsTotal,
+                recordsFiltered: res.data.recordsFiltered
             });
         })).catch((err) => {
             console.log(err);
@@ -187,6 +190,13 @@ export class Datatable extends React.Component {
             </tr>
         );
 
+        // compute the number of pages
+        let pages = 1;
+        if (this.state.limit && this.state.recordsTotal)
+        {
+            pages = Math.round(this.state.recordsTotal / this.state.limit);
+        }
+
         return (
             <>
                 {this.props.crud && <Actions actions={this.props.crud} />}
@@ -202,7 +212,7 @@ export class Datatable extends React.Component {
                     </tbody>
                 </Table>
                 {this.props.paginate && <DatatablePagination
-                    pages={this.props.pages || 5}
+                    pages={pages}
                     onPageChange={(e) => this.handlePageChange(e)}
                 />}
             </>
