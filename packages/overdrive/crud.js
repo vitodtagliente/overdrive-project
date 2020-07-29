@@ -117,7 +117,6 @@ class Search {
                                     }
                                 }
                             }
-                            console.log(or);
                             and.push({ $or: or });
                         }
                         condition['$and'] = and;
@@ -134,7 +133,6 @@ class Search {
                 }
             }
         }
-        console.log(condition);
         return condition;
     }
 
