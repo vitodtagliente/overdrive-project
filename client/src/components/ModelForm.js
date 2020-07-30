@@ -29,6 +29,7 @@ class Attribute extends React.Component {
                                 checked={value}
                                 readOnly={readonly}
                                 disabled={readonly}
+                                required={this.props.required || false}
                                 onChange={(e) => this.handleInputchange(e)}
                             />
                         </Form.Group>
@@ -44,6 +45,7 @@ class Attribute extends React.Component {
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}
                                 readOnly={readonly}
+                                required={this.props.required || false}
                                 onChange={(e) => this.handleInputchange(e)}
                             />
                         </Form.Group>
@@ -61,6 +63,7 @@ class Attribute extends React.Component {
                                 name={this.props.name}
                                 value={value}
                                 readOnly={readonly}
+                                required={this.props.required || false}
                                 onChange={(e) => this.handleInputchange(e)}
                             />
                         </Form.Group>
@@ -76,6 +79,14 @@ export default class ModelForm extends React.Component {
         this.state = {
 
         };
+    }
+
+    handleAdd(e) {
+
+    }
+
+    handleEdit(e) {
+
     }
 
     render() {
@@ -96,6 +107,7 @@ export default class ModelForm extends React.Component {
                         type="submit"
                         className="rounded-0"
                         size="sm"
+                        onClick={this.handleAdd}
                     >Add</Button>
                 }
                 {this.props.model &&
@@ -104,6 +116,7 @@ export default class ModelForm extends React.Component {
                         type="submit"
                         className="rounded-0"
                         size="sm"
+                        onClick={this.handleEdit}
                     >Edit</Button>
                 }
                 <Button
