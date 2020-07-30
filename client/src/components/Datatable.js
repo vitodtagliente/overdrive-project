@@ -3,31 +3,6 @@ import { Table, Pagination, Button, ButtonGroup, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 
-class Actions extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        };
-    }
-
-    render() {
-        return (
-            <ButtonGroup aria-label="Basic example" className="mb-3">
-                <Button variant="success" className="rounded-0" size="sm">
-                    <FontAwesomeIcon icon={faPlus} /> Add
-                </Button>
-                <Button variant="warning" className="rounded-0" size="sm">
-                    <FontAwesomeIcon icon={faPen} /> Edit
-                </Button>
-                <Button variant="danger" className="rounded-0" size="sm">
-                    <FontAwesomeIcon icon={faTrash} /> Delete
-                </Button>
-            </ButtonGroup>
-        );
-    }
-}
-
 class Search extends React.Component {
     constructor(props) {
         super(props);
@@ -252,7 +227,6 @@ export class Datatable extends React.Component {
 
         return (
             <>
-                {this.props.crud && <Actions actions={this.props.crud} />}
                 {this.props.search && <Search onTextChange={(e) => this.handleSearch(e)} />}
                 <Table
                     ref={this.table}
