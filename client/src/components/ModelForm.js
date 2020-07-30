@@ -86,6 +86,10 @@ export default class ModelForm extends React.Component {
         this.form = React.createRef();
     }
 
+    get dataProvider() {
+        return this.props.dataProvider;
+    }
+
     handleOnChange(name, value) {
         let state = {};
         state[name] = value;
@@ -95,13 +99,19 @@ export default class ModelForm extends React.Component {
     handleAdd(e) {
         e.preventDefault();
 
-        console.log(this.state);
+        if (this.dataProvider)
+        {
+
+        }
     }
 
     handleEdit(e) {
         e.preventDefault();
 
-        console.log(this.state);
+        if (this.dataProvider)
+        {
+
+        }
     }
 
     render() {
