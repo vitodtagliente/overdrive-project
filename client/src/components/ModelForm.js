@@ -14,6 +14,8 @@ class Attribute extends React.Component {
         const value = (this.props.model && this.props.model[this.props.name]) ?
             this.props.model[this.props.name] : undefined;
 
+        const readonly = this.props.model && this.props.schema.readonly;
+
         switch (this.props.schema.type || String)
         {
             case Boolean:
@@ -25,6 +27,8 @@ class Attribute extends React.Component {
                                 label={this.props.schema.display || this.props.name}
                                 name={this.props.name}
                                 checked={value}
+                                readOnly={readonly}
+                                disabled={readonly}
                                 onChange={(e) => this.handleInputchange(e)}
                             />
                         </Form.Group>
@@ -39,6 +43,7 @@ class Attribute extends React.Component {
                                 type="number"
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}
+                                readOnly={readonly}
                                 onChange={(e) => this.handleInputchange(e)}
                             />
                         </Form.Group>
@@ -55,6 +60,7 @@ class Attribute extends React.Component {
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}
                                 value={value}
+                                readOnly={readonly}
                                 onChange={(e) => this.handleInputchange(e)}
                             />
                         </Form.Group>
