@@ -1,7 +1,5 @@
 import React from 'react';
-import { Table, Pagination, Button, ButtonGroup, Form } from 'react-bootstrap';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
+import { Table, Pagination, Form } from 'react-bootstrap';
 
 class Search extends React.Component {
     constructor(props) {
@@ -146,12 +144,12 @@ export class Datatable extends React.Component {
         return this.state.data;
     }
 
-    #fetch = (filter, page) => {
+    #fetch = (filter, page, limit) => {
         if (!this.dataProvider) return;
 
         this.dataProvider.getList({
-            offset: (page - 1) * this.state.limit,
-            limit: this.state.limit,
+            offset: (page - 1) * limit,
+            limit: limit,
             filter: filter
         }).then((res => {
             this.setState({
@@ -160,7 +158,8 @@ export class Datatable extends React.Component {
                 filter: filter,
                 recordsTotal: res.data.recordsTotal,
                 recordsFiltered: res.data.recordsFiltered,
-                selectedRow: -1
+                selectedRow: -1,
+                limit: limit
             });
         })).catch((err) => {
             console.log(err);
@@ -168,7 +167,7 @@ export class Datatable extends React.Component {
     }
 
     componentDidMount() {
-        this.#fetch(this.state.filter, this.state.page);
+        this.#fetch(this.state.filter, this.state.page, this.state.limit);
     }
 
     handleRowSelection(e, index, record) {
@@ -184,11 +183,15 @@ export class Datatable extends React.Component {
     }
 
     handleSearch(text) {
-        this.#fetch(text, this.state.page);
+        this.#fetch(text, this.state.page, this.state.limit);
     }
 
     handlePageChange(page) {
-        this.#fetch(this.state.filter, page);
+        this.#fetch(this.state.filter, page, this.state.limit);
+    }
+
+    handleLimitChange(e) {
+        this.#fetch(this.state.filter, this.state.page, e.target.value);
     }
 
     render() {
@@ -244,12 +247,31 @@ export class Datatable extends React.Component {
                         {body}
                     </tbody>
                 </Table>
-                <div>
-                    {this.props.paginate && <DatatablePagination
-                        pages={pages}
-                        onPageChange={(e) => this.handlePageChange(e)}
-                    />}
-                </div>
+                {this.props.paginate &&
+                    <div className="row">
+                        <div className="col-sm-12 col-md-5 align-items-center">
+                            <span>Showing </span>
+                            <Form.Control
+                                as="select"
+                                size="sm"
+                                width="30px"
+                                onChange={(e) => this.handleLimitChange(e)}
+                                custom>
+                                <option>10</option>
+                                <option>25</option>
+                                <option>50</option>
+                                <option>100</option>
+                            </Form.Control>
+                            <span> of {this.state.recordsTotal} records</span>
+                        </div>
+                        <div className="col-sm-12 col-md-7">
+                            <DatatablePagination
+                                pages={pages}
+                                onPageChange={(e) => this.handlePageChange(e)}
+                            />
+                        </div>
+                    </div>
+                }
             </>
         );
     }
