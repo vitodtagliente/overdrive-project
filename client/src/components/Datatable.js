@@ -254,9 +254,9 @@ export class Datatable extends React.Component {
                             <Form.Control
                                 as="select"
                                 size="sm"
-                                width="30px"
                                 onChange={(e) => this.handleLimitChange(e)}
-                                custom>
+                                custom
+                                style={{ width: '80px' }}>
                                 <option>10</option>
                                 <option>25</option>
                                 <option>50</option>
