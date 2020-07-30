@@ -28,17 +28,47 @@ class Actions extends React.Component {
     }
 }
 
-function Search(props) {
-    return (
-        <div className="mb-2">
-            <Form.Control
-                type="text"
-                placeholder="Search"
-                size="sm"
-                onKeyUp={(e) => { if (props['onTextChange']) props.onTextChange(e.target.value); }}
-            />
-        </div>
-    );
+class Search extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            text: ''
+        };
+
+        this.timer = null;
+    }
+
+    handleTextChange(text) {
+        // Clears the previously set timer.
+        clearTimeout(this.timer);
+
+        // Reset the timer, to make the http call after 475MS (this.callSearch is a method which will call the search API. Don't forget to bind it in constructor.)
+        this.timer = setTimeout(() => this.callSearch(), this.props.delay || 475);
+
+        this.setState({
+            text: text
+        });
+    }
+
+    callSearch() {
+        if (this.props['onTextChange'])
+        {
+            this.props.onTextChange(this.state.text);
+        }
+    }
+
+    render() {
+        return (
+            <div className="mb-2">
+                <Form.Control
+                    type="text"
+                    placeholder="Search"
+                    size="sm"
+                    onKeyUp={(e) => { this.handleTextChange(e.target.value); }}
+                />
+            </div>
+        );
+    }
 }
 
 class DatatablePagination extends React.Component {
@@ -162,8 +192,12 @@ export class Datatable extends React.Component {
         this.#fetch(this.state.filter, this.state.page);
     }
 
-    handleRowSelection(record) {
-        console.log(record);
+    handleRowSelection(e, record) {
+        console.log(e);
+        if (this.props['onRowSelection'])
+        {
+            this.props.onRowSelection(record);
+        }
     }
 
     handleSearch(text) {
@@ -192,7 +226,7 @@ export class Datatable extends React.Component {
         );
 
         const body = this.data.map((record, index) =>
-            <tr key={index} onClick={() => this.handleRowSelection(record)}>
+            <tr key={index} onClick={(e) => this.handleRowSelection(e, record)}>
                 {columns.map((column) =>
                     <td key={record.id + column}>{record[column]}</td>
                 )}
