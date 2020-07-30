@@ -156,8 +156,11 @@ export class Datatable extends React.Component {
             recordsFiltered: 0,
             limit: 10,
             page: 1,
-            filter: ''
+            filter: '',
+            selectedRow: null
         };
+
+        this.table = React.createRef();
     }
 
     get dataProvider() {
@@ -181,7 +184,8 @@ export class Datatable extends React.Component {
                 page: page,
                 filter: filter,
                 recordsTotal: res.data.recordsTotal,
-                recordsFiltered: res.data.recordsFiltered
+                recordsFiltered: res.data.recordsFiltered,
+                selectedRow: null
             });
         })).catch((err) => {
             console.log(err);
@@ -192,11 +196,15 @@ export class Datatable extends React.Component {
         this.#fetch(this.state.filter, this.state.page);
     }
 
-    handleRowSelection(e, record) {
-        console.log(e);
+    handleRowSelection(e, index, record) {
+        const selection = this.state.selectedRow == index ? null : index;
+        this.setState({
+            selectedRow: selection
+        });
+
         if (this.props['onRowSelection'])
         {
-            this.props.onRowSelection(record);
+            this.props.onRowSelection(selection ? record : null);
         }
     }
 
@@ -226,7 +234,9 @@ export class Datatable extends React.Component {
         );
 
         const body = this.data.map((record, index) =>
-            <tr key={index} onClick={(e) => this.handleRowSelection(e, record)}>
+            <tr key={index}
+                onClick={(e) => this.handleRowSelection(e, index, record)}
+                className={this.state.selectedRow == index ? 'table-primary' : ''}>
                 {columns.map((column) =>
                     <td key={record.id + column}>{record[column]}</td>
                 )}
@@ -244,7 +254,13 @@ export class Datatable extends React.Component {
             <>
                 {this.props.crud && <Actions actions={this.props.crud} />}
                 {this.props.search && <Search onTextChange={(e) => this.handleSearch(e)} />}
-                <Table responsive striped bordered hover size="sm">
+                <Table
+                    ref={this.table}
+                    responsive
+                    striped
+                    bordered
+                    hover
+                    size="sm">
                     <thead>
                         <tr>
                             {head}
