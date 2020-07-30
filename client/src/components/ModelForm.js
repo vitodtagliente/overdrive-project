@@ -90,7 +90,7 @@ export default class ModelForm extends React.Component {
                         type="submit"
                         className="rounded-0"
                         size="sm"
-                    >Save</Button>
+                    >Add</Button>
                 }
                 {this.props.model &&
                     <Button
@@ -98,12 +98,13 @@ export default class ModelForm extends React.Component {
                         type="submit"
                         className="rounded-0"
                         size="sm"
-                    >Save</Button>
+                    >Edit</Button>
                 }
                 <Button
                     variant="info"
                     className="rounded-0"
                     size="sm"
+                    onClick={this.props.onCancel}
                 >Cancel</Button>
             </Form>
         );
