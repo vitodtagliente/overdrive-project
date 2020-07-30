@@ -25,12 +25,35 @@ const Action = {
 class ActionBar extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
     }
 
     render() {
+
+        let edit = '';
+        if (this.props.record)
+        {
+            edit = (
+                <>
+                    <Button
+                        variant="warning"
+                        className="rounded-0"
+                        size="sm"
+                        onClick={(e) => { if (this.props['onAction']) this.props.onAction(Action.Edit); }}
+                    >
+                        <FontAwesomeIcon icon={faPen} /> Edit
+                    </Button>
+                    <Button
+                        variant="danger"
+                        className="rounded-0"
+                        size="sm"
+                        onClick={(e) => { if (this.props['onAction']) this.props.onAction(Action.Delete); }}
+                    >
+                        <FontAwesomeIcon icon={faTrash} /> Delete
+                    </Button>
+                </>
+            );
+        }
+
         return (
             <ButtonGroup aria-label="Basic example" className="mb-3">
                 <Button
@@ -41,22 +64,7 @@ class ActionBar extends React.Component {
                 >
                     <FontAwesomeIcon icon={faPlus} /> Add
                 </Button>
-                <Button
-                    variant="warning"
-                    className="rounded-0"
-                    size="sm"
-                    onClick={(e) => { if (this.props['onAction']) this.props.onAction(Action.Edit); }}
-                >
-                    <FontAwesomeIcon icon={faPen} /> Edit
-                </Button>
-                <Button
-                    variant="danger"
-                    className="rounded-0"
-                    size="sm"
-                    onClick={(e) => { if (this.props['onAction']) this.props.onAction(Action.Delete); }}
-                >
-                    <FontAwesomeIcon icon={faTrash} /> Delete
-                </Button>
+                {edit}
             </ButtonGroup>
         );
     }
@@ -67,7 +75,8 @@ export class DatatableModule extends React.Component {
         super(props);
         this.state = {
             dataProvider: new DataProvider(props.api),
-            action: Action.List
+            action: Action.List,
+            selectedRecord: null
         };
     }
 
@@ -83,12 +92,14 @@ export class DatatableModule extends React.Component {
                         <>
                             <ActionBar
                                 onAction={(e) => this.handleActionChange(e)}
+                                record={this.state.selectedRecord}
                             ></ActionBar>
                             <Datatable
                                 columns={columns}
                                 dataProvider={this.state.dataProvider}
                                 paginate={true}
                                 search={true}
+                                onRowSelection={(record) => this.handleRecordSelection(record)}
                             ></Datatable>
                         </>
                     );
@@ -99,6 +110,7 @@ export class DatatableModule extends React.Component {
                     {
                         return this.props.create();
                     }
+                    break;
                 }
             case Action.Edit:
                 {
@@ -106,6 +118,7 @@ export class DatatableModule extends React.Component {
                     {
                         return this.props.edit();
                     }
+                    break;
                 }
             default: return (<></>);
         }
@@ -114,6 +127,12 @@ export class DatatableModule extends React.Component {
     handleActionChange(action) {
         this.setState({
             action: action
+        });
+    }
+
+    handleRecordSelection(record) {
+        this.setState({
+            selectedRecord: record
         });
     }
 
