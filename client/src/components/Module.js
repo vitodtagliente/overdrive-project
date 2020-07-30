@@ -109,6 +109,7 @@ export class DatatableModule extends React.Component {
                     if (this.props.create)
                     {
                         return this.props.create({
+                            dataProvider: this.state.dataProvider,
                             onCancel: () => this.handleActionChange(Action.List)
                         });
                     }
@@ -119,6 +120,7 @@ export class DatatableModule extends React.Component {
                     if (this.props.edit)
                     {
                         return this.props.edit({
+                            dataProvider: this.state.dataProvider,
                             model: this.state.selectedRecord,
                             onCancel: () => this.handleActionChange(Action.List)
                         });

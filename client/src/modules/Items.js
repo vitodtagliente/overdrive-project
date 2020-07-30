@@ -35,6 +35,7 @@ export function CreateItems(props) {
         <ModelForm
             schema={Schema}
             onCancel={props.onCancel}
+            dataProvider={props.dataProvider}
         ></ModelForm>
     );
 }
@@ -45,6 +46,7 @@ export function EditItems(props) {
             schema={Schema}
             model={props.model}
             onCancel={props.onCancel}
+            dataProvider={props.dataProvider}
         ></ModelForm>
     );
 }

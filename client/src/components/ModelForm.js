@@ -99,19 +99,29 @@ export default class ModelForm extends React.Component {
     handleAdd(e) {
         e.preventDefault();
 
-        if (this.dataProvider)
-        {
+        if (!this.dataProvider) return;
 
-        }
+        this.dataProvider.create(
+            this.state
+        ).then((res => {
+            this.props.onCancel();            
+        })).catch((err) => {
+            console.log(err);
+        });
     }
 
     handleEdit(e) {
         e.preventDefault();
 
-        if (this.dataProvider)
-        {
+        if (!this.dataProvider) return;
 
-        }
+        this.dataProvider.update(
+            this.state
+        ).then((res => {
+            this.props.onCancel();
+        })).catch((err) => {
+            console.log(err);
+        });
     }
 
     render() {
