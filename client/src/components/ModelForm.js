@@ -12,7 +12,7 @@ class Attribute extends React.Component {
 
     render() {
         const value = (this.props.model && this.props.model[this.props.name]) ?
-        this.props.model[this.props.name] : undefined;
+            this.props.model[this.props.name] : undefined;
 
         switch (this.props.schema.type || String)
         {
@@ -24,6 +24,7 @@ class Attribute extends React.Component {
                                 type="checkbox"
                                 label={this.props.schema.display || this.props.name}
                                 name={this.props.name}
+                                checked={value}
                                 onChange={(e) => this.handleInputchange(e)}
                             />
                         </Form.Group>
@@ -86,6 +87,14 @@ export default class ModelForm extends React.Component {
                 {this.props.model == null &&
                     <Button
                         variant="success"
+                        type="submit"
+                        className="rounded-0"
+                        size="sm"
+                    >Save</Button>
+                }
+                {this.props.model &&
+                    <Button
+                        variant="warning"
                         type="submit"
                         className="rounded-0"
                         size="sm"
