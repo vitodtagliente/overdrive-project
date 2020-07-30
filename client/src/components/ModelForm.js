@@ -1,13 +1,18 @@
 import React from 'react';
-import { Container, Button, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 class Attribute extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+        };
     }
 
-    handleInputchange(e) {
-
+    handleInputchange(name, value) {
+        if (this.props['onChange'])
+        {
+            this.props.onChange(name, value);
+        }
     }
 
     render() {
@@ -29,8 +34,8 @@ class Attribute extends React.Component {
                                 checked={value}
                                 readOnly={readonly}
                                 disabled={readonly}
-                                required={this.props.required || false}
-                                onChange={(e) => this.handleInputchange(e)}
+                                required={this.props.schema.required || false}
+                                onChange={(e) => this.handleInputchange(this.props.name, e.target.value)}
                             />
                         </Form.Group>
                     );
@@ -45,8 +50,8 @@ class Attribute extends React.Component {
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}
                                 readOnly={readonly}
-                                required={this.props.required || false}
-                                onChange={(e) => this.handleInputchange(e)}
+                                required={this.props.schema.required || false}
+                                onChange={(e) => this.handleInputchange(this.props.name, e.target.value)}
                             />
                         </Form.Group>
                     );
@@ -63,8 +68,8 @@ class Attribute extends React.Component {
                                 name={this.props.name}
                                 value={value}
                                 readOnly={readonly}
-                                required={this.props.required || false}
-                                onChange={(e) => this.handleInputchange(e)}
+                                required={this.props.schema.required || false}
+                                onChange={(e) => this.handleInputchange(this.props.name, e.target.value)}
                             />
                         </Form.Group>
                     );
@@ -76,17 +81,27 @@ class Attribute extends React.Component {
 export default class ModelForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = this.props.model || {};
 
-        };
+        this.form = React.createRef();
+    }
+
+    handleOnChange(name, value) {
+        let state = {};
+        state[name] = value;
+        this.setState(state);
     }
 
     handleAdd(e) {
+        e.preventDefault();
 
+        console.log(this.state);
     }
 
     handleEdit(e) {
+        e.preventDefault();
 
+        console.log(this.state);
     }
 
     render() {
@@ -95,11 +110,12 @@ export default class ModelForm extends React.Component {
                 name={attribute}
                 schema={this.props.schema[attribute]}
                 model={this.props.model}
+                onChange={(name, value) => this.handleOnChange(name, value)}
             />
         );
 
         return (
-            <Form>
+            <Form ref={this.form}>
                 {content}
                 {this.props.model == null &&
                     <Button
@@ -107,7 +123,7 @@ export default class ModelForm extends React.Component {
                         type="submit"
                         className="rounded-0"
                         size="sm"
-                        onClick={this.handleAdd}
+                        onClick={(e) => this.handleAdd(e)}
                     >Add</Button>
                 }
                 {this.props.model &&
@@ -116,7 +132,7 @@ export default class ModelForm extends React.Component {
                         type="submit"
                         className="rounded-0"
                         size="sm"
-                        onClick={this.handleEdit}
+                        onClick={(e) => this.handleEdit(e)}
                     >Edit</Button>
                 }
                 <Button
