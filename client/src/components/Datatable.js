@@ -157,7 +157,7 @@ export class Datatable extends React.Component {
             limit: 10,
             page: 1,
             filter: '',
-            selectedRow: null
+            selectedRow: -1
         };
 
         this.table = React.createRef();
@@ -185,7 +185,7 @@ export class Datatable extends React.Component {
                 filter: filter,
                 recordsTotal: res.data.recordsTotal,
                 recordsFiltered: res.data.recordsFiltered,
-                selectedRow: null
+                selectedRow: -1
             });
         })).catch((err) => {
             console.log(err);
@@ -197,14 +197,14 @@ export class Datatable extends React.Component {
     }
 
     handleRowSelection(e, index, record) {
-        const selection = this.state.selectedRow == index ? null : index;
+        const selection = this.state.selectedRow === index ? -1 : index;
         this.setState({
             selectedRow: selection
         });
 
         if (this.props['onRowSelection'])
         {
-            this.props.onRowSelection(selection ? record : null);
+            this.props.onRowSelection(selection >= 0 ? record : null);
         }
     }
 
