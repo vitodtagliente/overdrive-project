@@ -15,4 +15,13 @@ export default class DataProvider {
             params: { limit: 10, offset: 0, ...params }
         });
     }
+
+    create(model = {}) {
+        return axios.post(this.url, model);
+    }
+
+    update(model = {}) {
+        const url = this.url + '/' + (model.id || model._id); 
+        return axios.patch(url, model);
+    }
 }

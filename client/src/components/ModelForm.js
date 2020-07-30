@@ -33,9 +33,8 @@ class Attribute extends React.Component {
                                 name={this.props.name}
                                 checked={value}
                                 readOnly={readonly}
-                                disabled={readonly}
                                 required={this.props.schema.required || false}
-                                onChange={(e) => this.handleInputchange(this.props.name, e.target.value)}
+                                onChange={(e) => this.handleInputchange(this.props.name, e.target.value === 'on')}
                             />
                         </Form.Group>
                     );
