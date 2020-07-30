@@ -1,7 +1,7 @@
 import React from 'react';
 import { Datatable } from './Datatable';
 import DataProvider from '../DataProvider';
-import { Button, ButtonGroup, Form } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 
@@ -116,7 +116,7 @@ export class DatatableModule extends React.Component {
                 {
                     if (this.props.edit)
                     {
-                        return this.props.edit();
+                        return this.props.edit({ model: this.state.selectedRecord });
                     }
                     break;
                 }
