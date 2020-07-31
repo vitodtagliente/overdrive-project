@@ -1,5 +1,7 @@
 import React from 'react';
-import { Table, Pagination, Form } from 'react-bootstrap';
+import { Table, Pagination, Form, InputGroup } from 'react-bootstrap';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 class Search extends React.Component {
     constructor(props) {
@@ -33,12 +35,19 @@ class Search extends React.Component {
     render() {
         return (
             <div className="mb-2">
-                <Form.Control
-                    type="text"
-                    placeholder="Search"
-                    size="sm"
-                    onKeyUp={(e) => { this.handleTextChange(e.target.value); }}
-                />
+                <InputGroup size="sm">
+                    <InputGroup.Prepend>
+                        <InputGroup.Text id="inputGroupPrepend">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                        type="text"
+                        placeholder="Search"
+                        size="sm"
+                        onKeyUp={(e) => { this.handleTextChange(e.target.value); }}
+                    />
+                </InputGroup>
             </div>
         );
     }
@@ -202,7 +211,7 @@ export class Datatable extends React.Component {
                 ? this.props.columns :
                 Object.keys(this.props.columns);
         }
-        else if (this.data.length > 0) 
+        else if (this.data.length > 0)
         {
             columns = Object.keys(this.data[0]);
         }

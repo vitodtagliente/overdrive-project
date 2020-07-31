@@ -31,7 +31,7 @@ class Attribute extends React.Component {
                                 type="checkbox"
                                 label={this.props.schema.display || this.props.name}
                                 name={this.props.name}
-                                checked={value}
+                                defaultValue={value}
                                 readOnly={readonly}
                                 required={this.props.schema.required || false}
                                 onChange={(e) => this.handleInputchange(this.props.name, e.target.value === 'on')}
@@ -48,6 +48,7 @@ class Attribute extends React.Component {
                                 type="number"
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}
+                                defaultValue={value}
                                 readOnly={readonly}
                                 required={this.props.schema.required || false}
                                 onChange={(e) => this.handleInputchange(this.props.name, e.target.value)}
@@ -65,7 +66,7 @@ class Attribute extends React.Component {
                                 type="text"
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}
-                                value={value}
+                                defaultValue={value}
                                 readOnly={readonly}
                                 required={this.props.schema.required || false}
                                 onChange={(e) => this.handleInputchange(this.props.name, e.target.value)}
