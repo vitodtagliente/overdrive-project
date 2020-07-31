@@ -34,7 +34,7 @@ class Attribute extends React.Component {
                                 defaultChecked={value}
                                 readOnly={readonly}
                                 required={this.props.schema.required || false}
-                                onChange={(e) => this.handleInputchange(this.props.name, e.target.value === 'on')}
+                                onChange={(e) => this.handleInputchange(this.props.name, e.target.checked)}
                             />
                         </Form.Group>
                     );
@@ -104,7 +104,7 @@ export default class ModelForm extends React.Component {
         this.dataProvider.create(
             this.state
         ).then((res => {
-            this.props.onCancel();            
+            this.props.onCancel();
         })).catch((err) => {
             console.log(err);
         });
