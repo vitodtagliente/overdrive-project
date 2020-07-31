@@ -107,6 +107,9 @@ export class DatatableModule extends React.Component {
                             <Dialog
                                 ref={this.deleteDialog}
                                 title="Delete"
+                                buttonName="Delete"
+                                buttonVariant="danger"
+                                onAction={(dialog) => this.handleDelete(dialog)}
                             >
                                 Are you sure to delete the selected record?
                             </Dialog>
@@ -152,8 +155,12 @@ export class DatatableModule extends React.Component {
         });
     }
 
-    handleDeleteAction(){
+    handleDeleteAction() {
         this.deleteDialog.current.show();
+    }
+
+    handleDelete(dialog) {
+        dialog.close();
     }
 
     render() {

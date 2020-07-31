@@ -42,10 +42,16 @@ export default class Dialog extends React.Component {
                     {this.props.children}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => this.close()}>
-                        Close
-                    </Button>
-                    <Button variant="primary">Understood</Button>
+                    <Button
+                        variant={this.props.buttonVariant || "warning"}
+                        size="sm"
+                        onClick={() => { if (this.props['onAction']) this.props.onAction(this) }}
+                    >{this.props.buttonName || "OK"}</Button>
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => this.close()}
+                    >Cancel</Button>
                 </Modal.Footer>
             </Modal>
         );
