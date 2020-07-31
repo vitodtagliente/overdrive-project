@@ -22,6 +22,8 @@ export default class DataProvider {
 
     update(model = {}) {
         const url = this.url + '/' + (model.id || model._id); 
+        delete model['id'];
+        delete model['_id'];
         return axios.patch(url, model);
     }
 }
