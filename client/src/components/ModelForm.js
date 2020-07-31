@@ -31,7 +31,7 @@ class Attribute extends React.Component {
                                 type="checkbox"
                                 label={this.props.schema.display || this.props.name}
                                 name={this.props.name}
-                                defaultValue={value}
+                                defaultChecked={value}
                                 readOnly={readonly}
                                 required={this.props.schema.required || false}
                                 onChange={(e) => this.handleInputchange(this.props.name, e.target.value === 'on')}
