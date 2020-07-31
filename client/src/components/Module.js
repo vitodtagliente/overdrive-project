@@ -4,6 +4,7 @@ import DataProvider from '../DataProvider';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
+import Dialog from './Dialog';
 
 export function Module(props) {
     return (
@@ -17,7 +18,6 @@ export function Module(props) {
 
 const Action = {
     Create: 'create',
-    Delete: 'delete',
     Edit: 'edit',
     List: 'list'
 }
@@ -46,7 +46,7 @@ class ActionBar extends React.Component {
                         variant="danger"
                         className="rounded-0"
                         size="sm"
-                        onClick={(e) => { if (this.props['onAction']) this.props.onAction(Action.Delete); }}
+                        onClick={(e) => { if (this.props['onDelete']) this.props.onDelete() }}
                     >
                         <FontAwesomeIcon icon={faTrash} /> Delete
                     </Button>
@@ -78,6 +78,8 @@ export class DatatableModule extends React.Component {
             action: Action.List,
             selectedRecord: null
         };
+
+        this.deleteDialog = React.createRef();
     }
 
     getContent() {
@@ -92,6 +94,7 @@ export class DatatableModule extends React.Component {
                         <>
                             <ActionBar
                                 onAction={(e) => this.handleActionChange(e)}
+                                onDelete={() => this.handleDeleteAction()}
                                 record={this.state.selectedRecord}
                             ></ActionBar>
                             <Datatable
@@ -101,6 +104,12 @@ export class DatatableModule extends React.Component {
                                 search={true}
                                 onRowSelection={(record) => this.handleRecordSelection(record)}
                             ></Datatable>
+                            <Dialog
+                                ref={this.deleteDialog}
+                                title="Delete"
+                            >
+                                Are you sure to delete the selected record?
+                            </Dialog>
                         </>
                     );
                 }
@@ -141,6 +150,10 @@ export class DatatableModule extends React.Component {
         this.setState({
             selectedRecord: record
         });
+    }
+
+    handleDeleteAction(){
+        this.deleteDialog.current.show();
     }
 
     render() {
