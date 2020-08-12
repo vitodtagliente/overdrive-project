@@ -13,7 +13,7 @@ export default class Dashboard extends React.Component {
     }
 
     get module() {
-        if (this.state.module > this.props.modules.length)
+        if (this.state.module < this.props.modules.length)
         {
             return this.props.modules[this.state.module];
         }
