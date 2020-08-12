@@ -1,19 +1,22 @@
 import React from 'react';
 
 export default class Module {
-    constructor() {
+    #id = null
 
+    constructor(id) {
+        this.#id = id || Math.random().toString(36).substring(2, 15)
+            + Math.random().toString(36).substring(2, 15);
+    }
+
+    get id() {
+        return this.#id;
     }
 
     sidebar() {
-        return (
-            <></>
-        );
+        return null;
     }
 
-    content() {
-        return (
-            <></>
-        );
+    content(context) {
+        return null;
     }
 }

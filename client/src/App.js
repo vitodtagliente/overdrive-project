@@ -8,11 +8,13 @@ import { Dashboard, Module } from 'overdrive-dashboard';
 import './components/Dashboard.css';
 import './components/Sidebar.css';
 
+import TestModule from './modules/test';
+
 export default function App(props) {
 	return (
 		<Dashboard
 			modules={[
-				new Module(),
+				new TestModule(),
 				new Module()
 			]}
 		/>

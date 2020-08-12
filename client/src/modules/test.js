@@ -8,7 +8,13 @@ export default class TestModule extends Module {
 
     sidebar() {
         return (
-            <div></div>
+            <div>Fooo</div>
+        );
+    }
+
+    content(context) {
+        return (
+            <div>Test Content</div>
         );
     }
 };
