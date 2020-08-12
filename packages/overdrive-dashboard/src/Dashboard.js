@@ -1,6 +1,8 @@
 import React from 'react';
 import './Dashboard.css';
 
+import Navbar from './Navbar';
+
 export default class Dashboard extends React.Component {
     constructor(props) {
         super(props);
@@ -8,7 +10,12 @@ export default class Dashboard extends React.Component {
 
     render() {
         return (
-            <div></div>
+            <div className="page-wrapper default-theme toggled">
+
+                <main className="page-content">
+                    <Navbar />
+                </main>
+            </div >
         );
     }
 }
