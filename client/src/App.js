@@ -1,13 +1,20 @@
 import React from 'react';
 
-import { Dashboard } from 'overdrive-dashboard';
-//import Dashboard from './components/Dashboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Dashboard, Module } from 'overdrive-dashboard';
+//import 'overdrive-dashboard/dist/index.css'
+//import Dashboard from './components/Dashboard';
+
+import './components/Dashboard.css';
+import './components/Sidebar.css';
 
 export default function App(props) {
 	return (
-		<Dashboard>
-
-		</Dashboard>
+		<Dashboard
+			modules={[
+				new Module(),
+				new Module()
+			]}
+		/>
 	);
 }

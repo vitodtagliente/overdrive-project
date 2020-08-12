@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from './Icon';
 
 export default class extends React.Component {
     constructor(props) {
@@ -27,7 +28,7 @@ export default class extends React.Component {
         return (
             <nav className="navbar navbar-expand navbar-light bg-light">
                 <button id="toggle-sidebar" className="btn" onClick={this.toggleSidebar}>
-                    Foo
+                    <Icon icon="foo" />
                 </button>
             </nav>
         );
