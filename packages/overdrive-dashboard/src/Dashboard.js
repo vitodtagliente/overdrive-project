@@ -8,7 +8,7 @@ export default class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            module: this.props.defaultModule || 0
+            module: this.dispatch()
         };
     }
 
@@ -22,6 +22,18 @@ export default class Dashboard extends React.Component {
 
     get url() {
         return window.location.pathname;
+    }
+
+    dispatch() {
+        for (var i = 0; i < this.props.modules.length; ++i)
+        {
+            var module = this.props.modules[i];
+            if (this.url.includes(module.url))
+            {
+                return i;
+            }
+        }
+        return this.props.defaultModule || 0;
     }
 
     render() {

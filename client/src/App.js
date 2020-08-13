@@ -9,13 +9,14 @@ import './components/Dashboard.css';
 import './components/Sidebar.css';
 
 import TestModule from './modules/test';
+import FooModule from './modules/foo';
 
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.modules = [
 			new TestModule('/test'),
-			new Module('/ttt')
+			new FooModule('/foo')
 		];
 	}
 
