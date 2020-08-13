@@ -42,8 +42,10 @@ export default class Dashboard extends React.Component {
                 <Sidebar
                     brand="Dashboard"
                 >
-                    {this.props.modules.map((module) =>
-                        module.sidebar()
+                    {this.props.modules.map((module, index) =>
+                        <div key={index}>
+                            {module.sidebar()}
+                        </div>
                     )}
                 </Sidebar>
                 <main className="page-content">

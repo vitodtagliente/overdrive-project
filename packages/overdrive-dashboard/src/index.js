@@ -9,3 +9,6 @@ export * from './Module';
 
 export { default as Datatable } from './Datatable';
 export * from './Datatable';
+
+export { default as DataProvider } from './DataProvider';
+export * from './DataProvider';

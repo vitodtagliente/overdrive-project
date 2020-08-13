@@ -32,13 +32,13 @@ class Search extends React.Component {
     render() {
         return (
             <div className="mb-2">
-                <div className="form-group from-group-sm">
+                <div className="input-group input-group-sm">
                     <div className="input-group-prepend">
                         <div className="input-group-text">@</div>
                     </div>
                     <input
                         type="text"
-                        className="from-control form-control-sm"
+                        className="form-control"
                         placeholder="Search"
                         onKeyUp={(e) => { this.handleTextChange(e.target.value); }}
                     />
@@ -50,7 +50,7 @@ class Search extends React.Component {
 
 function Page(props) {
     return (
-        <li key={props.key} className={props.active ? "page-item active" : "page-item"}>
+        <li className={props.active ? "page-item active" : "page-item"}>
             <a
                 className="page-link"
                 href="#"
@@ -115,11 +115,11 @@ class Pagination extends React.Component {
         return (
             <nav>
                 <ul className="pagination pagination-sm justify-content-end">
-                    <Page onClick={() => this.handlePageSelection(1)}>First</Page>
-                    <Page onClick={() => this.handlePageSelection(Math.max(1, page - 1))}>Previous</Page>
+                    <Page key="first" onClick={() => this.handlePageSelection(1)}>First</Page>
+                    <Page key="previous" onClick={() => this.handlePageSelection(Math.max(1, page - 1))}>Previous</Page>
                     {items}
-                    <Page onClick={() => this.handlePageSelection(Math.min(pages, page + 1))}>Next</Page>
-                    <Page onClick={() => this.handlePageSelection(pages)}>Last</Page>
+                    <Page key="next" onClick={() => this.handlePageSelection(Math.min(pages, page + 1))}>Next</Page>
+                    <Page key="last" onClick={() => this.handlePageSelection(pages)}>Last</Page>
                 </ul>
             </nav>
         );
@@ -215,7 +215,7 @@ export default class Datatable extends React.Component {
         }
 
         const head = columns.map((column, index) =>
-            <th key={index}>{this.props.columns[column] || column}</th>
+            <th key={index} scope="col">{this.props.columns[column] || column}</th>
         );
 
         const body = this.data.map((record, index) =>
@@ -240,7 +240,7 @@ export default class Datatable extends React.Component {
                 {this.props.search && <Search onTextChange={(e) => this.handleSearch(e)} />}
                 <table
                     ref={this.table}
-                    className="table table-responsive table-bordered table-hover table-striped table-sm">
+                    className="table table-bordered table-hover table-striped table-sm">
                     <thead>
                         <tr>
                             {head}
@@ -255,9 +255,9 @@ export default class Datatable extends React.Component {
                         <div className="col-sm-12 col-md-5 align-items-center">
                             <span>Showing </span>
                             <select
-                                className="form-control from-control-sm"
+                                className="form-control form-control-sm"
                                 onChange={(e) => this.handleLimitChange(e)}
-                                style={{ width: '80px' }}>
+                                style={{ width: '80px', display: 'inline' }}>
                                 <option>10</option>
                                 <option>25</option>
                                 <option>50</option>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Module, Sidebar, Datatable } from 'overdrive-dashboard';
+import { Module, Sidebar, Datatable, DataProvider } from 'overdrive-dashboard';
 
 export default class TestModule extends Module {
     constructor(url, id) {
@@ -23,7 +23,7 @@ export default class TestModule extends Module {
             >
                 <Datatable
                     columns={{ _id: 'Id', name: 'Name' }}
-                    dataProvider={null}
+                    dataProvider={new DataProvider("http://localhost:9000/api/items")}
                     paginate={true}
                     search={true}
                     onRowSelection={(record) => console.log(record)}
