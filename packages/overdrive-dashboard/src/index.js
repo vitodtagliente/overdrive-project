@@ -6,3 +6,6 @@ export * from './Sidebar';
 
 export { default as Module } from './Module';
 export * from './Module';
+
+export { default as Datatable } from './Datatable';
+export * from './Datatable';

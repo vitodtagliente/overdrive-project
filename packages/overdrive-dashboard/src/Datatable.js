@@ -1,7 +1,4 @@
-import React from 'react';
-import { Table, Pagination, Form, InputGroup } from 'react-bootstrap';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import React, { Fragment } from 'react';
 
 class Search extends React.Component {
     constructor(props) {
@@ -35,25 +32,37 @@ class Search extends React.Component {
     render() {
         return (
             <div className="mb-2">
-                <InputGroup size="sm">
-                    <InputGroup.Prepend>
-                        <InputGroup.Text id="inputGroupPrepend">
-                            <FontAwesomeIcon icon={faSearch} />
-                        </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <Form.Control
+                <div className="form-group from-group-sm">
+                    <div className="input-group-prepend">
+                        <div className="input-group-text">@</div>
+                    </div>
+                    <input
                         type="text"
+                        className="from-control form-control-sm"
                         placeholder="Search"
-                        size="sm"
                         onKeyUp={(e) => { this.handleTextChange(e.target.value); }}
                     />
-                </InputGroup>
+                </div>
             </div>
         );
     }
 }
 
-class DatatablePagination extends React.Component {
+function Page(props) {
+    return (
+        <li key={props.key} className={props.active ? "page-item active" : "page-item"}>
+            <a
+                className="page-link"
+                href="#"
+                onClick={(e) => { if (props['onClick']) props.onClick(e); }}
+            >
+                {props.children}
+            </a>
+        </li>
+    );
+}
+
+class Pagination extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -93,42 +102,31 @@ class DatatablePagination extends React.Component {
         const items = [];
         for (let i = min; i <= max; ++i)
         {
-            if (i === page)
-            {
-                items.push(
-                    <Pagination.Item
-                        onClick={() => this.handlePageSelection(i)}
-                        key={i}
-                        active>
-                        {i}
-                    </Pagination.Item>
-                );
-            }
-            else
-            {
-                items.push(
-                    <Pagination.Item
-                        onClick={() => this.handlePageSelection(i)}
-                        key={i}>
-                        {i}
-                    </Pagination.Item>
-                );
-            }
+            items.push(
+                <Page
+                    onClick={() => this.handlePageSelection(i)}
+                    key={i}
+                    active={i === page}>
+                    {i}
+                </Page>
+            );
         }
 
         return (
-            <Pagination size="sm" className="justify-content-end">
-                <Pagination.First onClick={() => this.handlePageSelection(1)} />
-                <Pagination.Prev onClick={() => this.handlePageSelection(Math.max(1, page - 1))} />
-                {items}
-                <Pagination.Next onClick={() => this.handlePageSelection(Math.min(pages, page + 1))} />
-                <Pagination.Last onClick={() => this.handlePageSelection(pages)} />
-            </Pagination>
+            <nav>
+                <ul className="pagination pagination-sm justify-content-end">
+                    <Page onClick={() => this.handlePageSelection(1)}>First</Page>
+                    <Page onClick={() => this.handlePageSelection(Math.max(1, page - 1))}>Previous</Page>
+                    {items}
+                    <Page onClick={() => this.handlePageSelection(Math.min(pages, page + 1))}>Next</Page>
+                    <Page onClick={() => this.handlePageSelection(pages)}>Last</Page>
+                </ul>
+            </nav>
         );
     }
 }
 
-export class Datatable extends React.Component {
+export default class Datatable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -240,13 +238,9 @@ export class Datatable extends React.Component {
         return (
             <>
                 {this.props.search && <Search onTextChange={(e) => this.handleSearch(e)} />}
-                <Table
+                <table
                     ref={this.table}
-                    responsive
-                    striped
-                    bordered
-                    hover
-                    size="sm">
+                    className="table table-responsive table-bordered table-hover table-striped table-sm">
                     <thead>
                         <tr>
                             {head}
@@ -255,26 +249,24 @@ export class Datatable extends React.Component {
                     <tbody>
                         {body}
                     </tbody>
-                </Table>
+                </table>
                 {this.props.paginate &&
                     <div className="row">
                         <div className="col-sm-12 col-md-5 align-items-center">
                             <span>Showing </span>
-                            <Form.Control
-                                as="select"
-                                size="sm"
+                            <select
+                                className="form-control from-control-sm"
                                 onChange={(e) => this.handleLimitChange(e)}
-                                custom
                                 style={{ width: '80px' }}>
                                 <option>10</option>
                                 <option>25</option>
                                 <option>50</option>
                                 <option>100</option>
-                            </Form.Control>
+                            </select>
                             <span> of {this.state.recordsTotal} records</span>
                         </div>
                         <div className="col-sm-12 col-md-7">
-                            <DatatablePagination
+                            <Pagination
                                 pages={pages}
                                 onPageChange={(e) => this.handlePageChange(e)}
                             />

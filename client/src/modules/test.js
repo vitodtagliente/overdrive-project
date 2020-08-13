@@ -1,5 +1,5 @@
 import React from 'react';
-import { Module, Sidebar } from 'overdrive-dashboard';
+import { Module, Sidebar, Datatable } from 'overdrive-dashboard';
 
 export default class TestModule extends Module {
     constructor(url, id) {
@@ -17,10 +17,18 @@ export default class TestModule extends Module {
 
     content(context) {
         return (
-            <Module.Content 
+            <Module.Content
                 name="Test"
                 description="test component"
-            >Test</Module.Content>
+            >
+                <Datatable
+                    columns={{ _id: 'Id', name: 'Name' }}
+                    dataProvider={null}
+                    paginate={true}
+                    search={true}
+                    onRowSelection={(record) => console.log(record)}
+                ></Datatable>
+            </Module.Content>
         );
     }
 };
