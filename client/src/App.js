@@ -1,9 +1,8 @@
 import React from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Dashboard, Module } from 'overdrive-dashboard';
-//import 'overdrive-dashboard/dist/index.css'
-//import Dashboard from './components/Dashboard';
+import { Dashboard } from 'overdrive-dashboard';
+import 'overdrive-dashboard/dist/index.css'
 
 import './components/Dashboard.css';
 import './components/Sidebar.css';
