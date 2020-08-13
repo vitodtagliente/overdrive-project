@@ -72,6 +72,8 @@ export default class TestModule extends Module {
         */
         return (
             <Module.SimpleCRUD
+                name="Test Component"
+                description="Foo sisjfiowegsopgehesgji"
                 columns={{ _id: 'Id', name: 'Name' }}
                 schema={Schema}
                 api="http://localhost:9000/api/items"
