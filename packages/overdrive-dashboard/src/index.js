@@ -12,3 +12,6 @@ export * from './Datatable';
 
 export { default as DataProvider } from './DataProvider';
 export * from './DataProvider';
+
+export { default as Inspector } from './Inspector';
+export * from './Inspector';

@@ -1,5 +1,34 @@
 import React from 'react';
-import { Module, Sidebar, Datatable, DataProvider } from 'overdrive-dashboard';
+import { Module, Sidebar, Datatable, DataProvider, Inspector } from 'overdrive-dashboard';
+
+const Schema = {
+    name: {
+        display: "Name",
+        required: true,
+        type: String,
+        placeholder: "Enter the item name"
+    },
+    type: {
+        display: "Type",
+        required: true,
+        type: String,
+        placeholder: "Enter the type"
+    },
+    isConsumable: {
+        type: Boolean
+    },
+    isStackable: {
+        type: Boolean
+    },
+    isEquippable: {
+        type: Boolean
+    },
+    power: {
+        display: "Power",
+        type: Number,
+        placeholder: "Enter the power"
+    }
+}
 
 export default class TestModule extends Module {
     constructor(url, id) {
@@ -16,6 +45,8 @@ export default class TestModule extends Module {
     }
 
     content(context) {
+        const dataProvider = new DataProvider("http://localhost:9000/api/items");
+
         return (
             <Module.Content
                 name="Test"
@@ -23,11 +54,16 @@ export default class TestModule extends Module {
             >
                 <Datatable
                     columns={{ _id: 'Id', name: 'Name' }}
-                    dataProvider={new DataProvider("http://localhost:9000/api/items")}
+                    dataProvider={dataProvider}
                     paginate={true}
                     search={true}
                     onRowSelection={(record) => console.log(record)}
                 ></Datatable>
+                <Inspector
+                    schema={Schema}
+                    model={null}
+                    dataProvider={dataProvider}
+                />
             </Module.Content>
         );
     }
