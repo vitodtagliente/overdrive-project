@@ -1,5 +1,5 @@
 import React from 'react';
-import { Module, Sidebar, Datatable, DataProvider, Inspector, ActionBar } from 'overdrive-dashboard';
+import { Module, Sidebar, Card, Icon } from 'overdrive-dashboard';
 
 const Schema = {
     name: {
@@ -47,40 +47,24 @@ export default class TestModule extends Module {
     }
 
     content(context) {
-        const dataProvider = new DataProvider("http://localhost:9000/api/items");
-
-        /*
         return (
-            <Module.Content
-                name="Test"
-                description="test component"
-            >
-                <ActionBar>
-                    <ActionBar.Button 
-                        variant="info"
-                        onClick={(e) => console.log("ciao")}>
-                        Add Move
-                    </ActionBar.Button>
-                </ActionBar>
-                <Datatable
+            <>
+                <Card
+                    url="/foo"
+                    icon={Icon.Images.faMoneyBill}
+                >
+                    <h3> ₹185358 </h3>
+                    <p> Today’s Collection </p>
+                </Card>
+                <Module.SimpleCRUD
+                    name="Test Component"
+                    description="Foo sisjfiowegsopgehesgji"
                     columns={{ _id: 'Id', name: 'Name' }}
-                    dataProvider={dataProvider}
-                    paginate={true}
-                    search={true}
-                    onRowSelection={(record) => console.log(record)}
-                ></Datatable>
-            </Module.Content>
-        );
-        */
-        return (
-            <Module.SimpleCRUD
-                name="Test Component"
-                description="Foo sisjfiowegsopgehesgji"
-                columns={{ _id: 'Id', name: 'Name' }}
-                schema={Schema}
-                api="http://localhost:9000/api/items"
-            >
-            </Module.SimpleCRUD>
+                    schema={Schema}
+                    api="http://localhost:9000/api/items"
+                >
+                </Module.SimpleCRUD>
+            </>
         );
     }
 };
