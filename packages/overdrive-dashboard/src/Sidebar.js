@@ -1,56 +1,11 @@
 import React from 'react';
 import Icon from './Icon';
-import './Sidebar.css';
-
-function User(props) {
-    return (
-        <div className="sidebar-item sidebar-header d-flex flex-nowrap">
-            <div className="user-pic">
-                <img className="img-responsive img-rounded mCS_img_loaded" src={userImg} alt="" />
-            </div>
-            <div className="user-info">
-                <span className="user-name">{props.name}</span>
-                <span className="user-name">
-                    <strong>{props.surname}</strong>
-                </span>
-                <span className="user-role">{props.role}</span>
-            </div>
-        </div>
-    );
-}
+import style from './style.css';
 
 function Brand(props) {
     return (
-        <div className="sidebar-item sidebar-brand">
-            <a href="/">{props.name}</a>
-        </div>
-    );
-}
-
-function Content(props) {
-    return (
-        <div className="sidebar-content">
-            {props.children}
-        </div>
-    );
-}
-
-function Footer(props) {
-    return (
-        <div className="sidebar-footer">
-            <div>
-                {props.children}
-            </div>
-        </div>
-    );
-}
-
-function Menu(props) {
-    return (
-        <div className=" sidebar-item sidebar-menu">
-            <ul>
-                {props.children}
-            </ul>
+        <div className={style['sidebar-header']}>
+            <h3>{props.name}</h3>
         </div>
     );
 }
@@ -62,55 +17,49 @@ export default class Sidebar extends React.Component {
 
     render() {
         return (
-            <nav id="sidebar" className="sidebar-wrapper">
-                <Content>
-                    {this.props.brand &&
-                        <Brand name={this.props.brand} />}
-                    <Menu>
-                        {this.props.children}
-                    </Menu>
-                </Content>
-                <Footer>
-                    <a data-toggle="modal" data-target="#logout-modal" href="#">
-                        <Icon icon="" />
-                    </a>
-                </Footer>
+            <nav id={style.sidebar}>
+                {this.props.brand &&
+                    <Brand name={this.props.brand} />}
+                <ul className={style.components}>
+                    {this.props.children}
+                </ul>
             </nav>
         );
     }
 }
 
-Sidebar.Section = function(props) {
+Sidebar.Section = function (props) {
     return (
-        <li className="header-menu">
-            <span>{props.name}</span>
-        </li>
+        <p>{props.name}</p>
     );
 }
 
-Sidebar.Item = function(props) {
+Sidebar.Item = function (props) {
     return (
-        <li>
+        <li className={props.active ? 'active' : ''}>
             <a href={props.url}>
                 <Icon icon={props.icon} />
-                <span className="menu-text">{props.name}</span>
+                <span>{props.name}</span>
             </a>
         </li>
     );
 }
 
-Sidebar.DropdownItem = function(props) {
+Sidebar.DropdownItem = function (props) {
     return (
-        <li className="sidebar-dropdown">
-            <a href="#">
-                <Icon icon={props.icon} />
-                <span className="menu-text">{props.name}</span>
+        <li className={props.active ? style.active : ''}>
+            <a
+                href={'#item' + props.name}
+                data-toggle="collapse"
+                aria-expanded="false"
+                className={style['dropdown-toggle']}
+            >
+                {props.icon && <Icon icon={props.icon} />}
+                {props.name}
             </a>
-            <div className="sidebar-submenu">
-                <ul>
-                    {props.children}
-                </ul>
-            </div>
+            <ul className={style.collapse} id={'item' + props.name}>
+                {props.children}
+            </ul>
         </li>
     );
 }

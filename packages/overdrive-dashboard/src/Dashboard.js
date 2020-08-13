@@ -1,5 +1,5 @@
-import React from 'react';
-import './Dashboard.css';
+import React, { Fragment } from 'react';
+import style from './style.css';
 
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
@@ -38,23 +38,25 @@ export default class Dashboard extends React.Component {
 
     render() {
         return (
-            <div className="page-wrapper default-theme toggled">
-                <Sidebar
-                    brand="Dashboard"
-                >
-                    {this.props.modules.map((module, index) =>
-                        <div key={index}>
-                            {module.sidebar()}
+            <>
+                <div className={style.wrapper}>
+                    <Sidebar
+                        brand="Dashboard"
+                    >
+                        {this.props.modules.map((module, index) =>
+                            <div key={index}>
+                                {module.sidebar()}
+                            </div>
+                        )}
+                    </Sidebar>
+                    <div id={style.content}>
+                        <Navbar />
+                        <div className="container-fluid mt-3">
+                            {this.module && this.module.content()}
                         </div>
-                    )}
-                </Sidebar>
-                <main className="page-content">
-                    <Navbar />
-                    <div className="container-fluid mt-3">
-                        {this.module && this.module.content()}
                     </div>
-                </main>
-            </div>
+                </div>
+            </>
         );
     }
 }
