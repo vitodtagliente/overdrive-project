@@ -13,6 +13,18 @@ export default class Dialog extends React.Component {
         return this.#id;
     }
 
+    close() {
+        document.getElementById(this.id).modal({ show: false });
+    }
+
+    show() {
+        document.getElementById(this.id).modal({ show: true });
+    }
+
+    toggle() {
+
+    };
+
     render() {
         return (
             <div className="modal fade" id={this.id} data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
