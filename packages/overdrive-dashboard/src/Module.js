@@ -1,3 +1,4 @@
+import React from 'react';
 
 export default class Module {
     #id = null
@@ -32,4 +33,14 @@ export default class Module {
     content(context) {
         return null;
     }
+}
+
+Module.Content = function (props) {
+    return (
+        <div>
+            {props.name && <h1>{props.name}</h1>}
+            {props.description && <p className="lead">{props.description}</p>}
+            {props.children}
+        </div>
+    );
 }

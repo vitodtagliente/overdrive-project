@@ -17,7 +17,10 @@ export default class TestModule extends Module {
 
     content(context) {
         return (
-            <div>Test Content</div>
+            <Module.Content 
+                name="Test"
+                description="test component"
+            >Test</Module.Content>
         );
     }
 };
