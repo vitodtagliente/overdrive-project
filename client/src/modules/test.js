@@ -1,5 +1,5 @@
 import React from 'react';
-import { Module, Sidebar, Datatable, DataProvider, Inspector } from 'overdrive-dashboard';
+import { Module, Sidebar, Datatable, DataProvider, Inspector, ActionBar } from 'overdrive-dashboard';
 
 const Schema = {
     name: {
@@ -52,6 +52,13 @@ export default class TestModule extends Module {
                 name="Test"
                 description="test component"
             >
+                <ActionBar>
+                    <ActionBar.Button 
+                        variant="info"
+                        onClick={(e) => console.log("ciao")}>
+                        Add Move
+                    </ActionBar.Button>
+                </ActionBar>
                 <Datatable
                     columns={{ _id: 'Id', name: 'Name' }}
                     dataProvider={dataProvider}
@@ -59,11 +66,6 @@ export default class TestModule extends Module {
                     search={true}
                     onRowSelection={(record) => console.log(record)}
                 ></Datatable>
-                <Inspector
-                    schema={Schema}
-                    model={null}
-                    dataProvider={dataProvider}
-                />
             </Module.Content>
         );
     }

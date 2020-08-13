@@ -15,3 +15,6 @@ export * from './DataProvider';
 
 export { default as Inspector } from './Inspector';
 export * from './Inspector';
+
+export { default as ActionBar } from './ActionBar';
+export * from './ActionBar';
