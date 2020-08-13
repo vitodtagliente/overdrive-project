@@ -18,3 +18,6 @@ export * from './Inspector';
 
 export { default as ActionBar } from './ActionBar';
 export * from './ActionBar';
+
+export { default as Dialog } from './Dialog';
+export * from './Dialog';

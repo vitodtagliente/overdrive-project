@@ -47,6 +47,7 @@ export default class TestModule extends Module {
     content(context) {
         const dataProvider = new DataProvider("http://localhost:9000/api/items");
 
+        /*
         return (
             <Module.Content
                 name="Test"
@@ -67,6 +68,15 @@ export default class TestModule extends Module {
                     onRowSelection={(record) => console.log(record)}
                 ></Datatable>
             </Module.Content>
+        );
+        */
+        return (
+            <Module.SimpleCRUD
+                columns={{ _id: 'Id', name: 'Name' }}
+                schema={Schema}
+                api="http://localhost:9000/api/items"
+            >
+            </Module.SimpleCRUD>
         );
     }
 };

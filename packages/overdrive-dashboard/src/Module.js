@@ -1,4 +1,9 @@
 import React, { Fragment } from 'react';
+import ActionBar from './ActionBar';
+import DataProvider from './DataProvider';
+import Datatable from './Datatable';
+import Dialog from './Dialog';
+import Inspector from './Inspector';
 
 export default class Module {
     #id = null
@@ -43,4 +48,128 @@ Module.Content = function (props) {
             {props.children}
         </>
     );
+}
+
+const Action = {
+    Create: 'create',
+    Edit: 'edit',
+    List: 'list'
+}
+
+Module.SimpleCRUD = class extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            dataProvider: new DataProvider(props.api),
+            action: Action.List,
+            selectedRecord: null
+        };
+
+        this.deleteDialog = React.createRef();
+    }
+
+    getContent() {
+        switch (this.state.action)
+        {
+            case Action.List:
+                {
+                    const columns = this.props.columns || {};
+                    return (
+                        <>
+                            <ActionBar>
+                                <ActionBar.Button
+                                    variant="success"
+                                    onClick={(e) => this.handleActionChange(Action.Create)}>
+                                    Add
+                                </ActionBar.Button>
+                                <ActionBar.Button
+                                    variant="warning"
+                                    active={this.state.selectedRecord != null}
+                                    onClick={(e) => this.handleActionChange(Action.Edit)}>
+                                    Edit
+                                </ActionBar.Button>
+                                <ActionBar.Button
+                                    variant="danger"
+                                    active={this.state.selectedRecord != null}
+                                    onClick={(e) => this.handleDeleteAction()}>
+                                    Delete
+                                </ActionBar.Button>
+                            </ActionBar>
+                            <Datatable
+                                columns={columns}
+                                dataProvider={this.state.dataProvider}
+                                paginate={true}
+                                search={true}
+                                onRowSelection={(record) => this.handleRecordSelection(record)}
+                            ></Datatable>
+                            <Dialog
+                                ref={this.deleteDialog}
+                                title="Delete"
+                                buttonName="Delete"
+                                buttonVariant="danger"
+                                onAction={(dialog) => this.handleDelete(dialog)}
+                            >
+                                Are you sure to delete the selected record?
+                            </Dialog>
+                        </>
+                    );
+                }
+            case Action.Create:
+                {
+                    return (
+                        <Inspector
+                            schema={this.props.schema}
+                            dataProvider={this.state.dataProvider}
+                            onCancel={() => this.handleActionChange(Action.List)}
+                        ></Inspector>
+                    );
+                    break;
+                }
+            case Action.Edit:
+                {
+                    return (
+                        <Inspector
+                            schema={this.props.schema}
+                            dataProvider={this.state.dataProvider}
+                            model={this.state.selectedRecord}
+                            onCancel={() => this.handleActionChange(Action.List)}
+                        ></Inspector>
+                    );
+                    break;
+                }
+            default: return (<></>);
+        }
+    }
+
+    handleActionChange(action) {
+        this.setState({
+            action: action
+        });
+    }
+
+    handleRecordSelection(record) {
+        this.setState({
+            selectedRecord: record
+        });
+    }
+
+    handleDeleteAction() {
+        this.deleteDialog.current.show();
+    }
+
+    handleDelete(dialog) {
+        dialog.close();
+    }
+
+    render() {
+        return (
+            <Module.Content
+                name={this.props.name}
+                description={this.props.description}
+            >
+                {this.getContent()}
+                {this.props.children}
+            </Module.Content>
+        );
+    }
 }
