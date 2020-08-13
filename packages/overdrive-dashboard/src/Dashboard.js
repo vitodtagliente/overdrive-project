@@ -20,6 +20,10 @@ export default class Dashboard extends React.Component {
         return null;
     }
 
+    get url() {
+        return window.location.pathname;
+    }
+
     render() {
         return (
             <div className="page-wrapper default-theme toggled">

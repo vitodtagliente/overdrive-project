@@ -1,14 +1,17 @@
 import React from 'react';
-import { Module } from 'overdrive-dashboard';
+import { Module, Sidebar } from 'overdrive-dashboard';
 
 export default class TestModule extends Module {
-    constructor() {
-        super();
+    constructor(url, id) {
+        super(url, id);
     }
 
     sidebar() {
         return (
-            <div>Fooo</div>
+            <>
+                <Sidebar.Item url={this.url} name="foo" />
+                <Sidebar.Item url={this.url + '/1'} name="foo1" />
+            </>
         );
     }
 

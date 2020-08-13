@@ -27,41 +27,6 @@ function Brand(props) {
     );
 }
 
-function Section(props) {
-    return (
-        <li className="header-menu">
-            <span>{props.name}</span>
-        </li>
-    );
-}
-
-function Item(props) {
-    return (
-        <li>
-            <a href={props.url}>
-                <Icon icon={props.icon} />
-                <span className="menu-text">{props.name}</span>
-            </a>
-        </li>
-    );
-}
-
-function DropdownItem(props) {
-    return (
-        <li className="sidebar-dropdown">
-            <a href="#">
-                <Icon icon={props.icon} />
-                <span className="menu-text">{props.name}</span>
-            </a>
-            <div className="sidebar-submenu">
-                <ul>
-                    {props.children}
-                </ul>
-            </div>
-        </li>
-    );
-}
-
 function Content(props) {
     return (
         <div className="sidebar-content">
@@ -113,4 +78,39 @@ export default class Sidebar extends React.Component {
             </nav>
         );
     }
+}
+
+Sidebar.Section = function(props) {
+    return (
+        <li className="header-menu">
+            <span>{props.name}</span>
+        </li>
+    );
+}
+
+Sidebar.Item = function(props) {
+    return (
+        <li>
+            <a href={props.url}>
+                <Icon icon={props.icon} />
+                <span className="menu-text">{props.name}</span>
+            </a>
+        </li>
+    );
+}
+
+Sidebar.DropdownItem = function(props) {
+    return (
+        <li className="sidebar-dropdown">
+            <a href="#">
+                <Icon icon={props.icon} />
+                <span className="menu-text">{props.name}</span>
+            </a>
+            <div className="sidebar-submenu">
+                <ul>
+                    {props.children}
+                </ul>
+            </div>
+        </li>
+    );
 }

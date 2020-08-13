@@ -10,13 +10,20 @@ import './components/Sidebar.css';
 
 import TestModule from './modules/test';
 
-export default function App(props) {
-	return (
-		<Dashboard
-			modules={[
-				new TestModule(),
-				new Module()
-			]}
-		/>
-	);
+export default class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.modules = [
+			new TestModule('/test'),
+			new Module('/ttt')
+		];
+	}
+
+	render() {
+		return (
+			<Dashboard
+				modules={this.modules}
+			/>
+		);
+	}
 }
