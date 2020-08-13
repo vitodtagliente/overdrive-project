@@ -3,6 +3,7 @@ import ActionBar from './ActionBar';
 import DataProvider from './DataProvider';
 import Datatable from './Datatable';
 import Dialog from './Dialog';
+import Icon from './Icon';
 import Inspector from './Inspector';
 
 export default class Module {
@@ -80,19 +81,19 @@ Module.SimpleCRUD = class extends React.Component {
                                 <ActionBar.Button
                                     variant="success"
                                     onClick={(e) => this.handleActionChange(Action.Create)}>
-                                    Add
+                                    <Icon icon={Icon.Images.faPlus} /> Add
                                 </ActionBar.Button>
                                 <ActionBar.Button
                                     variant="warning"
                                     active={this.state.selectedRecord != null}
                                     onClick={(e) => this.handleActionChange(Action.Edit)}>
-                                    Edit
+                                    <Icon icon={Icon.Images.faPen} /> Edit
                                 </ActionBar.Button>
                                 <ActionBar.Button
                                     variant="danger"
                                     active={this.state.selectedRecord != null}
                                     onClick={(e) => this.handleDeleteAction()}>
-                                    Delete
+                                    <Icon icon={Icon.Images.faTrash} /> Delete
                                 </ActionBar.Button>
                             </ActionBar>
                             <Datatable

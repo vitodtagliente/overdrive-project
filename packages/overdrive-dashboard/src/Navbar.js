@@ -28,7 +28,7 @@ export default class extends React.Component {
         return (
             <nav className="navbar navbar-expand navbar-light bg-light">
                 <button id="toggle-sidebar" className="btn" onClick={this.toggleSidebar}>
-                    <Icon icon="foo" />
+                    <Icon icon={Icon.Images.faBars} />
                 </button>
             </nav>
         );

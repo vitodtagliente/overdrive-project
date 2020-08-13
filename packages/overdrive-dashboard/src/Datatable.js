@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import Icon from './Icon';
 import Pagination from './Pagination';
 
 class Search extends React.Component {
@@ -35,7 +36,9 @@ class Search extends React.Component {
             <div className="mb-2">
                 <div className="input-group input-group-sm">
                     <div className="input-group-prepend">
-                        <div className="input-group-text">@</div>
+                        <div className="input-group-text">
+                            <Icon icon={Icon.Images.faSearch} />
+                        </div>
                     </div>
                     <input
                         type="text"

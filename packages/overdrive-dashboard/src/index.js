@@ -21,3 +21,6 @@ export * from './ActionBar';
 
 export { default as Dialog } from './Dialog';
 export * from './Dialog';
+
+export { default as Icon } from './Icon';
+export * from './Icon';

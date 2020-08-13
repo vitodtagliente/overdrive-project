@@ -1,4 +1,5 @@
 import React from 'react';
+import Icon from './Icon';
 
 function Page(props) {
     return (
@@ -67,13 +68,21 @@ export default class Pagination extends React.Component {
         return (
             <nav>
                 <ul className="pagination pagination-sm justify-content-end">
-                    <Page key="first" onClick={() => this.handlePageSelection(1)}>❮❮</Page>
-                    <Page key="previous" onClick={() => this.handlePageSelection(Math.max(1, page - 1))}>❮</Page>
+                    <Page key="first" onClick={() => this.handlePageSelection(1)}>
+                        <Icon icon={Icon.Images.faAngleDoubleLeft} />
+                    </Page>
+                    <Page key="previous" onClick={() => this.handlePageSelection(Math.max(1, page - 1))}>
+                        <Icon icon={Icon.Images.faAngleLeft} />
+                    </Page>
                     {items}
-                    <Page key="next" onClick={() => this.handlePageSelection(Math.min(pages, page + 1))}>❯</Page>
-                    <Page key="last" onClick={() => this.handlePageSelection(pages)}>❯❯</Page>
+                    <Page key="next" onClick={() => this.handlePageSelection(Math.min(pages, page + 1))}>
+                        <Icon icon={Icon.Images.faAngleRight} />
+                    </Page>
+                    <Page key="last" onClick={() => this.handlePageSelection(pages)}>
+                        <Icon icon={Icon.Images.faAngleDoubleRight} />
+                    </Page>
                 </ul>
-            </nav>
+            </nav >
         );
     }
 }
