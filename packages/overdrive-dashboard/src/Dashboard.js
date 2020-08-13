@@ -28,7 +28,7 @@ export default class Dashboard extends React.Component {
         for (var i = 0; i < this.props.modules.length; ++i)
         {
             var module = this.props.modules[i];
-            if (this.url.includes(module.url))
+            if (module.isActive)
             {
                 return i;
             }

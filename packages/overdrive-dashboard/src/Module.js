@@ -1,5 +1,3 @@
-import React from 'react';
-import Sidebar from './Sidebar';
 
 export default class Module {
     #id = null
@@ -17,6 +15,14 @@ export default class Module {
 
     get url() {
         return this.#url;
+    }
+
+    get pathname() {
+        return window.location.pathname;
+    }
+
+    get isActive() {
+        return this.pathname.includes(this.url);
     }
 
     sidebar() {
