@@ -17,7 +17,7 @@ export default class Sidebar extends React.Component {
 
     render() {
         return (
-            <nav id={style.sidebar}>
+            <nav className={style.sidebar}>
                 {this.props.brand &&
                     <Brand name={this.props.brand} />}
                 <ul className={style.components}>

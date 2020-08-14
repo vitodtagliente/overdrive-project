@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component {
                             </div>
                         )}
                     </Sidebar>
-                    <div id={style.content}>
+                    <div className={style.content}>
                         <Navbar />
                         <div className="container-fluid mt-3">
                             {this.module && this.module.content()}

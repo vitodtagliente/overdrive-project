@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from './Icon';
+import style from './style.css';
 
 export default class extends React.Component {
     constructor(props) {
@@ -9,25 +10,33 @@ export default class extends React.Component {
     }
 
     toggleSidebar() {
-        const elements = document.getElementsByClassName('page-wrapper');
+        console.log(style.toggled);
+        const elements = document.getElementsByClassName(style.wrapper);
         if (elements.length > 0)
         {
             const container = elements[0];
-            if (container.className.includes('toggled'))
+            if (container.className.includes(style.toggled))
             {
-                container.classList.remove('toggled');
+                container.classList.remove(style.toggled);
             }
             else 
             {
-                container.classList.add('toggled');
+                container.classList.add(style.toggled);
             }
         }
     }
 
     render() {
         return (
-            <nav className="navbar navbar-expand navbar-light bg-light">
-                <button id="toggle-sidebar" className="btn" onClick={this.toggleSidebar}>
+            <nav
+                className="navbar navbar-expand navbar-light"
+                style={{ backgroundColor: '#e3f2fd' }}
+            >
+                <button
+                    id="toggle-sidebar"
+                    className="btn"
+                    onClick={this.toggleSidebar}
+                >
                     <Icon icon={Icon.Images.faBars} />
                 </button>
             </nav>
