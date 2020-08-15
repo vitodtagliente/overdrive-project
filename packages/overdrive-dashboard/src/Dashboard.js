@@ -44,9 +44,9 @@ export default class Dashboard extends React.Component {
                         brand={this.props.brand || 'Dashboard'}
                     >
                         {this.props.modules.map((module, index) =>
-                            <div key={index}>
+                            <Fragment key={index}>
                                 {module.sidebar()}
-                            </div>
+                            </Fragment>
                         )}
                     </Sidebar>
                     <div className={style.content}>
