@@ -79,7 +79,9 @@ a:focus {
 }
 
 .sidebar ul.components li.active {
-    background-color: #fdcf46a9;
+    background-color: #feb509;
+    border: solid 1px #db9c09;
+    cursor: default;
 }
 
 .sidebar ul.components li.active > a {

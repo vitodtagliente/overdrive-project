@@ -10,7 +10,6 @@ export default class extends React.Component {
     }
 
     toggleSidebar() {
-        console.log(style.toggled);
         const elements = document.getElementsByClassName(style.wrapper);
         if (elements.length > 0)
         {
