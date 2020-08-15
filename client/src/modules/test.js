@@ -49,13 +49,6 @@ export default class TestModule extends Module {
     content(context) {
         return (
             <>
-                <Card
-                    url="/foo"
-                    icon={Icon.Images.faMoneyBill}
-                >
-                    <h3> ₹185358 </h3>
-                    <p> Today’s Collection </p>
-                </Card>
                 <Module.SimpleCRUD
                     name="Test Component"
                     description="Foo sisjfiowegsopgehesgji"

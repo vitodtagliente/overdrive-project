@@ -5,7 +5,7 @@ import style from './style.css';
 function Brand(props) {
     return (
         <div className={style['sidebar-header']}>
-            <h3>{props.name}</h3>
+            <a href="/">{props.name}</a>
         </div>
     );
 }

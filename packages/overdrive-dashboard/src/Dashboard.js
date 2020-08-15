@@ -41,7 +41,7 @@ export default class Dashboard extends React.Component {
             <>
                 <div className={style.wrapper}>
                     <Sidebar
-                        brand="Dashboard"
+                        brand={this.props.brand || 'Dashboard'}
                     >
                         {this.props.modules.map((module, index) =>
                             <div key={index}>
@@ -51,7 +51,7 @@ export default class Dashboard extends React.Component {
                     </Sidebar>
                     <div className={style.content}>
                         <Navbar />
-                        <div className="container-fluid mt-3">
+                        <div className="container-fluid mt-3 mb-3">
                             {this.module && this.module.content()}
                         </div>
                     </div>
