@@ -65,7 +65,7 @@ a:focus {
 }
 
 .sidebar ul.components {
-    padding: 0;
+    padding: 0.5em 0;
     margin: 0px;
 }
 
@@ -79,7 +79,11 @@ a:focus {
 }
 
 .sidebar ul.components li.active {
-    background-color: #222222;
+    background-color: #fdcf46a9;
+}
+
+.sidebar ul.components li.active > a {
+    color: #f2f2f2;
 }
 
 /* ---------------------------------------------------
