@@ -61,11 +61,12 @@ a:focus {
 }
 
 .sidebar ul {
-    text-decoration: none;
+    list-style-type: none;
 }
 
 .sidebar ul.components {
-    padding: 20px 5px;
+    padding: 1rem 1.2rem;
+    margin: 0px;
 }
 
 /* ---------------------------------------------------
