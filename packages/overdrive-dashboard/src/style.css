@@ -69,6 +69,19 @@ a:focus {
     margin: 0px;
 }
 
+.sidebar ul.components li {
+    padding: 0.5rem 0;
+    align-items: center;
+}
+
+.sidebar ul.components li:hover {
+    background-color: #2b2b2b;
+}
+
+.sidebar ul.components li.active {
+    background-color: #222222;
+}
+
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */

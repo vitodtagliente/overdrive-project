@@ -37,12 +37,7 @@ export default class TestModule extends Module {
 
     sidebar() {
         return (
-            <Sidebar.DropdownItem
-                name="Foo"
-            >
-                <Sidebar.Item url={this.url} name="test" />
-                <Sidebar.Item url={this.url + '/1'} name="test1" />
-            </Sidebar.DropdownItem>
+            <Sidebar.Item url={this.url} active={true} name="test" />
         );
     }
 

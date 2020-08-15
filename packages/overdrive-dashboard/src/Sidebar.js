@@ -36,7 +36,7 @@ Sidebar.Section = function (props) {
 
 Sidebar.Item = function (props) {
     return (
-        <li className={props.active ? 'active' : ''}>
+        <li className={props.active ? style.active : ''}>
             <a href={props.url}>
                 <Icon icon={props.icon} />
                 <span>{props.name}</span>
