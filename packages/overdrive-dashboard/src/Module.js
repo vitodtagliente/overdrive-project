@@ -5,6 +5,7 @@ import Datatable from './Datatable';
 import Dialog from './Dialog';
 import Icon from './Icon';
 import Inspector from './Inspector';
+import style from './style.css';
 
 export default class Module {
     #id = null
