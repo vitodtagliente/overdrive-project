@@ -30,8 +30,8 @@ a:focus {
     left: 0;
     height: 100vh;
     z-index: 999;
-    background-color: #1d1d1d;
-    color: #c7c7c7;
+    background-color: #fff;
+    color: #969595;
     transition: all 0.3s;
 }
 
@@ -44,7 +44,6 @@ a:focus {
     padding: 1rem 1.2rem;
     align-items: center;
     height: 55px;
-    border-bottom: 1px solid #454545;
 }
 
 .sidebar a {
@@ -57,7 +56,7 @@ a:focus {
 }
 
 .sidebar a:hover, a:active {
-    color: #f2f2f2;
+    color: #969595;
 }
 
 .sidebar ul {
@@ -75,17 +74,16 @@ a:focus {
 }
 
 .sidebar ul.components li:hover {
-    background-color: #2b2b2b;
+    background-color: rgba(0,0,0,.075);
 }
 
 .sidebar ul.components li.active {
-    background-color: #feb509;
-    border: solid 1px #db9c09;
+    background-color: #f8f9fa!important;
     cursor: default;
 }
 
 .sidebar ul.components li.active > a {
-    color: #f2f2f2;
+    color: #000;
 }
 
 /* ---------------------------------------------------

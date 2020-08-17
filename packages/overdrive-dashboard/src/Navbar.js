@@ -28,7 +28,7 @@ export default class extends React.Component {
     render() {
         return (
             <nav
-                className="navbar navbar-expand navbar-light bg-light border"
+                className="navbar navbar-expand navbar-light bg-light border-bottom"
             >
                 <button
                     id="toggle-sidebar"
