@@ -43,7 +43,7 @@ export default class Module {
 
 Module.Description = function (props) {
     return (
-        <div>
+        <div className="border-bottom mb-3">
             {
                 props.name &&
                 <h1>

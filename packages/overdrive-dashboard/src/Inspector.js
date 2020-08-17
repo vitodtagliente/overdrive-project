@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import Button from './Button';
+import Icon from './Icon';
 
 class Attribute extends React.Component {
     constructor(props) {
@@ -83,19 +85,6 @@ class Attribute extends React.Component {
     }
 }
 
-function Button(props) {
-    const style = `btn btn-sm rounded-0 btn-${(props.variant) ? props.variant : 'primary'}`;
-    return (
-        <button
-            type={props.type || 'button'}
-            className={style}
-            onClick={(e) => { if (props['onClick']) props.onClick(e); }}
-        >
-            {props.children}
-        </button>
-    );
-}
-
 export default class Inspector extends React.Component {
     constructor(props) {
         super(props);
@@ -157,24 +146,27 @@ export default class Inspector extends React.Component {
                 {content}
                 {this.props.model == null &&
                     <Button
-                        variant="success"
+                        color="green"
+                        icon={Icon.Images.faPlus}
+                        name="Add"
                         type="submit"
-                        className="rounded-0"
-                        size="sm"
                         onClick={(e) => this.handleAdd(e)}
-                    >Add</Button>
+                    />
                 }
                 {this.props.model &&
                     <Button
-                        variant="warning"
+                        color="orange"
+                        icon={Icon.Images.faPen}
+                        name="Edit"
                         type="submit"
                         onClick={(e) => this.handleEdit(e)}
-                    >Edit</Button>
+                    />
                 }
+                &nbsp;
                 <Button
-                    variant="info"
+                    name="Cancel"
                     onClick={this.props.onCancel}
-                >Cancel</Button>
+                />
             </form>
         );
     }
