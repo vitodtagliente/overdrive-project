@@ -145,9 +145,15 @@ export default class Datatable extends React.Component {
         );
 
         const body = this.data.map((record, index) =>
-            <tr key={index}
-                onClick={(e) => this.handleRowSelection(e, index, record)}
-                className={this.state.selectedRow == index ? 'table-primary' : ''}>
+            <tr key={index}>
+                <td key={record.id} className="text-center">
+                    <input
+                        type="checkbox"
+                        className=""
+                        defaultChecked={this.state.selectedRow == index}
+                        onChange={(e) => this.handleRowSelection(e, index, record)}
+                    />
+                </td>
                 {columns.map((column) =>
                     <td key={record.id + column}>{record[column]}</td>
                 )}
@@ -166,9 +172,12 @@ export default class Datatable extends React.Component {
                 {this.props.search && <Search onTextChange={(e) => this.handleSearch(e)} />}
                 <table
                     ref={this.table}
-                    className="table table-bordered table-hover table-striped table-sm">
-                    <thead>
+                    className="table table-hover table-sm">
+                    <thead style={{ paddingTop: "10px" }}>
                         <tr>
+                            <th key={-1} scope="col" className="text-center" style={{ width: "40px" }}>
+                                <Icon icon={Icon.Images.faCheckCircle} />
+                            </th>
                             {head}
                         </tr>
                     </thead>
