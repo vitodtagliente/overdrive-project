@@ -28,8 +28,7 @@ export default class extends React.Component {
     render() {
         return (
             <nav
-                className="navbar navbar-expand navbar-light"
-                style={{ backgroundColor: '#e3f2fd' }}
+                className="navbar navbar-expand navbar-light bg-light border"
             >
                 <button
                     id="toggle-sidebar"
