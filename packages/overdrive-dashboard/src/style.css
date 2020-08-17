@@ -82,7 +82,7 @@ a:focus {
 
 .sidebar ul.components li.active {
     background-color: #f8f9fa;    
-    border-right: 4px solid orange;
+    border-right: 2px solid #5bc0de;
     cursor: default;
 }
 

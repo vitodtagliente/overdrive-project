@@ -50,7 +50,9 @@ Module.Description = function (props) {
                     {props.icon &&
                         <span
                             className="border pl-1 pr-1 mr-2"
-                            style={{ color: props.color }}
+                            style={{
+                                color: props.color
+                            }}
                         >
                             <Icon icon={props.icon} />
                         </span>
