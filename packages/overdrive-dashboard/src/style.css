@@ -67,7 +67,7 @@ a:focus {
 }
 
 .sidebar ul.components {
-    padding: 0.5em 0;
+    padding: 0em 0;
     margin: 0px;
 }
 
@@ -82,8 +82,7 @@ a:focus {
 
 .sidebar ul.components li.active {
     background-color: #f8f9fa;    
-    border-right: 2px solid orange;
-    border-left: 2px solid orange;
+    border-right: 4px solid orange;
     cursor: default;
 }
 

@@ -46,7 +46,7 @@ Module.Description = function (props) {
         <div className="border-bottom mb-3">
             {
                 props.name &&
-                <h1>
+                <h2>
                     {props.icon &&
                         <span
                             className="border pl-1 pr-1 mr-2"
@@ -56,7 +56,7 @@ Module.Description = function (props) {
                         </span>
                     }
                     {props.name}
-                </h1>
+                </h2>
             }
             {props.description && <p><small>{props.description}</small></p>}
         </div>
