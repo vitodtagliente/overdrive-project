@@ -58,7 +58,7 @@ Module.Description = function (props) {
                     {props.name}
                 </h1>
             }
-            {props.description && <p className="lead">{props.description}</p>}
+            {props.description && <p><small>{props.description}</small></p>}
         </div>
     );
 }
