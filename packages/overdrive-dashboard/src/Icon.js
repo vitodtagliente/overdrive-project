@@ -5,7 +5,7 @@ import * as Icons from '@fortawesome/free-solid-svg-icons';
 export default function Icon(props) {
     return (
         <>
-            {props.icon && <FontAwesomeIcon icon={props.icon} />}
+            {props.icon && <FontAwesomeIcon icon={props.icon} style={{ color: props.color }} />}
         </>
     );
 }

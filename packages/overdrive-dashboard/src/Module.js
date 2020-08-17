@@ -79,22 +79,20 @@ Module.SimpleCRUD = class extends React.Component {
                         <>
                             <ActionBar>
                                 <ActionBar.Button
-                                    variant="success"
-                                    onClick={(e) => this.handleActionChange(Action.Create)}>
-                                    <Icon icon={Icon.Images.faPlus} /> Add
-                                </ActionBar.Button>
+                                    icon={Icon.Images.faPlus}
+                                    name="Add"
+                                    onClick={(e) => this.handleActionChange(Action.Create)} />
                                 <ActionBar.Button
-                                    variant="warning"
                                     active={this.state.selectedRecord != null}
-                                    onClick={(e) => this.handleActionChange(Action.Edit)}>
-                                    <Icon icon={Icon.Images.faPen} /> Edit
-                                </ActionBar.Button>
+                                    icon={Icon.Images.faPen}
+                                    name="Edit"
+                                    onClick={(e) => this.handleActionChange(Action.Edit)} />
                                 <ActionBar.Button
-                                    variant="danger"
+                                    color='red'
                                     active={this.state.selectedRecord != null}
-                                    onClick={(e) => this.handleDeleteAction()}>
-                                    <Icon icon={Icon.Images.faTrash} /> Delete
-                                </ActionBar.Button>
+                                    icon={Icon.Images.faTrash}
+                                    name="Delete"
+                                    onClick={(e) => this.handleDeleteAction()} />
                             </ActionBar>
                             <Datatable
                                 columns={columns}
