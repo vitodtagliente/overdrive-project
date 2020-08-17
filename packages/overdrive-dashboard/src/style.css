@@ -32,7 +32,8 @@ a:focus {
     z-index: 999;
     background-color: #fff;
     color: #969595;
-    transition: all 0.3s;
+    transition: all 0.3s;    
+    border-right: 1px solid #dee2e6!important;
 }
 
 .wrapper.toggled > .sidebar {
@@ -44,6 +45,8 @@ a:focus {
     padding: 1rem 1.2rem;
     align-items: center;
     height: 55px;
+    border-bottom: 1px solid #dee2e6!important;
+    background-color: #f8f9fa!important;
 }
 
 .sidebar a {
@@ -78,7 +81,9 @@ a:focus {
 }
 
 .sidebar ul.components li.active {
-    background-color: #f8f9fa!important;
+    background-color: #f8f9fa;    
+    border-right: 2px solid orange;
+    border-left: 2px solid orange;
     cursor: default;
 }
 

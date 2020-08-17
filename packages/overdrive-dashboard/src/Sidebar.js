@@ -4,7 +4,7 @@ import style from './style.css';
 
 function Brand(props) {
     return (
-        <div className={`${style['sidebar-header']} border-bottom bg-light`}>
+        <div className={`${style['sidebar-header']}`}>
             <a href="/">{props.name}</a>
         </div>
     );
@@ -17,7 +17,7 @@ export default class Sidebar extends React.Component {
 
     render() {
         return (
-            <nav className={`${style.sidebar} border-right`}>
+            <nav className={`${style.sidebar}`}>
                 {this.props.brand &&
                     <Brand name={this.props.brand} />}
                 <ul className={style.components}>
