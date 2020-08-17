@@ -36,13 +36,13 @@ class Search extends React.Component {
             <div className="mb-2">
                 <div className="input-group input-group-sm">
                     <div className="input-group-prepend">
-                        <div className="input-group-text">
+                        <div className="input-group-text rounded-0">
                             <Icon icon={Icon.Images.faSearch} />
                         </div>
                     </div>
                     <input
                         type="text"
-                        className="form-control"
+                        className="form-control rounded-0"
                         placeholder="Search"
                         onKeyUp={(e) => { this.handleTextChange(e.target.value); }}
                     />
@@ -147,12 +147,13 @@ export default class Datatable extends React.Component {
         const body = this.data.map((record, index) =>
             <tr key={index}>
                 <td key={record.id} className="text-center">
-                    <input
-                        type="checkbox"
-                        className=""
-                        defaultChecked={this.state.selectedRow == index}
-                        onChange={(e) => this.handleRowSelection(e, index, record)}
-                    />
+                    <div className="checkbox checkbox-circle">
+                        <input
+                            type="checkbox"
+                            defaultChecked={this.state.selectedRow == index}
+                            onChange={(e) => this.handleRowSelection(e, index, record)}
+                        />
+                    </div>
                 </td>
                 {columns.map((column) =>
                     <td key={record.id + column}>{record[column]}</td>

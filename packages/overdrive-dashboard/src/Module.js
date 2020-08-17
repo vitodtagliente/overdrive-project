@@ -41,12 +41,39 @@ export default class Module {
     }
 }
 
+Module.Description = function (props) {
+    return (
+        <div>
+            {
+                props.name &&
+                <h1>
+                    {props.icon &&
+                        <span
+                            className="border pl-1 pr-1 mr-2"
+                            style={{ color: props.color }}
+                        >
+                            <Icon icon={props.icon} />
+                        </span>
+                    }
+                    {props.name}
+                </h1>
+            }
+            {props.description && <p className="lead">{props.description}</p>}
+        </div>
+    );
+}
+
 Module.Content = function (props) {
     return (
         <>
-            {props.name && <h1>{props.name}</h1>}
-            {props.description && <p className="lead">{props.description}</p>}
-            {props.children}
+            <Module.Description
+                name={props.name}
+                description={props.description}
+                icon={props.icon}
+                color={props.color} />
+            <div>
+                {props.children}
+            </div>
         </>
     );
 }
@@ -165,6 +192,8 @@ Module.SimpleCRUD = class extends React.Component {
             <Module.Content
                 name={this.props.name}
                 description={this.props.description}
+                icon={this.props.icon}
+                color={this.props.color}
             >
                 {this.getContent()}
                 {this.props.children}

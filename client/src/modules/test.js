@@ -47,6 +47,8 @@ export default class TestModule extends Module {
                 <Module.SimpleCRUD
                     name="Test Component"
                     description="Foo sisjfiowegsopgehesgji"
+                    icon={Icon.Images.faDog}
+                    color={'purple'}
                     columns={{ _id: 'Id', name: 'Name' }}
                     schema={Schema}
                     api="http://localhost:9000/api/items"
