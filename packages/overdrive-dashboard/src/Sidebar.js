@@ -38,7 +38,12 @@ Sidebar.Item = function (props) {
     return (
         <li className={props.active ? style.active : ''}>
             <a href={props.url}>
-                <Icon icon={props.icon} />
+                {props.icon &&
+                    <span style={{ color: props.color }}>
+                        <Icon icon={props.icon} />
+                    &nbsp;
+                    </span>
+                }
                 <span>{props.name}</span>
             </a>
         </li>
