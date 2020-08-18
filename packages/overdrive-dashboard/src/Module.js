@@ -87,6 +87,23 @@ const Action = {
     List: 'list'
 }
 
+function Panel(props) {
+    return (
+        <div className={style['wrapper-panel']}>
+            <div className={style.panel}>
+                <div className="container">
+                    <div className="justify-content-end">
+                        <button onClick={(e) => { if (props['onClose']) props.onClose(e) }}>
+                            <Icon icon={Icon.Images.faTimes} />
+                        </button>
+                    </div>
+                    {props.children}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 Module.SimpleCRUD = class extends React.Component {
     constructor(props) {
         super(props);
@@ -99,8 +116,8 @@ Module.SimpleCRUD = class extends React.Component {
         this.deleteDialog = React.createRef();
     }
 
-    getContent() {
-        switch (this.state.action)
+    getView(action) {
+        switch (action)
         {
             case Action.List:
                 {
@@ -198,8 +215,15 @@ Module.SimpleCRUD = class extends React.Component {
                 icon={this.props.icon}
                 color={this.props.color}
             >
-                {this.getContent()}
+                {this.getView(Action.List)}
                 {this.props.children}
+                {this.state.action != Action.List &&
+                    <Panel
+                        onClose={(e) => this.handleActionChange(Action.List)}
+                    >
+                        {this.getView(this.state.action)}
+                    </Panel>
+                }
             </Module.Content>
         );
     }
