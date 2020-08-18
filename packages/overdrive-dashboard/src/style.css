@@ -117,7 +117,7 @@ a:focus {
     margin-right: -70%;
     background-color: #fff;
     border-left: 1px solid #dee2e6!important;
-    transition: all 0.6s;
+    transition: all 0.4s;
     padding: 10px 0px;
 }
 

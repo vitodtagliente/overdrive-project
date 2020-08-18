@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import ActionBar from './ActionBar';
+import Alert from './Alert';
 import DataProvider from './DataProvider';
 import Datatable from './Datatable';
 import Dialog from './Dialog';
@@ -103,7 +104,8 @@ Module.SimpleCRUD = class extends React.Component {
         this.state = {
             dataProvider: new DataProvider(props.api),
             action: Action.List,
-            selectedRecord: null
+            selectedRecord: null,
+            error: null
         };
 
         this.deleteDialog = React.createRef();
@@ -162,8 +164,11 @@ Module.SimpleCRUD = class extends React.Component {
                             <Inspector
                                 schema={this.props.schema}
                                 dataProvider={this.state.dataProvider}
+                                onError={(e) => this.setState({ error: e })}
                                 onCancel={() => this.handleActionChange(Action.List)}
                             ></Inspector>
+                            {this.state.error &&
+                                <Alert>{this.state.error}</Alert>}
                         </Fragment>
                     );
                     break;
