@@ -89,11 +89,9 @@ const Action = {
 
 function Panel(props) {
     return (
-        <div className={style['wrapper-panel']}>
-            <div className={style.panel}>
-                <div className="container">
-                    {props.children}
-                </div>
+        <div className={`${style.panel} ${props.show ? style.toggled : ''}`}>
+            <div className="container">
+                {props.children}
             </div>
         </div>
     );
@@ -216,13 +214,13 @@ Module.SimpleCRUD = class extends React.Component {
             >
                 {this.getView(Action.List)}
                 {this.props.children}
-                {this.state.action != Action.List &&
-                    <Panel
-                        onClose={(e) => this.handleActionChange(Action.List)}
-                    >
-                        {this.getView(this.state.action)}
-                    </Panel>
-                }
+                <Panel
+                    show={this.state.action != Action.List}
+                    onClose={(e) => this.handleActionChange(Action.List)}
+                >
+                    {this.state.action != Action.List
+                        && this.getView(this.state.action)}
+                </Panel>
             </Module.Content>
         );
     }
