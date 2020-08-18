@@ -118,7 +118,7 @@ a:focus {
     background-color: #fff;
     border-left: 1px solid #dee2e6!important;
     transition: all 0.4s;
-    padding: 10px 0px;
+    padding: 5px 0px;
 }
 
 .panel.toggled {

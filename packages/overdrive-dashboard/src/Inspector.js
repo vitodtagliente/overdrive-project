@@ -30,7 +30,7 @@ class Attribute extends React.Component {
                         <div className="form-check">
                             <input
                                 type="checkbox"
-                                className="form-check-input"
+                                className="form-check-input rounded-0"
                                 label={this.props.schema.display || this.props.name}
                                 name={this.props.name}
                                 defaultChecked={value}
@@ -51,7 +51,7 @@ class Attribute extends React.Component {
                             <label htmlFor={this.props.name}>{this.props.schema.display || this.props.name}</label>
                             <input
                                 type="number"
-                                className="form-control form-control-sm"
+                                className="form-control form-control-sm rounded-0"
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}
                                 defaultValue={value}
@@ -70,7 +70,7 @@ class Attribute extends React.Component {
                             <label htmlFor={this.props.name}>{this.props.schema.display || this.props.name}</label>
                             <input
                                 type="text"
-                                className="form-control form-control-sm"
+                                className="form-control form-control-sm rounded-0"
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}
                                 defaultValue={value}
