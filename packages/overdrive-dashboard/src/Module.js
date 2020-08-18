@@ -92,11 +92,6 @@ function Panel(props) {
         <div className={style['wrapper-panel']}>
             <div className={style.panel}>
                 <div className="container">
-                    <div className="justify-content-end">
-                        <button onClick={(e) => { if (props['onClose']) props.onClose(e) }}>
-                            <Icon icon={Icon.Images.faTimes} />
-                        </button>
-                    </div>
                     {props.children}
                 </div>
             </div>
@@ -163,11 +158,15 @@ Module.SimpleCRUD = class extends React.Component {
             case Action.Create:
                 {
                     return (
-                        <Inspector
-                            schema={this.props.schema}
-                            dataProvider={this.state.dataProvider}
-                            onCancel={() => this.handleActionChange(Action.List)}
-                        ></Inspector>
+                        <Fragment>
+                            <h3>Create a new one</h3>
+                            <hr />
+                            <Inspector
+                                schema={this.props.schema}
+                                dataProvider={this.state.dataProvider}
+                                onCancel={() => this.handleActionChange(Action.List)}
+                            ></Inspector>
+                        </Fragment>
                     );
                     break;
                 }
