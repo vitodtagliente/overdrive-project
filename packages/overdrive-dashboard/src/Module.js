@@ -176,12 +176,16 @@ Module.SimpleCRUD = class extends React.Component {
             case Action.Edit:
                 {
                     return (
-                        <Inspector
-                            schema={this.props.schema}
-                            dataProvider={this.state.dataProvider}
-                            model={this.state.selectedRecord}
-                            onCancel={() => this.handleActionChange(Action.List)}
-                        ></Inspector>
+                        <Fragment>
+                            <h3>Edit one</h3>
+                            <hr />
+                            <Inspector
+                                schema={this.props.schema}
+                                dataProvider={this.state.dataProvider}
+                                model={this.state.selectedRecord}
+                                onCancel={() => this.handleActionChange(Action.List)}
+                            ></Inspector>
+                        </Fragment>
                     );
                     break;
                 }

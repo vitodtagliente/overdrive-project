@@ -1,11 +1,12 @@
 import React from 'react';
 import Icon from './Icon';
+import style from './style.css';
 
 function Page(props) {
     return (
-        <li className={props.active ? "page-item active" : "page-item"}>
+        <li className={props.active ? `page-item active` : "page-item"}>
             <a
-                className="page-link"
+                className={`page-link ${style['pagination-page']} ${props.active ? style['pagination-active'] : ''}`}
                 href="#"
                 onClick={(e) => { if (props['onClick']) props.onClick(e); }}
             >
