@@ -27,4 +27,14 @@ export default class DataProvider {
         delete model['_id'];
         return axios.patch(url, model);
     }
+
+    delete(models = []) {
+        let ids = [];
+        for (let i = 0; i < models.length; ++i)
+        {
+            const model = models[i];
+            ids.push(model.id || model._id);
+        }
+        return axios.delete(this.url + '/' + ids.join(","));
+    }
 }

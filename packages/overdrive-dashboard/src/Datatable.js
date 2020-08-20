@@ -151,6 +151,10 @@ export default class Datatable extends React.Component {
         this.#fetch(this.state.filter, this.state.page, e.target.value);
     }
 
+    refresh() {
+        this.#fetch(this.state.filter, this.state.page, this.state.value);
+    }
+
     render() {
         let columns = [];
         if (this.props.columns)

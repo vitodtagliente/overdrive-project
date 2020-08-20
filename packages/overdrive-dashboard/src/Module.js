@@ -108,6 +108,7 @@ Module.SimpleCRUD = class extends React.Component {
             error: null
         };
 
+        this.datatable = React.createRef();
         this.deleteDialog = React.createRef();
     }
 
@@ -137,6 +138,7 @@ Module.SimpleCRUD = class extends React.Component {
                                     onClick={(e) => this.handleDeleteAction()} />
                             </ActionBar>
                             <Datatable
+                                ref={this.datatable}
                                 columns={columns}
                                 dataProvider={this.state.dataProvider}
                                 paginate={true}
@@ -216,7 +218,12 @@ Module.SimpleCRUD = class extends React.Component {
     }
 
     handleDelete() {
-        // this.deleteDialog.current.close();
+        this.state.dataProvider.delete(this.state.selectedRecords)
+            .then((res => {
+                this.datatable.current.refresh();
+            })).catch((err) => {
+                console.log(err);
+            });
     }
 
     render() {
