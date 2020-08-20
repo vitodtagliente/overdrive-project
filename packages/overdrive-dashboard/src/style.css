@@ -123,6 +123,7 @@ a:focus {
     border-left: 1px solid #dee2e6!important;
     transition: all 0.4s;
     padding: 5px 0px;
+    overflow-y: auto;
 }
 
 .panel.toggled {

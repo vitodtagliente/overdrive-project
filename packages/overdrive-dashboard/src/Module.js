@@ -133,7 +133,7 @@ Module.SimpleCRUD = class extends React.Component {
                                     color='red'
                                     active={this.state.selectedRecord != null}
                                     icon={Icon.Images.faTrash}
-                                    name="Delete"
+                                    name={`Delete (1)`}
                                     onClick={(e) => this.handleDeleteAction()} />
                             </ActionBar>
                             <Datatable
@@ -167,8 +167,9 @@ Module.SimpleCRUD = class extends React.Component {
                                 onError={(e) => this.setState({ error: e })}
                                 onCancel={() => this.handleActionChange(Action.List)}
                             ></Inspector>
+                            <hr />
                             {this.state.error &&
-                                <Alert>{this.state.error}</Alert>}
+                                <Alert variant="danger">{this.state.error}</Alert>}
                         </Fragment>
                     );
                     break;
@@ -185,6 +186,12 @@ Module.SimpleCRUD = class extends React.Component {
                                 model={this.state.selectedRecord}
                                 onCancel={() => this.handleActionChange(Action.List)}
                             ></Inspector>
+                            {this.state.error &&
+                                <>
+                                    <hr />
+                                    <Alert variant="danger">{this.state.error}</Alert>
+                                </>
+                            }
                         </Fragment>
                     );
                     break;

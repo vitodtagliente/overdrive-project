@@ -134,9 +134,7 @@ export default class Inspector extends React.Component {
     handleError(error) {
         if (this.props['onError'])
         {
-            console.log(error);
-            return;
-            this.props.onError(error);
+            this.props.onError("ciao");
         }
     }
 
