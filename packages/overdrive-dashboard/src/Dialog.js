@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './Button'
 
 export default class Dialog extends React.Component {
 
@@ -7,6 +8,9 @@ export default class Dialog extends React.Component {
     constructor(props) {
         super(props);
         this.#id = Date.now();
+        this.state = {
+            show: false
+        };
     }
 
     get id() {
@@ -14,11 +18,11 @@ export default class Dialog extends React.Component {
     }
 
     close() {
-        document.getElementById(this.id).modal({ show: false });
+        this.setState({ show: false });
     }
 
     show() {
-        document.getElementById(this.id).modal({ show: true });
+        this.setState({ show: true });
     }
 
     toggle() {
@@ -27,7 +31,19 @@ export default class Dialog extends React.Component {
 
     render() {
         return (
-            <div className="modal fade" id={this.id} data-backdrop="static" data-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div
+                className={`modal fade ${this.state.show ? 'show' : ''}`}
+                id={this.id}
+                data-backdrop="static"
+                data-keyboard="false"
+                tabIndex="-1"
+                aria-labelledby="staticBackdropLabel"
+                aria-hidden={this.state.show}
+                aria-modal={this.state.show}
+                style={{
+                    display: this.state.show ? 'block' : 'none'
+                }}
+            >
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -40,8 +56,20 @@ export default class Dialog extends React.Component {
                             {this.props.children}
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="button" className="btn btn-primary">Understood</button>
+                            <Button
+                                name={this.props.buttonName || 'Ok'}
+                                onClick={(e) => {
+                                    if (this.props['onAction'])
+                                    {
+                                        this.props.onAction(e);
+                                    }
+                                    this.close();
+                                }}
+                            />
+                            <Button
+                                name="Cancel"
+                                onClick={(e) => this.close()}
+                            />
                         </div>
                     </div>
                 </div>

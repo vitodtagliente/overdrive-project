@@ -147,7 +147,6 @@ Module.SimpleCRUD = class extends React.Component {
                                 ref={this.deleteDialog}
                                 title="Delete"
                                 buttonName="Delete"
-                                buttonVariant="danger"
                                 onAction={(dialog) => this.handleDelete(dialog)}
                             >
                                 Are you sure to delete the selected record?
@@ -216,8 +215,8 @@ Module.SimpleCRUD = class extends React.Component {
         this.deleteDialog.current.show();
     }
 
-    handleDelete(dialog) {
-        dialog.close();
+    handleDelete() {
+        // this.deleteDialog.current.close();
     }
 
     render() {
