@@ -149,7 +149,7 @@ Module.SimpleCRUD = class extends React.Component {
                                 buttonName="Delete"
                                 onAction={(dialog) => this.handleDelete(dialog)}
                             >
-                                Are you sure to delete the selected record?
+                                Are you sure to delete the selected record{this.state.selectedRecords.length > 1 ? 's' : ''}?
                             </Dialog>
                         </>
                     );
