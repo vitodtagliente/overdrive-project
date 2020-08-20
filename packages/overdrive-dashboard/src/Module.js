@@ -104,7 +104,7 @@ Module.SimpleCRUD = class extends React.Component {
         this.state = {
             dataProvider: new DataProvider(props.api),
             action: Action.List,
-            selectedRecord: null,
+            selectedRecords: [],
             error: null
         };
 
@@ -125,15 +125,15 @@ Module.SimpleCRUD = class extends React.Component {
                                     name="Add"
                                     onClick={(e) => this.handleActionChange(Action.Create)} />
                                 <ActionBar.Button
-                                    active={this.state.selectedRecord != null}
+                                    active={this.state.selectedRecords.length == 1}
                                     icon={Icon.Images.faPen}
                                     name="Edit"
                                     onClick={(e) => this.handleActionChange(Action.Edit)} />
                                 <ActionBar.Button
                                     color='red'
-                                    active={this.state.selectedRecord != null}
+                                    active={this.state.selectedRecords.length > 0}
                                     icon={Icon.Images.faTrash}
-                                    name={`Delete (1)`}
+                                    name={`Delete${this.state.selectedRecords.length > 1 ? ` (${this.state.selectedRecords.length})` : ''}`}
                                     onClick={(e) => this.handleDeleteAction()} />
                             </ActionBar>
                             <Datatable
@@ -141,7 +141,7 @@ Module.SimpleCRUD = class extends React.Component {
                                 dataProvider={this.state.dataProvider}
                                 paginate={true}
                                 search={true}
-                                onRowSelection={(record) => this.handleRecordSelection(record)}
+                                onSelectionChanged={(records) => this.handleRecordSelection(records)}
                             ></Datatable>
                             <Dialog
                                 ref={this.deleteDialog}
@@ -183,7 +183,7 @@ Module.SimpleCRUD = class extends React.Component {
                             <Inspector
                                 schema={this.props.schema}
                                 dataProvider={this.state.dataProvider}
-                                model={this.state.selectedRecord}
+                                model={this.state.selectedRecords[0]}
                                 onCancel={() => this.handleActionChange(Action.List)}
                             ></Inspector>
                             {this.state.error &&
@@ -206,9 +206,9 @@ Module.SimpleCRUD = class extends React.Component {
         });
     }
 
-    handleRecordSelection(record) {
+    handleRecordSelection(records) {
         this.setState({
-            selectedRecord: record
+            selectedRecords: records
         });
     }
 

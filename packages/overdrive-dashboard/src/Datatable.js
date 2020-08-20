@@ -63,7 +63,7 @@ export default class Datatable extends React.Component {
             limit: 10,
             page: 1,
             filter: '',
-            selectedRow: -1
+            selectedRows: []
         };
 
         this.table = React.createRef();
@@ -91,7 +91,7 @@ export default class Datatable extends React.Component {
                 filter: filter,
                 recordsTotal: res.data.recordsTotal,
                 recordsFiltered: res.data.recordsFiltered,
-                selectedRow: -1,
+                selectedRows: [],
                 limit: limit
             });
         })).catch((err) => {
@@ -104,14 +104,38 @@ export default class Datatable extends React.Component {
     }
 
     handleRowSelection(e, index, record) {
-        const selection = this.state.selectedRow === index ? -1 : index;
+        let selection = this.state.selectedRows;
+        if (e.target.checked)
+        {
+            if (!selection.includes(index))
+            {
+                selection.push(index);
+            }
+        }
+        else 
+        {
+            for (let i = 0; i < selection.length; ++i)
+            {
+                if (selection[i] === index) 
+                {
+                    selection.splice(i, 1);
+                }
+            }
+        }
+
         this.setState({
-            selectedRow: selection
+            selectedRows: selection
         });
 
-        if (this.props['onRowSelection'])
+        if (this.props['onSelectionChanged'])
         {
-            this.props.onRowSelection(selection >= 0 ? record : null);
+            let records = [];
+            for (let i = 0; i < selection.length; ++i)
+            {
+                records.push(this.state.data[selection[i]]);
+            }
+
+            this.props.onSelectionChanged(records);
         }
     }
 
@@ -150,7 +174,7 @@ export default class Datatable extends React.Component {
                     <div className="checkbox checkbox-circle">
                         <input
                             type="checkbox"
-                            defaultChecked={this.state.selectedRow == index}
+                            checked={this.state.selectedRows.includes(index)}
                             onChange={(e) => this.handleRowSelection(e, index, record)}
                         />
                     </div>
