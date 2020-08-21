@@ -116,7 +116,7 @@ Module.SimpleCRUD = class extends React.Component {
         {
             case Action.List:
                 {
-                    const columns = this.props.columns || {};
+                    const columns = this.props.fields || {};
                     return (
                         <>
                             <ActionBar>
