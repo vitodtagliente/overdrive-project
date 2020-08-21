@@ -39,7 +39,7 @@ export default class TestModule extends Module {
         return (
             <Sidebar.Item
                 url={this.url}
-                active={true}
+                active={this.isActive}
                 name="Test Component"
                 icon={Icon.Images.faDog}
                 color="purple"

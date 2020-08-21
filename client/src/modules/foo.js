@@ -8,7 +8,11 @@ export default class FooModule extends Module {
 
     sidebar() {
         return (
-            <Sidebar.Item url={this.url} name="foo" />
+            <Sidebar.Item
+                url={this.url}
+                active={this.isActive}
+                name="foo"
+            />
         );
     }
 
