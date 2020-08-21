@@ -130,7 +130,12 @@ a:focus {
     margin-right: 0;
 }
 
+.freeze {
+    overflow: hidden;
+}
+
 .obscured {
+    display: none;
     position: fixed;
     left: 0;
     top: 0;
@@ -140,8 +145,8 @@ a:focus {
     background-color: rgba(0,0,0,.075);
 }
 
-.nooverflow {
-    overflow: hidden;
+.freeze .obscured {
+    display: block;
 }
 
 /* ---------------------------------------------------

@@ -230,16 +230,16 @@ Module.SimpleCRUD = class extends React.Component {
         const showPanel = this.state.action != Action.List;
         if (showPanel)
         {
-            if (!document.body.className.includes(style.nooverflow))
+            if (!document.body.className.includes(style.freeze))
             {
-                document.body.classList.add(style.nooverflow);
+                document.body.classList.add(style.freeze);
             }
         }
         else 
         {
-            if (document.body.className.includes(style.nooverflow))
+            if (document.body.className.includes(style.freeze))
             {
-                document.body.classList.remove(style.nooverflow);
+                document.body.classList.remove(style.freeze);
             }
         }
 
@@ -252,7 +252,6 @@ Module.SimpleCRUD = class extends React.Component {
             >
                 {this.getView(Action.List)}
                 {this.props.children}
-                {showPanel && <div className={style.obscured}></div>}
                 <Panel
                     show={showPanel}
                     onClose={(e) => this.handleActionChange(Action.List)}

@@ -54,6 +54,7 @@ export default class Dashboard extends React.Component {
                         <div className="container-fluid mt-3 mb-3">
                             {this.module && this.module.content()}
                         </div>
+                        <div className={style.obscured}></div>
                     </div>
                 </div>
             </>
