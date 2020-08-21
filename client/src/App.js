@@ -1,6 +1,5 @@
 import React from 'react';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Dashboard } from 'overdrive-dashboard';
 import 'overdrive-dashboard/dist/index.css'
 

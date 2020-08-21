@@ -1,3 +1,5 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 export { default as Dashboard } from './Dashboard';
 export * from './Dashboard';
 
