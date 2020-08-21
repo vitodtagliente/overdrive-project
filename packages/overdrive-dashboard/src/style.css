@@ -130,6 +130,20 @@ a:focus {
     margin-right: 0;
 }
 
+.obscured {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background-color: rgba(0,0,0,.075);
+}
+
+.nooverflow {
+    overflow: hidden;
+}
+
 /* ---------------------------------------------------
     NAVIGATION STYLE
 ----------------------------------------------------- */
