@@ -21,8 +21,8 @@ export * from './Inspector';
 export { default as ActionBar } from './ActionBar';
 export * from './ActionBar';
 
-export { default as Dialog } from './Dialog';
-export * from './Dialog';
+export { default as Modal } from './Modal';
+export * from './Modal';
 
 export { default as Icon } from './Icon';
 export * from './Icon';
