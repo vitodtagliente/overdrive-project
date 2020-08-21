@@ -3,9 +3,9 @@ import ActionBar from './ActionBar';
 import Alert from './Alert';
 import DataProvider from './DataProvider';
 import Datatable from './Datatable';
-import Dialog from './Dialog';
 import Icon from './Icon';
 import Inspector from './Inspector';
+import Modal from './Modal';
 import style from './style.css';
 
 export default class Module {
@@ -109,7 +109,7 @@ Module.SimpleCRUD = class extends React.Component {
         };
 
         this.datatable = React.createRef();
-        this.deleteDialog = React.createRef();
+        this.deleteModal = React.createRef();
     }
 
     getView(action) {
@@ -145,14 +145,14 @@ Module.SimpleCRUD = class extends React.Component {
                                 search={true}
                                 onSelectionChanged={(records) => this.handleRecordSelection(records)}
                             ></Datatable>
-                            <Dialog
-                                ref={this.deleteDialog}
+                            <Modal
+                                ref={this.deleteModal}
                                 title="Delete"
                                 buttonName="Delete"
-                                onAction={(dialog) => this.handleDelete(dialog)}
+                                onAction={(e) => this.handleDelete(e)}
                             >
                                 Are you sure to delete the selected record{this.state.selectedRecords.length > 1 ? 's' : ''}?
-                            </Dialog>
+                            </Modal>
                         </>
                     );
                 }
@@ -214,7 +214,7 @@ Module.SimpleCRUD = class extends React.Component {
     }
 
     handleDeleteAction() {
-        this.deleteDialog.current.show();
+        this.deleteModal.current.show();
     }
 
     handleDelete() {

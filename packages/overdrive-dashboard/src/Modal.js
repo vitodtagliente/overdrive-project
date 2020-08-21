@@ -1,7 +1,9 @@
 import React from 'react';
+import $ from 'jquery';
+import 'bootstrap';
 import Button from './Button'
 
-export default class Dialog extends React.Component {
+export default class Modal extends React.Component {
 
     #id = null;
 
@@ -18,31 +20,27 @@ export default class Dialog extends React.Component {
     }
 
     close() {
-        this.setState({ show: false });
+        $(`#${this.id}`).modal('hide');
     }
 
     show() {
-        this.setState({ show: true });
+        $(`#${this.id}`).modal('show');
     }
 
     toggle() {
-
+        $(`#${this.id}`).modal('toggles');
     };
 
     render() {
         return (
             <div
-                className={`modal fade ${this.state.show ? 'show' : ''}`}
+                className="modal fade"
                 id={this.id}
                 data-backdrop="static"
                 data-keyboard="false"
-                tabIndex="-1"
+                tabindex="-1"
                 aria-labelledby="staticBackdropLabel"
-                aria-hidden={this.state.show}
-                aria-modal={this.state.show}
-                style={{
-                    display: this.state.show ? 'block' : 'none'
-                }}
+                aria-hidden="true"
             >
                 <div className="modal-dialog">
                     <div className="modal-content">
@@ -53,7 +51,6 @@ export default class Dialog extends React.Component {
                                 className="close"
                                 data-dismiss="modal"
                                 aria-label="Close"
-                                onClick={e => this.close()}
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>
