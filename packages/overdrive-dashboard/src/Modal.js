@@ -38,7 +38,7 @@ export default class Modal extends React.Component {
                 id={this.id}
                 data-backdrop="static"
                 data-keyboard="false"
-                tabindex="-1"
+                tabIndex="-1"
                 aria-labelledby="staticBackdropLabel"
                 aria-hidden="true"
             >

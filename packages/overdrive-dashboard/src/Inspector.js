@@ -113,7 +113,7 @@ export default class Inspector extends React.Component {
         ).then((res => {
             this.props.onCancel();
         })).catch((err) => {
-            this.handleError(err);
+            this.handleError(err.response);
         });
     }
 
@@ -127,14 +127,14 @@ export default class Inspector extends React.Component {
         ).then((res => {
             this.props.onCancel();
         })).catch((err) => {
-            this.handleError(err);
+            this.handleError(err.response);
         });
     }
 
     handleError(error) {
         if (this.props['onError'])
         {
-            this.props.onError("ciao");
+            this.props.onError(error);
         }
     }
 

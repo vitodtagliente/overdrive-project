@@ -104,8 +104,7 @@ Module.SimpleCRUD = class extends React.Component {
         this.state = {
             dataProvider: new DataProvider(props.api),
             action: Action.List,
-            selectedRecords: [],
-            error: null
+            selectedRecords: []
         };
 
         this.datatable = React.createRef();
@@ -165,12 +164,9 @@ Module.SimpleCRUD = class extends React.Component {
                             <Inspector
                                 schema={this.props.schema}
                                 dataProvider={this.state.dataProvider}
-                                onError={(e) => this.setState({ error: e })}
+                                onError={(e) => this.handleError(e)}
                                 onCancel={() => this.handleActionChange(Action.List)}
                             ></Inspector>
-                            <hr />
-                            {this.state.error &&
-                                <Alert variant="danger">{this.state.error}</Alert>}
                         </Fragment>
                     );
                     break;
@@ -185,14 +181,9 @@ Module.SimpleCRUD = class extends React.Component {
                                 schema={this.props.schema}
                                 dataProvider={this.state.dataProvider}
                                 model={this.state.selectedRecords[0]}
+                                onError={(e) => this.handleError(e)}
                                 onCancel={() => this.handleActionChange(Action.List)}
                             ></Inspector>
-                            {this.state.error &&
-                                <>
-                                    <hr />
-                                    <Alert variant="danger">{this.state.error}</Alert>
-                                </>
-                            }
                         </Fragment>
                     );
                     break;
@@ -222,8 +213,12 @@ Module.SimpleCRUD = class extends React.Component {
             .then((res => {
                 this.datatable.current.refresh();
             })).catch((err) => {
-                console.log(err);
+                this.handleError(err.response);
             });
+    }
+
+    handleError(error) {
+        console.log(error);
     }
 
     render() {
