@@ -3,22 +3,24 @@ import React from 'react';
 import { Dashboard } from 'overdrive-dashboard';
 import 'overdrive-dashboard/dist/index.css'
 
-import TestModule from './modules/test';
-import FooModule from './modules/foo';
+/* Modules */
+import fooModule from './modules/foo';
+import testModule from './modules/test';
+
+const modules = [
+	new fooModule(),
+	new testModule()
+];
 
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
-		this.modules = [
-			new TestModule('/test'),
-			new FooModule('/foo')
-		];
 	}
 
 	render() {
 		return (
 			<Dashboard
-				modules={this.modules}
+				modules={modules}
 			/>
 		);
 	}

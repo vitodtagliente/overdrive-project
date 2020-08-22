@@ -3,7 +3,7 @@ import { Module, Sidebar } from 'overdrive-dashboard';
 
 export default class FooModule extends Module {
     constructor(url, id) {
-        super(url, id);
+        super('/foo', id);
     }
 
     sidebar() {

@@ -163,6 +163,6 @@ a:focus {
 
 .pagination-active {
     background-color: #5bc0de!important;
-    border-color: #dee2e6!important;
-    color: #212529!important;
+    border-color: #44b7da!important;
+    color: #fff!important;
 }

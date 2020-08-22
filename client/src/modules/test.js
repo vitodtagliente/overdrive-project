@@ -32,7 +32,7 @@ const Schema = {
 
 export default class TestModule extends Module {
     constructor(url, id) {
-        super(url, id);
+        super('test', id);
     }
 
     sidebar() {
