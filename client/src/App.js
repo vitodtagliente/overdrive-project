@@ -6,7 +6,7 @@ import moduleLoader from './services/moduleLoader';
 import { Dashboard } from 'overdrive-dashboard';
 import 'overdrive-dashboard/dist/index.css'
 
-import Route from './components/Route';
+import Router from './components/Router';
 import Home from './components/Home';
 import Login from './components/Login';
 
@@ -33,11 +33,14 @@ export default class App extends React.Component {
 				}
 				{
 					!this.auth.isAuthenticated() &&
-					<Fragment>
-						<Route url="/login">
+					<Router>
+						<Router.Route url="/login">
 							<Login />
-						</Route>
-					</Fragment>
+						</Router.Route>
+						<Router.Route url="/">
+							<Home />
+						</Router.Route>
+					</Router>
 				}
 			</Fragment>
 		);
