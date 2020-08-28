@@ -14,7 +14,7 @@ export default class Footer extends React.Component {
     render() {
         return (
             <div className="footer">
-
+                <span>Power by <a href="/dddd">overdrive</a></span>
             </div>
         );
     }
