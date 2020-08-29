@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'overdrive-dashboard';
-import './Authentication.css';
-import Footer from './Footer';
-import auth from '../services/authentication';
+import Auth from '../services/authentication';
 
 export default class Signup extends React.Component {
     constructor(props) {
@@ -11,7 +9,7 @@ export default class Signup extends React.Component {
     }
 
     handleSignup(e) {
-        auth.signup(
+        Auth.signup(
             document.getElementById('inputUsername').value,
             document.getElementById('inputEmail').value,
             document.getElementById('inputPassword').value
@@ -43,7 +41,6 @@ export default class Signup extends React.Component {
                         />
                     </form>
                 </div>
-                <Footer />
             </Fragment>
         );
     }

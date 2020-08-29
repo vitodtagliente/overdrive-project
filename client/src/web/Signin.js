@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'overdrive-dashboard';
-import './Authentication.css';
-import auth from '../services/authentication';
+import Auth from '../services/authentication';
 
 export default class Signin extends React.Component {
     constructor(props) {
@@ -10,7 +9,7 @@ export default class Signin extends React.Component {
     }
 
     handleSignin(e) {
-        auth.signin(
+        Auth.signin(
             document.getElementById('inputEmail').value,
             document.getElementById('inputPassword').value
         ).then((res => {
