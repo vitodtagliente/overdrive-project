@@ -1,5 +1,6 @@
 import React from 'react';
-import style from './Footer.css';
+import { Icon } from 'overdrive-dashboard';
+import './Footer.css';
 
 export default class Footer extends React.Component {
     constructor(props) {
@@ -12,10 +13,16 @@ export default class Footer extends React.Component {
     }
 
     render() {
+        const url = "https://github.com/vitodtagliente/overdrive-project";
+
         return (
-            <div className="footer">
-                <span>Power by <a href="/dddd">overdrive</a></span>
-            </div>
+            <footer className="footer mt-auto py-3">
+                <div className="container">
+                    <span className="text-muted">
+                        Powered by <a href={url} target="_blank">overdrive</a> <Icon color='red' icon={Icon.Images.faHeart} />
+                    </span>
+                </div>
+            </footer>
         );
     }
 }

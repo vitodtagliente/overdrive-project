@@ -72,9 +72,9 @@ class AuthController extends Controller {
     /// Register the controller routes
     /// @param router - The router
     register(router) {
-        router.post('/api/auth/signin', AuthController.signin);
-        router.post('/api/auth/signup', AuthController.signup);
-        router.get('/api/auth/logout', AuthController.logout);
+        router.post('/auth/signin', AuthController.signin);
+        router.post('/auth/signup', AuthController.signup);
+        router.get('/auth/logout', AuthController.logout);
     }
 }
 

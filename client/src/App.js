@@ -8,7 +8,8 @@ import 'overdrive-dashboard/dist/index.css'
 
 import Router from './components/Router';
 import Home from './components/Home';
-import Login from './components/Login';
+import Signin from './components/Signin';
+import Signup from './components/Signup';
 
 export default class App extends React.Component {
 	constructor(props) {
@@ -34,8 +35,11 @@ export default class App extends React.Component {
 				{
 					!this.auth.isAuthenticated() &&
 					<Router>
-						<Router.Route url="/login">
-							<Login />
+						<Router.Route url="/signin">
+							<Signin />
+						</Router.Route>
+						<Router.Route url="/signup">
+							<Signup />
 						</Router.Route>
 						<Router.Route url="/">
 							<Home />

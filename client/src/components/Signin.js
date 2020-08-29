@@ -1,16 +1,24 @@
 import React, { Fragment } from 'react';
 import { Button } from 'overdrive-dashboard';
-import style from './Login.css';
+import './Authentication.css';
 import Footer from './Footer';
+import auth from '../services/authentication';
 
-export default class Login extends React.Component {
+export default class Signin extends React.Component {
     constructor(props) {
         super(props);
 
     }
 
-    handleLogin(e) {
-
+    handleSignin(e) {
+        auth.signin(
+            document.getElementById('inputEmail').value,
+            document.getElementById('inputPassword').value
+        ).then((res => {
+            console.log(res);
+        })).catch((err) => {
+            console.error(err);
+        });
     }
 
     render() {
@@ -32,8 +40,7 @@ export default class Login extends React.Component {
                         </div>
                         <Button
                             name="Sign in"
-                            type="submit"
-                            onClick={(e) => this.handleLogin(e)}
+                            onClick={(e) => this.handleSignin(e)}
                         />
                     </form>
                 </div>
