@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from 'overdrive-dashboard';
 import './Authentication.css';
-import Footer from './Footer';
 import auth from '../services/authentication';
 
 export default class Signin extends React.Component {
@@ -44,7 +43,6 @@ export default class Signin extends React.Component {
                         />
                     </form>
                 </div>
-                <Footer />
             </Fragment>
         );
     }
