@@ -1,5 +1,6 @@
 const Auth = require('overdrive').Auth;
 const Controller = require('overdrive').Controller;
+const Logger = require('overdrive').Logger;
 const Password = require('overdrive').Password;
 const Session = require('overdrive').Session;
 const Status = require('overdrive').Status;
@@ -59,6 +60,7 @@ class AuthController extends Controller {
         }
         else 
         {
+            Logger.error('Validation failed, cannot create the user');
             res.respond(Status.Code.BadRequest);
         }
     }

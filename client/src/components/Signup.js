@@ -12,6 +12,7 @@ export default class Signup extends React.Component {
 
     handleSignup(e) {
         auth.signup(
+            document.getElementById('inputUsername').value,
             document.getElementById('inputEmail').value,
             document.getElementById('inputPassword').value
         ).then((res => {
@@ -28,7 +29,10 @@ export default class Signup extends React.Component {
                     <form>
                         <h1 className="h3 mb-3 font-weight-normal">Sign up</h1>
                         <div className="form-group">
-                            <input type="email" id="inputEmail" className="form-control rounded-0" placeholder="Email address" required autoFocus />
+                            <input type="text" id="inputUsername" className="form-control rounded-0" placeholder="Username" required autoFocus />
+                        </div>
+                        <div className="form-group">
+                            <input type="email" id="inputEmail" className="form-control rounded-0" placeholder="Email address" required />
                         </div>
                         <div className="form-group">
                             <input type="password" id="inputPassword" className="form-control rounded-0" placeholder="Password" required />

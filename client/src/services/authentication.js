@@ -14,8 +14,9 @@ export default class Authentication {
         });
     }
 
-    static signup(email, password) {
+    static signup(username, email, password) {
         return axios.post(`${url}/signup`, {
+            username,
             email,
             password
         });
