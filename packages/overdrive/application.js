@@ -83,7 +83,9 @@ class Application {
         // add the respond method
         this.#app.use(Respond);
         // allow cross origin requests
-        this.#app.use(cors());
+        this.#app.use(cors({
+            origin: "http://localhost:3000"
+        }));
     }
 
     /// Get the application configuration 

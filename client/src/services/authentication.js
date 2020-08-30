@@ -19,6 +19,6 @@ export default class Authentication {
     }
 
     isAuthenticated() {
-        return false;
+        return true;
     }
 }
