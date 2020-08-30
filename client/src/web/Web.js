@@ -10,6 +10,16 @@ import Footer from './Footer';
 import './Footer.css';
 import './Web.css';
 
+function NavLink(props) {
+    const className = window.location.pathname.includes(props.url) ?
+        'nav-item active' : 'nav-item';
+    return (
+        <li className={className}>
+            <a class="nav-link" href={props.url}>{props.name}</a>
+        </li>
+    );
+}
+
 export default class Web extends React.Component {
     constructor(props) {
         super(props);
@@ -25,15 +35,8 @@ export default class Web extends React.Component {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
-                            <li className="nav-item">
-                                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li className="nav-item">
-                                <a class="nav-link" href="/signin">Sign in</a>
-                            </li>
-                            <li className="nav-item">
-                                <a class="nav-link" href="/signup">Sign up</a>
-                            </li>
+                            <NavLink url="/signin" name="Sign in" />
+                            <NavLink url="/signup" name="Sign up" />
                         </ul>
                     </div>
                 </nav>
