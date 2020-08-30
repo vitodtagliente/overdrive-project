@@ -15,7 +15,7 @@ function NavLink(props) {
         'nav-item active' : 'nav-item';
     return (
         <li className={className}>
-            <a class="nav-link" href={props.url}>{props.name}</a>
+            <a className="nav-link" href={props.url}>{props.name}</a>
         </li>
     );
 }

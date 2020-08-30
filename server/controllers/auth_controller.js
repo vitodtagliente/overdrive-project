@@ -36,7 +36,7 @@ class AuthController extends Controller {
                 {
                     // store the user id into the session
                     session.data.user = { id: user.id };
-                    return res.respond(Status.Code.OK);
+                    return res.respond(Status.Code.OK, session.data.user);
                 }
             }
         }

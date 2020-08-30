@@ -30,7 +30,7 @@ class Session {
         if (this.data)
         {
             this.data.destroy((err) => {
-                
+
             });
         }
         return true;
@@ -39,13 +39,18 @@ class Session {
     /// Initialize the session module
     /// @param app - The express application
     /// @param secret - The secret
-    static initialize(app, secret) {
+    static initialize(app, secret, name, lifetime) {
         app.use(session({
+            name,
             secret,
             resave: false,
             saveUninitialized: false,
             /// activate if on https
-            cookie: { secure: false }
+            cookie: {
+                sameSite: true,
+                secure: false,
+                maxAge: parseInt(lifetime)
+            }
         }));
     }
 

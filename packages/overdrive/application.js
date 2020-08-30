@@ -40,6 +40,14 @@ class ApplicationConfig {
         return this.#config.SECRET || 'OVERDRIVE-SECRET';
     }
 
+    get sessionLifetime() {
+        return this.#config.SESSION_LIFETIME || 1000 * 60 * 60 * 2;
+    }
+
+    get sessionName() {
+        return this.#config.SESSION_NAME || 'overdrive';
+    }
+
     get type() {
         return this.#config.CONNECTION_TYPE || Connection.Type.MongoDB;
     }
@@ -92,12 +100,17 @@ class Application {
             // server already initialized
             return;
         }
-        
+
         // parse the configuration
         this.#config = new ApplicationConfig(config);
 
         // initialize the session
-        Session.initialize(this.#app, this.#config.secret);
+        Session.initialize(
+            this.#app,
+            this.#config.secret,
+            this.#config.sessionName,
+            this.#config.sessionLifetime
+        );
         // initialize the authentication
         Auth.initialize(this.#app);
 
