@@ -23,7 +23,7 @@ export default class Signup extends React.Component {
     render() {
         return (
             <Fragment>
-                <div className="login">
+                <div className="content">
                     <form>
                         <h1 className="h3 mb-3 font-weight-normal">Sign up</h1>
                         <div className="form-group">
