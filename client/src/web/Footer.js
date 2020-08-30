@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon } from 'overdrive-dashboard';
 import './Footer.css';
 
-export default function Footer() {
+export default function Footer(props) {
     const url = "https://github.com/vitodtagliente/overdrive-project";
 
     return (

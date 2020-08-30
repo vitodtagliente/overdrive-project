@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Home() {
+export default function Home(props) {
     return (
         <div className="container m-3">
             <h1>Welcome to Overdrive</h1>
