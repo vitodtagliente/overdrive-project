@@ -20,39 +20,33 @@ function NavLink(props) {
     );
 }
 
-export default class Web extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Fragment>
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <a className="navbar-brand" href="/">{this.props.brand || 'Overdrive'}</a>
-                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav">
-                            <NavLink url="/signin" name="Sign in" />
-                            <NavLink url="/signup" name="Sign up" />
-                        </ul>
-                    </div>
-                </nav>
-                <Router>
-                    <Router.Route url="/signin">
-                        <Signin />
-                    </Router.Route>
-                    <Router.Route url="/signup">
-                        <Signup />
-                    </Router.Route>
-                    <Router.Route url="/">
-                        <Home />
-                    </Router.Route>
-                </Router>
-                <Footer />
-            </Fragment>
-        );
-    }
+export default function Web() {
+    return (
+        <Fragment>
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <a className="navbar-brand" href="/">{this.props.brand || 'Overdrive'}</a>
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav">
+                        <NavLink url="/signin" name="Sign in" />
+                        <NavLink url="/signup" name="Sign up" />
+                    </ul>
+                </div>
+            </nav>
+            <Router>
+                <Router.Route url="/signin">
+                    <Signin />
+                </Router.Route>
+                <Router.Route url="/signup">
+                    <Signup />
+                </Router.Route>
+                <Router.Route url="/">
+                    <Home />
+                </Router.Route>
+            </Router>
+            <Footer />
+        </Fragment>
+    );
 }

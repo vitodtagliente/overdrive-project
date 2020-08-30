@@ -1,5 +1,5 @@
 import React from 'react';
-import { Module, Sidebar, Card, Icon } from 'overdrive-dashboard';
+import { Module, Sidebar, Icon } from 'overdrive-dashboard';
 
 const Schema = {
     name: {

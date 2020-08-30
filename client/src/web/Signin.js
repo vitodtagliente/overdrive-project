@@ -5,7 +5,7 @@ import Auth from '../services/authentication';
 export default class Signin extends React.Component {
     constructor(props) {
         super(props);
-
+        this.state = {};
     }
 
     handleSignin(e) {
