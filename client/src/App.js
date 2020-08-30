@@ -8,6 +8,8 @@ import 'overdrive-dashboard/dist/index.css'
 
 import Web from './web/Web';
 
+import config from './config';
+
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -27,11 +29,12 @@ export default class App extends React.Component {
 					this.auth.isAuthenticated() &&
 					<Dashboard
 						modules={moduleLoader()}
+						brand={config.brand}
 					/>
 				}
 				{
 					!this.auth.isAuthenticated() &&
-					<Web />
+					<Web brand={config.brand} />
 				}
 			</Fragment>
 		);
