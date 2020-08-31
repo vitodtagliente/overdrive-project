@@ -48,6 +48,7 @@ class Logger {
         const datafy = JSON.stringify(data);
         console.log(`[${Color.decorate(req.method, Color.Foreground.Green)}] ` +
             `[${getCurrentDateTime()}] ` +
+            `[${req.headers['user-agent']}] ` +
             `[${Stack.getFormatedStackTraceElement(1)}] ` +
             `${req.url} ` +
             `${datafy != '{}' ? datafy : ''}`
