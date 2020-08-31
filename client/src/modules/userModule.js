@@ -69,9 +69,23 @@ export default class UserModule extends Module {
     }
 };
 
+const Action = {
+    Profile: 'profile'
+};
+
 class CRUD extends Module.CRUD {
-    constructor(props){
+    constructor(props) {
         super(props);
+    }
+
+    getView(action) {
+        if (action == Action.Profile)
+        {
+            return (
+                <p>Hello</p>
+            );
+        }
+        else return super.getView(action);
     }
 
     getActionBar() {
@@ -80,12 +94,12 @@ class CRUD extends Module.CRUD {
                 <ActionBar.Button
                     icon={Icon.Images.faUserCircle}
                     name="Edit Profile"
-                     />
+                    onClick={(e) => this.handleActionChange(Action.Profile)} />
                 <ActionBar.Button
                     active={this.state.selectedRecords.length === 1}
                     icon={Icon.Images.faUserEdit}
                     name="Change Role"
-                    />
+                />
             </ActionBar>
         )
     }

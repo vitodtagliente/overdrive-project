@@ -263,3 +263,5 @@ Module.CRUD = class extends React.Component {
         );
     }
 }
+
+Module.CRUD.Action = Action;
