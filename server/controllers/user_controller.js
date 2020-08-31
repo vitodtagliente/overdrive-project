@@ -6,7 +6,8 @@ class UserController extends Controller {
     /// Register the controller routes
     /// @param router - The router
     register(router) {
-        CRUD.register(router, User, '/users');
+        /// Retrieve the list of all the users
+        CRUD.read(router, User, '/users');
     }
 }
 

@@ -69,7 +69,7 @@ class Attribute extends React.Component {
                         <div className="form-group">
                             <label htmlFor={this.props.name}>{this.props.schema.display || this.props.name}</label>
                             <input
-                                type="text"
+                                type={this.props.name != 'password' ? 'text' : 'password'}
                                 className="form-control form-control-sm rounded-0"
                                 placeholder={this.props.schema.placeholder || this.props.name}
                                 name={this.props.name}

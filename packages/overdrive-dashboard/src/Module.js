@@ -69,7 +69,7 @@ Module.Description = function (props) {
 
 Module.Content = function (props) {
     return (
-        <>
+        <Fragment>
             <Module.Description
                 name={props.name}
                 description={props.description}
@@ -78,7 +78,7 @@ Module.Content = function (props) {
             <div>
                 {props.children}
             </div>
-        </>
+        </Fragment>
     );
 }
 
@@ -98,7 +98,7 @@ function Panel(props) {
     );
 }
 
-Module.SimpleCRUD = class extends React.Component {
+Module.CRUD = class extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -111,6 +111,28 @@ Module.SimpleCRUD = class extends React.Component {
         this.deleteModal = React.createRef();
     }
 
+    getActionBar() {
+        return (
+            <ActionBar>
+                <ActionBar.Button
+                    icon={Icon.Images.faPlus}
+                    name="Add"
+                    onClick={(e) => this.handleActionChange(Action.Create)} />
+                <ActionBar.Button
+                    active={this.state.selectedRecords.length == 1}
+                    icon={Icon.Images.faPen}
+                    name="Edit"
+                    onClick={(e) => this.handleActionChange(Action.Edit)} />
+                <ActionBar.Button
+                    color='red'
+                    active={this.state.selectedRecords.length > 0}
+                    icon={Icon.Images.faTrash}
+                    name={`Delete${this.state.selectedRecords.length > 1 ? ` (${this.state.selectedRecords.length})` : ''}`}
+                    onClick={(e) => this.handleDeleteAction()} />
+            </ActionBar>
+        );
+    }
+
     getView(action) {
         switch (action)
         {
@@ -118,24 +140,8 @@ Module.SimpleCRUD = class extends React.Component {
                 {
                     const columns = this.props.fields || {};
                     return (
-                        <>
-                            <ActionBar>
-                                <ActionBar.Button
-                                    icon={Icon.Images.faPlus}
-                                    name="Add"
-                                    onClick={(e) => this.handleActionChange(Action.Create)} />
-                                <ActionBar.Button
-                                    active={this.state.selectedRecords.length == 1}
-                                    icon={Icon.Images.faPen}
-                                    name="Edit"
-                                    onClick={(e) => this.handleActionChange(Action.Edit)} />
-                                <ActionBar.Button
-                                    color='red'
-                                    active={this.state.selectedRecords.length > 0}
-                                    icon={Icon.Images.faTrash}
-                                    name={`Delete${this.state.selectedRecords.length > 1 ? ` (${this.state.selectedRecords.length})` : ''}`}
-                                    onClick={(e) => this.handleDeleteAction()} />
-                            </ActionBar>
+                        <Fragment>
+                            {this.getActionBar()}
                             <Datatable
                                 ref={this.datatable}
                                 columns={columns}
@@ -152,7 +158,7 @@ Module.SimpleCRUD = class extends React.Component {
                             >
                                 Are you sure to delete the selected record{this.state.selectedRecords.length > 1 ? 's' : ''}?
                             </Modal>
-                        </>
+                        </Fragment>
                     );
                 }
             case Action.Create:

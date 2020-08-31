@@ -54,7 +54,7 @@ export default class UserModule extends Module {
     content(context) {
         return (
             <>
-                <Module.SimpleCRUD
+                <Module.CRUD
                     name="Users"
                     description="Manage the users of the application"
                     icon={Icon.Images.faUser}
@@ -63,7 +63,7 @@ export default class UserModule extends Module {
                     schema={Schema}
                     api="http://localhost:9000/users"
                 >
-                </Module.SimpleCRUD>
+                </Module.CRUD>
             </>
         );
     }
