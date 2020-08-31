@@ -1,5 +1,5 @@
-import React from 'react';
-import { Module, Sidebar, Icon } from 'overdrive-dashboard';
+import React, { Fragment } from 'react';
+import { Module, Sidebar, Icon, ActionBar } from 'overdrive-dashboard';
 
 const Schema = {
     username: {
@@ -54,7 +54,7 @@ export default class UserModule extends Module {
     content(context) {
         return (
             <>
-                <Module.CRUD
+                <CRUD
                     name="Users"
                     description="Manage the users of the application"
                     icon={Icon.Images.faUser}
@@ -63,8 +63,31 @@ export default class UserModule extends Module {
                     schema={Schema}
                     api="http://localhost:9000/users"
                 >
-                </Module.CRUD>
+                </CRUD>
             </>
         );
     }
 };
+
+class CRUD extends Module.CRUD {
+    constructor(props){
+        super(props);
+    }
+
+    getActionBar() {
+        return (
+            <ActionBar>
+                <ActionBar.Button
+                    icon={Icon.Images.faUserCircle}
+                    name="Edit Profile"
+                     />
+                <ActionBar.Button
+                    active={this.state.selectedRecords.length === 1}
+                    icon={Icon.Images.faUserEdit}
+                    name="Change Role"
+                    />
+            </ActionBar>
+        )
+    }
+
+}
