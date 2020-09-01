@@ -60,6 +60,9 @@ class Search {
             const tokens = [filter];
             for (const token of tokens)
             {
+                if (token.trim().length === 0)
+                    continue;
+
                 if (token.includes('=='))
                 {
                     const pieces = token.split('==').map(piece => piece.trim());
@@ -99,7 +102,7 @@ class Search {
                             if (isNumber)
                             {
                                 let expression = {};
-                                expression[field] = { $eq: Number(search) };
+                                expression[field] = { $eq: Number(token) };
                                 or.push(expression);
                             }
                         }
