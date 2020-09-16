@@ -22,6 +22,7 @@
     "overdrive": "file:../packages/overdrive",
     "overdrive-db": "file:../packages/overdrive-db",
     "overdrive-logger": "file:../packages/overdrive-logger",
+    "overdrive-socket": "file:../packages/overdrive-socket",
     "overdrive-status": "file:../packages/overdrive-status"
   }
 }

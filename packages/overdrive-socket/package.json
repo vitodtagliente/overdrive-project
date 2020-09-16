@@ -1,0 +1,17 @@
+{
+  "name": "overdrive-socket",
+  "version": "1.0.0",
+  "description": "Nodejs socket server library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "logger"
+  ],
+  "author": "Vito Domenico Tagliente",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io": "^2.3.0"
+  }
+}
