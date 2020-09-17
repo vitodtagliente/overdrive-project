@@ -158,7 +158,7 @@ class Application {
                     null,
                     () => {
                         success();
-                        Logger.log(`Server listening on port ${this.#config.port}...`);
+                        Logger.log(`${Logger.Color.decorate('HTTP', Logger.Color.Foreground.Yellow)} Server listening on port ${Logger.Color.decorate(this.#config.port, Logger.Color.Foreground.Magenta)}...`);
                     },
                     (err) => {
                         Logger.error(`Cannot connect to database:\n ${err}`);

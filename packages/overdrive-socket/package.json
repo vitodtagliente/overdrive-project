@@ -12,6 +12,7 @@
   "author": "Vito Domenico Tagliente",
   "license": "ISC",
   "dependencies": {
+    "overdrive-logger": "file:../overdrive-logger",
     "socket.io": "^2.3.0"
   }
 }
