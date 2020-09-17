@@ -4,4 +4,8 @@ export default class TaskScheduler {
     constructor() {
 
     }
+
+    register(task) {
+        
+    }
 }
