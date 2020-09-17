@@ -66,6 +66,8 @@ class Application {
     #initialized = false;
     /// Define if the server has been launched
     #launched = false;
+    /// HTTP server
+    #server = null;
 
     /// constructor
     constructor() {
@@ -92,6 +94,12 @@ class Application {
     /// @return - The configuration
     get config() {
         return this.#config;
+    }
+
+    /// Get the http layer
+    /// @return - The http layer
+    get server() {
+        return this.#server;
     }
 
     /// Initialize the server
@@ -138,7 +146,7 @@ class Application {
         this.#launched = true;
 
         // start listening 
-        this.#app.listen(this.#config.port, () => {
+        this.#server = this.#app.listen(this.#config.port, () => {
             const connectionString = this.#config.connection;
             // check if the server need to connect to the db
             if (connectionString != null)
