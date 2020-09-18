@@ -4,58 +4,10 @@ const cors = require('cors');
 const Connection = require('overdrive-db').Connection;
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const Schema = require('overdrive-json').Schema;
 const Logger = require('overdrive-logger');
 const Respond = require('./respond');
 const Session = require('./session');
-
-class ApplicationConfig {
-    #config = null;
-    /// constructor
-    /// @param config - The config json
-    constructor(config = null) {
-        if (config == null)
-        {
-            Logger.error('Using a default server configuration...');
-        }
-        this.#config = config;
-    }
-
-    get connection() {
-        return this.#config.CONNECTION;
-    }
-
-    get env() {
-        return this.#config.ENV || "development";
-    }
-
-    get port() {
-        return this.#config.PORT || 3000;
-    }
-
-    get raw() {
-        return this.#config;
-    }
-
-    get secret() {
-        return this.#config.SECRET || 'OVERDRIVE-SECRET';
-    }
-
-    get sessionLifetime() {
-        return this.#config.SESSION_LIFETIME || 1000 * 60 * 60 * 2;
-    }
-
-    get sessionName() {
-        return this.#config.SESSION_NAME || 'overdrive';
-    }
-
-    get type() {
-        return this.#config.CONNECTION_TYPE || Connection.Type.MongoDB;
-    }
-
-    get url() {
-        return this.#config.URL || `http://localshost:${this.port}`;
-    }
-}
 
 class Application {
     /// The express application
@@ -70,24 +22,17 @@ class Application {
     #server = null;
 
     /// constructor
-    constructor() {
+    /// @param config - The application configuration
+    constructor(config = null) {
         // create the express application
         this.#app = express();
 
-        // parse application/x-www-form-urlencoded
-        this.#app.use(bodyParser.urlencoded({ extended: false }));
-        // parse application/json
-        this.#app.use(bodyParser.json());
-        // parse cookies
-        this.#app.use(cookieParser());
-        // log every request
-        this.#app.use(Logger.middleware);
-        // add the respond method
-        this.#app.use(Respond);
-        // allow cross origin requests
-        this.#app.use(cors({
-            origin: "http://localhost:3000"
-        }));
+        // cache the configuration
+        if (config == null)
+        {
+            Logger.error('Using a default server configuration...');
+        }
+        this.#config = Schema(config, Application.Config);
     }
 
     /// Get the application configuration 
@@ -103,16 +48,30 @@ class Application {
     }
 
     /// Initialize the server
-    /// @param config - The configuration json
-    initialize(config = null) {
+    initialize() {
         if (this.#initialized)
         {
             // server already initialized
             return;
         }
 
-        // parse the configuration
-        this.#config = new ApplicationConfig(config);
+        // parse application/x-www-form-urlencoded
+        this.#app.use(bodyParser.urlencoded({ extended: false }));
+        // parse application/json
+        this.#app.use(bodyParser.json());
+        // parse cookies
+        this.#app.use(cookieParser());
+        // log every request
+        this.#app.use(Logger.middleware);
+        // add the respond method
+        this.#app.use(Respond);
+        // allow cross origin requests        
+        for (const origin of this.#config.crossOrigins)
+        {
+            this.#app.use(cors({
+                origin: origin
+            }));
+        }
 
         // initialize the session
         Session.initialize(
@@ -134,7 +93,7 @@ class Application {
         // make sure that the server is initialized
         if (this.#initialized == false)
         {
-            Logger.error('Cannot start the server since it is not initialized');
+            this.initialize();
             return;
         }
 
@@ -153,7 +112,7 @@ class Application {
             {
                 // initialize the database connection
                 Connection.connect(
-                    this.#config.type,
+                    this.#config.connectionType,
                     connectionString,
                     null,
                     () => {
@@ -169,7 +128,7 @@ class Application {
             else 
             {
                 success();
-                Logger.log(`Server listening on port ${this.#config.port}...`);
+                Logger.log(`${Logger.Color.decorate('HTTP', Logger.Color.Foreground.Yellow)} Server listening on port ${Logger.Color.decorate(this.#config.port, Logger.Color.Foreground.Magenta)}...`);
             }
         });
     }
@@ -192,5 +151,25 @@ class Application {
         this.#app.use(middleware);
     }
 }
+
+Application.Config = {
+    name: 'overdrive',
+    version: 1.0,
+    // database
+    connection: process.env.connection || 'mongodb://127.0.0.1/overdrive',
+    connectionType: process.env.connectionType || 'mongodb',
+    env: process.env.env || "development",
+    port: process.env.port || 9000,
+    secret: process.env.secret || 'OVERDRIVE-SECRET',
+    ulr: process.env.URL || "http://localshost:9000",
+    // session infos
+    sessionName: 'overdrive',
+    sessionLifetime: 1000 * 60 * 60 * 2,
+    // allowed cross origins
+    crossOrigins: [
+        // default React cross origin
+        "http://localhost:3000"
+    ]
+};
 
 module.exports = Application;

@@ -1,6 +1,6 @@
 function Schema(data = {}, schema = {}) {
     const obj = Object.create(schema);
-    const keys = Object.keys(data);
+    const keys = Object.keys(data || {});
     for (const key of Object.keys(schema))
     {
         if (keys.includes(key))
@@ -12,7 +12,7 @@ function Schema(data = {}, schema = {}) {
 }
 
 Schema.ref = function (data = {}, schema = {}) {
-    const keys = Object.keys(data);
+    const keys = Object.keys(data || {});
     for (const key of Object.keys(schema))
     {
         if (keys.includes(key) == false)

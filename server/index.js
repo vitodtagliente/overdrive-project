@@ -6,8 +6,8 @@ const Logger = require('overdrive').Logger;
 const path = require('path');
 const Server = require('overdrive-websocket').Server;
 
-const app = new Application();
-app.initialize(config);
+const app = new Application(config);
+app.initialize();
 app.listen(
     () => {
         // initalize the server module
