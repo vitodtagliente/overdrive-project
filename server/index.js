@@ -18,7 +18,7 @@ app.listen(
         {
             controllers.push(require(file));
         }
-        Controller.load(controllers, app.raw);
+        Controller.load(controllers, app);
 
         // run the socket server instance
         Logger.log("Initializing the WebSocket interface...");

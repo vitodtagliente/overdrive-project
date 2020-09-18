@@ -47,6 +47,11 @@ class Application {
         return this.#server;
     }
 
+    /// Get the express router
+    get router() {
+        return this.#app;
+    }
+
     /// Initialize the server
     initialize() {
         if (this.#initialized)

@@ -4,10 +4,10 @@ const Type = require('./type');
 
 class Controller {
     /// Register the routers for a list of controllers
-    /// @param controllers - The list of controllers
-    /// @param router - The express router
-    static load(controllers = Array(), router = null) {
-        router = router || express.Router();
+    /// @param controllers - The list of controller classes
+    /// @param app - The overdrive application
+    static load(controllers = Array(), app = null) {
+        const router = app ? app.router : express.Router();
         for (const controller of controllers)
         {
             if (Type.isSubclassOf(controller, Controller))
@@ -15,7 +15,8 @@ class Controller {
                 try
                 {
                     Logger.log(`Registering ${controller.name}...`);
-                    new controller().register(router);
+                    const instance = new controller();
+                    instance.register(router);
                 }
                 catch (err)
                 {
