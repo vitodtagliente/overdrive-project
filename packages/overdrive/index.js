@@ -6,6 +6,7 @@ exports.Database = require('overdrive-db');
 exports.IO = {
     Directory: require('./io/directory')
 };
+exports.Json = require('overdrive-json');
 exports.Logger = require('overdrive-logger');
 exports.Password = require('./password');
 exports.Respond = require('./respond');

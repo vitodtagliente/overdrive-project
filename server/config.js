@@ -4,5 +4,7 @@ module.exports = {
     ENV: process.env.ENV || "development",
     PORT: process.env.PORT || 9000,
     SECRET: process.env.SECRET || 'OVERDRIVE-SECRET',
-    URL: process.env.URL || "http://localshost:9000"
+    URL: process.env.URL || "http://localshost:9000",
+    PROJECT: 'Overdrive',
+    VERSION: 1.0
 };

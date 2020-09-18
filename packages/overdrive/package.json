@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "overdrive-db": "file:../overdrive-db",
+    "overdrive-json": "file:../overdrive-json",
     "overdrive-logger": "file:../overdrive-logger",
     "overdrive-status": "file:../overdrive-status"
   }
